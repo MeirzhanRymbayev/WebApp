@@ -1,4 +1,4 @@
-package kz.epam.model;
+package kz.epam.mrymbayev.model;
 
 public class Tour {
 

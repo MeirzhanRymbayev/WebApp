@@ -1,12 +1,12 @@
-package kz.epam.dao;
+package kz.epam.mrymbayev.dao;
 
-import kz.epam.model.Tour;
+import kz.epam.mrymbayev.model.Tour;
 
 import java.sql.*;
 
-public class TourDAO {
+public class VoucherDAO {
 
-    public static final String INSERT_TOUR = "INSERT INTO TOUR (ID, TYPE, COST) VALUES (DEFAULT, ?, ?)";
+    public static final String INSERT_TOUR = "INSERT INTO VOUCHER (ID, TYPE, COST) VALUES (DEFAULT, ?, ?)";
     public static final int INSERT_TOUR_FIRST_PARAM = 1;
     public static final int INSERT_TOUR_SECOND_PARAM = 2;
 

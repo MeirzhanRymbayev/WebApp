@@ -1,8 +1,8 @@
-package kz.epam.servlet;
+package kz.epam.mrymbayev.servlet;
 
-import kz.epam.dao.DAOException;
-import kz.epam.dao.TourDAO;
-import kz.epam.model.Tour;
+import kz.epam.mrymbayev.dao.DAOException;
+import kz.epam.mrymbayev.dao.VoucherDAO;
+import kz.epam.mrymbayev.model.Tour;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,9 +29,9 @@ public class MainServlet extends HttpServlet {
                 tour.setType(type);
                 tour.setCost(cost);
 
-                TourDAO tourDAO = new TourDAO();
+                VoucherDAO voucherDAO = new VoucherDAO();
                 try {
-                    tourDAO.insert(tour);
+                    voucherDAO.insert(tour);
                 } catch (DAOException e) {
                     e.printStackTrace();
                 }
