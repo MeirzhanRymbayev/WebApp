@@ -4,6 +4,6 @@
     <title>Main Page</title>
 </head>
 <body>
-<a href="create-voucher.jsp">Create Tour</a>
+<a href="manage-index.jsp">Tour agent page</a>
 </body>
 </html>
