@@ -1,5 +1,8 @@
 package kz.epam.mrymbayev.action;
 
+import kz.epam.mrymbayev.dao.CustomerDAO;
+import kz.epam.mrymbayev.model.Customer;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
