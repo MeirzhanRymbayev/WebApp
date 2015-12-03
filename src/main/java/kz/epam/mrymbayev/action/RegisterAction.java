@@ -1,14 +1,17 @@
 package kz.epam.mrymbayev.action;
 
 import kz.epam.mrymbayev.dao.CustomerDAO;
+import kz.epam.mrymbayev.dao.DAOException;
 import kz.epam.mrymbayev.model.Customer;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class RegisterAction implements Action{
+    Logger registLog = Logger.getLogger(RegisterAction.class);
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws DAOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         // TODO validate params
@@ -17,6 +20,11 @@ public class RegisterAction implements Action{
         customer.setLogin(login);
         customer.setPassword(password);
         CustomerDAO customerDAO = new CustomerDAO();
-        customerDAO.insert(customer);
+        try {
+            customerDAO.insert(customer);
+        } catch (DAOException e) {
+            registLog.error("DAOException was handled when application try insert(customer)");
+            throw new DAOException();
+        }
     }
 }

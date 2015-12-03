@@ -4,6 +4,6 @@
     <title>Main Page</title>
 </head>
 <body>
-<a href="manage-index.jsp">Tour agent page</a>
+<a href="manage-index.jsp">Go to tour agent page</a>
 </body>
 </html>
