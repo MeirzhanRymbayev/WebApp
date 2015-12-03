@@ -48,6 +48,14 @@ public class ConnectionPool {
             throw new ConnectionPoolException(e);
         }
         if(connection == null) throw new ConnectionPoolException("No available connections");
+        /*Правильно ли здесь создать коннекшн если его нет*/
+        try {
+            if(!connection.isClosed()){
+                connection = DriverManager.getConnection(JDBC_DB_URL, DB_USER, DB_PASSWORD);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return connection;
     }
 
