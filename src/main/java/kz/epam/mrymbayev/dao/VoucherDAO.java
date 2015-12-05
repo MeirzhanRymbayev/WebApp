@@ -1,5 +1,6 @@
 package kz.epam.mrymbayev.dao;
 
+import kz.epam.mrymbayev.jdcpool.ConnectionPool;
 import kz.epam.mrymbayev.model.Voucher;
 
 import java.sql.*;
@@ -18,7 +19,7 @@ public class VoucherDAO {
 
         try {
             Class.forName("org.h2.Driver"); //TODO replace to ActionFactory
-            Connection connection = DriverManager.getConnection(JDBC_DB_URL, admin, password);
+            Connection connection = ConnectionPool.getInstance().getConnection();
             //TODO Create Connection Pool
             PreparedStatement ps = connection.prepareStatement(INSERT_VOUCHER);
             ps.setString(INSERT_VOUCHER_FIRST_PARAM, voucher.getType());

@@ -22,9 +22,11 @@ public class RegisterAction implements Action{
         CustomerDAO customerDAO = new CustomerDAO();
         try {
             customerDAO.insert(customer);
+            registLog.info("Customer: " + customer.getLogin() + " was added to DB.");
         } catch (DAOException e) {
             registLog.error("DAOException was handled when application try insert(customer)");
             throw new DAOException();
         }
+        return "VIEW";
     }
 }

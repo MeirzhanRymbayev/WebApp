@@ -8,8 +8,8 @@ public class ActionFactory {
     static Map<String, Action> actions;
     static {
         actions.put("POST/register", new RegisterAction());
-        actions.put("POST/login", new LoginAction());
-        actions.put("GET/register", new LogoutAction());
+        //actions.put("POST/login", new LoginAction());
+        //actions.put("GET/register", new LogoutAction());
     }
 
     public static Action getAction(HttpServletRequest request){

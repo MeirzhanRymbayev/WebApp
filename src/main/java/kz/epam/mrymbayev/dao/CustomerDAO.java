@@ -1,5 +1,6 @@
 package kz.epam.mrymbayev.dao;
 
+import kz.epam.mrymbayev.jdcpool.ConnectionPool;
 import kz.epam.mrymbayev.model.Customer;
 
 import java.sql.Connection;
@@ -16,10 +17,10 @@ public class CustomerDAO {
 
     public Customer insert(Customer customer) throws DAOException {
         //TODO ConnectionPool
-        ConnectionPool connectionPool = new ConnectionPool();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
         Connection connection = connectionPool.getConnection();
-        PreparedStatement ps = connection.preparedStatement(INSERT_NEW_CUSTOMER);
         try {
+            PreparedStatement ps = connection.prepareStatement(INSERT_NEW_CUSTOMER);
             ps.setString(FIRST_PARAM, customer.getLogin());
             ps.setString(SECOND_PARAM, customer.getPassword());
             ps.executeUpdate();

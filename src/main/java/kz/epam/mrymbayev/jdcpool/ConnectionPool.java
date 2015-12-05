@@ -22,16 +22,21 @@ public class ConnectionPool {
 
     BlockingQueue<Connection> freeConnections = new LinkedBlockingQueue<>();
 
+
     private ConnectionPool() throws ConnectionPoolException {
-        poolLogger.info("Connection pool initialization start");
+        poolLogger.trace("Connection pool initialization start");
         try {
             Connection connection;
+            Class.forName("org.h2.Driver");
             for (int i = 0; i < MAX_CONNECTION_COUNT; i++) {
                 connection = DriverManager.getConnection(JDBC_DB_URL, DB_USER, DB_PASSWORD);
                 freeConnections.add(connection);
+                System.out.println(connection);
             }
         } catch (SQLException e) {
             throw new ConnectionPoolException(e);
+        } catch (ClassNotFoundException e) {
+            throw new ConnectionPoolException("Can not load - org.h2.Driver");
         }
         poolLogger.info("Connection pool initialization finish");
     }
@@ -43,14 +48,14 @@ public class ConnectionPool {
     public Connection getConnection(){
         Connection connection = null;
         try {
-            freeConnections.poll(5, TimeUnit.SECONDS);
+            connection = freeConnections.poll(5, TimeUnit.SECONDS); // Sorry seems to be the hardest word!
         } catch (InterruptedException e) {
             throw new ConnectionPoolException(e);
         }
-        if(connection == null) throw new ConnectionPoolException("No available connections");
+        if(connection == null) throw new ConnectionPoolException("Sorry, no available connections");
         /*Правильно ли здесь создать коннекшн если его нет*/
         try {
-            if(!connection.isClosed()){
+            if(connection.isClosed()){
                 connection = DriverManager.getConnection(JDBC_DB_URL, DB_USER, DB_PASSWORD);
             }
         } catch (SQLException e) {
