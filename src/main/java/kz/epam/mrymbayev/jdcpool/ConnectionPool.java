@@ -31,14 +31,13 @@ public class ConnectionPool {
             for (int i = 0; i < MAX_CONNECTION_COUNT; i++) {
                 connection = DriverManager.getConnection(JDBC_DB_URL, DB_USER, DB_PASSWORD);
                 freeConnections.add(connection);
-                System.out.println(connection);
             }
         } catch (SQLException e) {
             throw new ConnectionPoolException(e);
         } catch (ClassNotFoundException e) {
             throw new ConnectionPoolException("Can not load - org.h2.Driver");
         }
-        poolLogger.info("Connection pool initialization finish");
+        poolLogger.info("Connection pool initialization finish. " + MAX_CONNECTION_COUNT + "connections were created.");
     }
 
     public static ConnectionPool getInstance() {

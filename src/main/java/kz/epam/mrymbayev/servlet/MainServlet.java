@@ -26,6 +26,7 @@ public class MainServlet extends HttpServlet {
             actionFactory = new ActionFactory();
         } catch (ActionException e) {
             log.error("ActionFactory exception was happened");
+            throw new ServletException();
         }
     }
 
@@ -33,6 +34,10 @@ public class MainServlet extends HttpServlet {
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Action action = actionFactory.getAction(req);
         String view = action.execute(req, resp);
+        if(action == null){
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+
         if(view.startsWith("redirect:")){
             getServletContext();
             resp.sendRedirect(getRedirectLocation(view));

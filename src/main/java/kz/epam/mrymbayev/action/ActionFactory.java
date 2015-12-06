@@ -10,13 +10,14 @@ public class ActionFactory {
     public ActionFactory() throws ActionException{
         actions = new HashMap<>();
         actions.put("POST/create-voucher", new CreateVoucherAction());
-        actions.put("POST/register", new RegisterAction());
         actions.put("GET/voucher-added", new VoucherAddedAction());
+        actions.put("POST/register", new RegisterAction());
+        actions.put("GET/register-success", new RegistrationSuccessAction());
         //actions.put("POST/login", new LoginAction());
         //actions.put("GET/register", new LogoutAction());
     }
 
-    public Action getAction(HttpServletRequest request){
+    public Action getAction(HttpServletRequest request) {
         String actionKey = request.getParameter("action");
         String requestMethod = request.getMethod();
         Action action = actions.get(requestMethod + "/" + actionKey);

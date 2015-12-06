@@ -13,7 +13,7 @@ public class CustomerDAO {
     public static final String INSERT_NEW_CUSTOMER = "INSERT INTO CUSTOMER (ID, LOGIN, PASSWORD)" +
                                                      "VALUES (default, ?, ?)";
     public static final int FIRST_PARAM = 1;
-    public static final int SECOND_PARAM = 1;
+    public static final int SECOND_PARAM = 2;
 
     public Customer insert(Customer customer) throws DAOException {
         //TODO ConnectionPool
