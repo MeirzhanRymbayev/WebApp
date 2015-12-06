@@ -6,6 +6,8 @@
 
     <session-config>
         <session-timeout>2</session-timeout>
-        <cookie-config></cookie-config>
+        <cookie-config>
+            <name>JSESSIONID</name>
+        </cookie-config>
     </session-config>
 </web-app>

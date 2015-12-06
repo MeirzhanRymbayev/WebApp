@@ -13,6 +13,8 @@ public class ActionFactory {
         actions.put("GET/voucher-added", new VoucherAddedAction());
         actions.put("POST/register", new RegisterAction());
         actions.put("GET/register-success", new RegistrationSuccessAction());
+        actions.put("POST/sign-in", new SignInAction());
+        actions.put("GET/sign-in-success", new SignInSuccessAction());
         //actions.put("POST/login", new LoginAction());
         //actions.put("GET/register", new LogoutAction());
     }
