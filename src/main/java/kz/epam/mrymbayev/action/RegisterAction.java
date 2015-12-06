@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 public class RegisterAction implements Action{
     Logger registLog = Logger.getLogger(RegisterAction.class);
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws DAOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         // TODO validate params
@@ -25,8 +25,8 @@ public class RegisterAction implements Action{
             registLog.info("Customer: " + customer.getLogin() + " was added to DB.");
         } catch (DAOException e) {
             registLog.error("DAOException was handled when application try insert(customer)");
-            throw new DAOException();
+
         }
-        return "VIEW";
+        return "redirect:register-success";
     }
 }
