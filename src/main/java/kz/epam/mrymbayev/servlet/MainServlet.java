@@ -3,9 +3,6 @@ package kz.epam.mrymbayev.servlet;
 import kz.epam.mrymbayev.action.Action;
 import kz.epam.mrymbayev.action.ActionException;
 import kz.epam.mrymbayev.action.ActionFactory;
-import kz.epam.mrymbayev.dao.DAOException;
-import kz.epam.mrymbayev.dao.VoucherDAO;
-import kz.epam.mrymbayev.model.Voucher;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -34,11 +31,11 @@ public class MainServlet extends HttpServlet {
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Action action = actionFactory.getAction(req);
         String view = action.execute(req, resp);
-        if(action == null){
+        if (action == null) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
 
-        if(view.startsWith("redirect:")){
+        if (view.startsWith("redirect:")) {
             getServletContext();
             resp.sendRedirect(getRedirectLocation(view));
             return;
@@ -46,8 +43,9 @@ public class MainServlet extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/" + view + ".jsp").forward(req, resp);
 
     }
-        private String getRedirectLocation(String view){
-            return getServletContext().getContextPath() + "/" + "controller?action=" + view.substring(9);
-        }
+
+    private String getRedirectLocation(String view) {
+        return getServletContext().getContextPath() + "/" + "controller?action=" + view.substring(9);
+    }
 
 }

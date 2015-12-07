@@ -3,11 +3,11 @@ package kz.epam.mrymbayev.action;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class ActionFactory {
     Map<String, Action> actions;
-    public ActionFactory() throws ActionException{
+
+    public ActionFactory() throws ActionException {
         actions = new HashMap<>();
         actions.put("POST/create-voucher", new CreateVoucherAction());
         actions.put("GET/voucher-added", new VoucherAddedAction());
