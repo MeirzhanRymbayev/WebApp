@@ -15,6 +15,7 @@ import java.util.List;
 public class RdbVoucherDAO implements VoucherDAO {
 
     public static final String INSERT_VOUCHER = "INSERT INTO VOUCHER (ID, TYPE, COST) VALUES (DEFAULT, ?, ?)";
+    public static final String UPDATE_VOUCHER = "UPDATE VOUCHER SET TYPE = ?, COST = ? WHERE ID = ?;";
     public static final int INSERT_VOUCHER_FIRST_PARAM = 1;
     public static final int INSERT_VOUCHER_SECOND_PARAM = 2;
 
@@ -26,7 +27,7 @@ public class RdbVoucherDAO implements VoucherDAO {
         this.connection = connection;
     }
 
-    public Voucher insert(Voucher voucher) throws DAOException {
+    public Voucher insert(Voucher voucher) {
 
         try {
 
@@ -41,19 +42,30 @@ public class RdbVoucherDAO implements VoucherDAO {
             voucher.setId(id);
         } catch (SQLException e) {
             logger.error("RdbVoucherDAOException with insert() operation.");
-            throw new RdbVoucherDAOException();
+            throw new RdbVoucherDAOException("Issue with insert() operation.");
         }
-        logger.trace("Voucher object was succesfully added: " + voucher.toString());
+        logger.trace("Voucher object was successfully inserted: " + voucher.toString());
         return voucher;
     }
 
     public Voucher update(Voucher voucher) {
-
+        try {
+            PreparedStatement ps = connection.prepareStatement(UPDATE_VOUCHER);
+            ps.setString(1, voucher.getType());
+            ps.setString(2, voucher.getCost());
+            ps.setLong(3, voucher.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("RdbVoucherDAOException with update() operation.");
+            throw new RdbVoucherDAOException("Issue with update() operation.");
+        }
+        logger.trace("Voucher object was successfully updated: " + voucher.toString());
+        return  voucher;
     }
 
     @Override
-    public Voucher save(Voucher entity) {
-        return entity.isPersisted() ? update(entity) : insert(entity);
+    public Voucher save(Voucher voucher) {
+        return voucher.isPersisted() ? update(voucher) : insert(voucher);
     }
 
     @Override
