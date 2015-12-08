@@ -1,8 +1,7 @@
 package kz.epam.mrymbayev.model;
 
-public class Voucher {
+public class Voucher extends BaseEntity{
 
-    private long id;
     private String type;
     private String cost;
 
@@ -10,18 +9,10 @@ public class Voucher {
 
     }
 
-    public Voucher(long id, String type, String cost) {
-        this.id = id;
+    public Voucher(Long id, String type, String cost) {
+        super(id);
         this.type = type;
         this.cost = cost;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getId() {
-        return id;
     }
 
     public void setType(String type) {
@@ -40,5 +31,10 @@ public class Voucher {
         return cost;
     }
 
-
+    @Override
+    public String toString() {
+        return "Voucher id " + this.id +
+                " type " + this.type +
+                " cost " + this.cost;
+    }
 }
