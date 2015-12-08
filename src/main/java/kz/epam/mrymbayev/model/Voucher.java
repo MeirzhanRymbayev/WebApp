@@ -33,8 +33,9 @@ public class Voucher extends BaseEntity{
 
     @Override
     public String toString() {
-        return "Voucher id " + this.id +
-                " type " + this.type +
-                " cost " + this.cost;
+        return "Voucher{" +
+                "type='" + type + '\'' +
+                ", cost='" + cost + '\'' +
+                '}';
     }
 }
