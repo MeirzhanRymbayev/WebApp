@@ -6,23 +6,24 @@ import org.apache.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
-public class RdbDaoFactory<E extends BaseEntity> extends DAOFactory {
+public class RdbDAOFactory<E extends BaseEntity> extends DAOFactory {
 
-    public static final String DAO_IMPLS_PATH = "kz.epam.mrymbayev.dao.impl";
-    private static final Logger log = Logger.getLogger(RdbDaoFactory.class);
+    public static final String DAO_IMPLS_PATH = "kz.epam.mrymbayev.dao.impl.rdb";
+    private static final Logger log = Logger.getLogger(RdbDAOFactory.class);
     Connection connection;
 
-    public RdbDaoFactory(){
+    public RdbDAOFactory(){
         log.trace("Get connection from connection pool.");
         ConnectionPool instance = ConnectionPool.getInstance();
         connection = instance.getConnection();
     }
 
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")//cast to T ensure
     @Override
     public <T extends GenericDao> T getDao(Class<T> clazz) {
-        String DaoClassName = DAO_IMPLS_PATH + ".Jdbc" + clazz.getSimpleName();
+        String DaoClassName = DAO_IMPLS_PATH + ".Rdb" + clazz.getSimpleName();
         GenericDao dao = null;
         try {
             log.trace("Trying to get DAO class object" + DaoClassName);
@@ -38,22 +39,39 @@ public class RdbDaoFactory<E extends BaseEntity> extends DAOFactory {
 
     @Override
     public void beginTransaction() {
-
+        try {
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public void commit() {
-
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void rollback() {
-
+        try {
+            connection.rollback();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void close() {
-
+        try {
+            ConnectionPool.ConnectionPooled connectionPooled = new ConnectionPool.ConnectionPooled(connection);
+            connectionPooled.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

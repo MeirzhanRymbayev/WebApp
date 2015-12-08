@@ -1,4 +1,4 @@
-package kz.epam.mrymbayev.dao;
+package kz.epam.mrymbayev.dao.exception;
 
 public class DAOException extends Throwable {
     public DAOException() {

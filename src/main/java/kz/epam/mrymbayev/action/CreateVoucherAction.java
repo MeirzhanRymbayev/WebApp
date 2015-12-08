@@ -1,6 +1,6 @@
 package kz.epam.mrymbayev.action;
 
-import kz.epam.mrymbayev.dao.DAOException;
+import kz.epam.mrymbayev.dao.exception.DAOException;
 import kz.epam.mrymbayev.dao.VoucherDAO;
 import kz.epam.mrymbayev.model.Voucher;
 

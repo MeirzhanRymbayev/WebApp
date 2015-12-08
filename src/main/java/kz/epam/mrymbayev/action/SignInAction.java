@@ -1,6 +1,6 @@
 package kz.epam.mrymbayev.action;
 
-import kz.epam.mrymbayev.dao.CustomerDAO;
+import kz.epam.mrymbayev.dao.impl.rdb.RdbCustomerDAO;
 import kz.epam.mrymbayev.model.Customer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +15,8 @@ public class SignInAction implements Action {
         if(login == null){
             // TODO setError();
         }
-        CustomerDAO customerDAO = new CustomerDAO();
-        Customer customer = customerDAO.findByLogin(login);
+        RdbCustomerDAO rdbCustomerDAO = new RdbCustomerDAO();
+        Customer customer = rdbCustomerDAO.findByLogin(login);
         //TODO создать сессию и прикрутить в  рекуест
         HttpSession session = request.getSession();
         session.setAttribute("customer", customer);

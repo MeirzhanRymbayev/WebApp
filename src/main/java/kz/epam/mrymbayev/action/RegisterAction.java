@@ -1,7 +1,7 @@
 package kz.epam.mrymbayev.action;
 
-import kz.epam.mrymbayev.dao.CustomerDAO;
-import kz.epam.mrymbayev.dao.DAOException;
+import kz.epam.mrymbayev.dao.impl.rdb.RdbCustomerDAO;
+import kz.epam.mrymbayev.dao.exception.DAOException;
 import kz.epam.mrymbayev.model.Customer;
 import org.apache.log4j.Logger;
 
@@ -19,9 +19,9 @@ public class RegisterAction implements Action{
         Customer customer = new Customer();
         customer.setLogin(login);
         customer.setPassword(password);
-        CustomerDAO customerDAO = new CustomerDAO();
+        RdbCustomerDAO rdbCustomerDAO = new RdbCustomerDAO();
         try {
-            customerDAO.insert(customer);
+            rdbCustomerDAO.insert(customer);
             registLog.info("Customer: " + customer.getLogin() + " was added to DB.");
         } catch (DAOException e) {
             registLog.error("DAOException was handled when application try insert(customer)");

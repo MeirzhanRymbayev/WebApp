@@ -5,7 +5,7 @@ import kz.epam.mrymbayev.model.BaseEntity;
 import java.util.List;
 
 public interface GenericDao<T extends BaseEntity> {
-    //CREATE and UPDATE actions
+    //CREATE and UPDATE action
     T save(T entity);
 
     //READ

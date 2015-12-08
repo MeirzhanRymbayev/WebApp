@@ -1,5 +1,6 @@
 package kz.epam.mrymbayev.dao;
 
+import kz.epam.mrymbayev.dao.exception.DAOException;
 import kz.epam.mrymbayev.jdcpool.ConnectionPool;
 import kz.epam.mrymbayev.model.Voucher;
 

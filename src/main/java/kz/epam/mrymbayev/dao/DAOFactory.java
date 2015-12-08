@@ -9,7 +9,7 @@ public abstract class DAOFactory {
     public static DAOFactory getInstance(){
         if(instance == null){
             logger.trace("Creating new JDBC DAO.");
-            instance = new RdbDaoFactory(); // Pattern Data Access Object
+            instance = new RdbDAOFactory(); // Pattern Data Access Object
         }
         return instance;
     }

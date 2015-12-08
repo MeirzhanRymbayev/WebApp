@@ -68,12 +68,13 @@ public class ConnectionPool {
 
         public ConnectionPooled(Connection connection) throws SQLException {
             this.connection = connection;
-            this.connection.setAutoCommit(true);
+            this.connection.setAutoCommit(true); //завершить транзакцию
         }
 
+        //TODO проверить правильно ли я возвращаю connection в RdbDAOFactory
         @Override
         public void close(){
-            INSTANCE.freeConnections.add(this);
+            INSTANCE.freeConnections.add(this.connection);
         }
 
         @Override
