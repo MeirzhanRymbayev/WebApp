@@ -3,30 +3,29 @@ package kz.epam.mrymbayev.dao.impl.rdb;
 import kz.epam.mrymbayev.dao.CustomerDAO;
 import kz.epam.mrymbayev.dao.exception.RdbDAOException;
 import kz.epam.mrymbayev.model.Customer;
+import kz.epam.mrymbayev.pm.PropertyManager;
 
 import java.sql.*;
 import java.util.List;
 
 public class RdbCustomerDAO implements CustomerDAO {
 
-    public static final String INSERT_NEW_CUSTOMER = "INSERT INTO CUSTOMER (ID, LOGIN, PASSWORD)" +
-                                                     "VALUES (default, ?, ?);";
-    public static final String UPDATE_CUSTOMER = "UPDATE CUSTOMER SET LOGIN=?, PASSWORD=? WHERE ID = ?;";
-    public static final int FIRST_PARAM = 1;
-    public static final int SECOND_PARAM = 2;
     Connection connection;
+    PropertyManager propertyManager = PropertyManager.getInstance();
 
     public RdbCustomerDAO(Connection connection) {
         this.connection = connection;
+        propertyManager.loadProperties("query.properties");
     }
 
     public Customer insert(Customer customer){
         PreparedStatement ps;
+        String query = propertyManager.getProperty("customer.insert");
 
         try {
-            ps = connection.prepareStatement(INSERT_NEW_CUSTOMER);
-            ps.setString(FIRST_PARAM, customer.getLogin());
-            ps.setString(SECOND_PARAM, customer.getPassword());
+            ps = connection.prepareStatement(query);
+            ps.setString(1, customer.getLogin());
+            ps.setString(2, customer.getPassword());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
@@ -40,8 +39,9 @@ public class RdbCustomerDAO implements CustomerDAO {
 
     public Customer update(Customer entity){
         PreparedStatement ps;
+        String query = propertyManager.getProperty("customer.update");
         try {
-            ps = connection.prepareStatement(UPDATE_CUSTOMER);
+            ps = connection.prepareStatement(query);
             ps.setString(1, entity.getLogin());
             ps.setString(2, entity.getPassword());
             ps.setLong(3, entity.getId()); //example: UPDATE CUSTOMER SET LOGIN='Guitarist3', PASSWORD='123' WHERE ID = 1;
@@ -80,7 +80,21 @@ public class RdbCustomerDAO implements CustomerDAO {
 
     @Override
     public Customer getByParameter(String param, String value) {
-        return null;
+        String query = propertyManager.getProperty("customer.getByParameter");
+        Customer customer = new Customer();
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, param);
+            ps.setString(2, value);
+            ResultSet rs = ps.executeQuery();
+
+            customer.setId(rs.getLong(1));
+            customer.setLogin(rs.getString(2));
+            customer.setPassword(rs.getString(3));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customer;
     }
 
     @Override
