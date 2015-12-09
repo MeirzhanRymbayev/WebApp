@@ -1,6 +1,7 @@
 package kz.epam.mrymbayev.dao.impl.rdb;
 
 import kz.epam.mrymbayev.dao.CustomerDAO;
+import kz.epam.mrymbayev.dao.exception.RdbCustomerDAOException;
 import kz.epam.mrymbayev.dao.exception.RdbDAOException;
 import kz.epam.mrymbayev.model.Customer;
 import kz.epam.mrymbayev.pm.PropertyManager;
@@ -41,24 +42,24 @@ public class RdbCustomerDAO implements CustomerDAO {
         return customer;
     }
 
-    public Customer update(Customer entity){
+    public Customer update(Customer customer){
         PreparedStatement ps;
         String sql = propertyManager.getProperty("customer.update");
         try {
             ps = connection.prepareStatement(sql);
-            ps.setString(1, entity.getLogin());
-            ps.setString(2, entity.getPassword());
-            ps.setLong(3, entity.getId());
+            ps.setString(1, customer.getLogin());
+            ps.setString(2, customer.getPassword());
+            ps.setLong(3, customer.getId());
         } catch (SQLException e) {
             logger.error("Error with RdbCustomerDAO update() method");
-            throw new RdbDAOException("Error with RdbCustomerDAO insert() method");
+            throw new RdbCustomerDAOException("Error with RdbCustomerDAO insert() method");
         }
-        return entity;
+        return customer;
     }
 
     @Override
-    public Customer save(Customer entity) {
-        return entity.isPersisted() ? update(entity) : insert(entity);
+    public Customer save(Customer customer) {
+        return customer.isPersisted() ? update(customer) : insert(customer);
     }
 
     @Override
@@ -105,20 +106,36 @@ public class RdbCustomerDAO implements CustomerDAO {
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
+            Customer customer;
             while(resultSet.next()){
-                Customer customer = new Customer();
+                customer = new Customer();
                 customer.setId(resultSet.getLong(1));
                 customer.setLogin(resultSet.getString(2));
                 customer.setPassword(resultSet.getString(3));
+                //TODO check this condition
+                if(resultSet.getString(4) != null){
+                    customer.setVoucherID(resultSet.getLong(4));
+                }
+                list.add(customer);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return list;
     }
 
     @Override
-    public boolean delete(Customer entity) {
+    public boolean delete(Customer customer) {
+        final String sql = propertyManager.getProperty("customer.delete");
+        boolean isDelete;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setLong(1, customer.getId());
+            int affectedRows = ps.executeUpdate();
+            isDelete = (affectedRows > 0) ? true : false;
+        } catch (SQLException e) {
+            throw new Rd
+        }
         return false;
     }
 }

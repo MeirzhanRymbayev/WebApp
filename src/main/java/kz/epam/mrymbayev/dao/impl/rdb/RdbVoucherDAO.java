@@ -1,9 +1,9 @@
 package kz.epam.mrymbayev.dao.impl.rdb;
 
 import kz.epam.mrymbayev.dao.VoucherDAO;
-import kz.epam.mrymbayev.dao.exception.DAOException;
 import kz.epam.mrymbayev.dao.exception.RdbVoucherDAOException;
 import kz.epam.mrymbayev.model.Voucher;
+import kz.epam.mrymbayev.pm.PropertyManager;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -14,26 +14,26 @@ import java.util.List;
 
 public class RdbVoucherDAO implements VoucherDAO {
 
-    public static final String INSERT_VOUCHER = "INSERT INTO VOUCHER (ID, TYPE, COST) VALUES (DEFAULT, ?, ?)";
-    public static final String UPDATE_VOUCHER = "UPDATE VOUCHER SET TYPE = ?, COST = ? WHERE ID = ?;";
-    public static final int INSERT_VOUCHER_FIRST_PARAM = 1;
-    public static final int INSERT_VOUCHER_SECOND_PARAM = 2;
-
     Logger logger = Logger.getLogger(RdbVoucherDAO.class);
 
     Connection connection;
+    PropertyManager propertyManager;
 
     public RdbVoucherDAO(Connection connection) {
         this.connection = connection;
+        propertyManager = PropertyManager.getInstance();
+        propertyManager.loadProperties("query.properties");
     }
 
     public Voucher insert(Voucher voucher) {
 
+        final String sql;
         try {
+            sql = propertyManager.getProperty("voucher.insert");
 
-            PreparedStatement ps = connection.prepareStatement(INSERT_VOUCHER);
-            ps.setString(INSERT_VOUCHER_FIRST_PARAM, voucher.getType());
-            ps.setString(INSERT_VOUCHER_SECOND_PARAM, voucher.getCost());
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, voucher.getType());
+            ps.setString(2, voucher.getCost());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
@@ -50,7 +50,8 @@ public class RdbVoucherDAO implements VoucherDAO {
 
     public Voucher update(Voucher voucher) {
         try {
-            PreparedStatement ps = connection.prepareStatement(UPDATE_VOUCHER);
+            final String sql = propertyManager.getProperty("voucher.update");
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, voucher.getType());
             ps.setString(2, voucher.getCost());
             ps.setLong(3, voucher.getId());
@@ -60,7 +61,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             throw new RdbVoucherDAOException("Issue with update() operation.");
         }
         logger.trace("Voucher object was successfully updated: " + voucher.toString());
-        return  voucher;
+        return voucher;
     }
 
     @Override
@@ -70,7 +71,21 @@ public class RdbVoucherDAO implements VoucherDAO {
 
     @Override
     public Voucher getByParameter(String param, String value) {
-        return null;
+        Voucher voucher = new Voucher();
+        final String sql = propertyManager.getProperty("voucher.getByParameter");
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, param);
+            ps.setString(2, value);
+            ResultSet resultSet = ps.executeQuery();
+            voucher.setId(resultSet.getLong(1));
+            voucher.setType(resultSet.getString(2));
+            voucher.setCost(resultSet.getString(3));
+        } catch (SQLException e) {
+            logger.error("RdbVoucherDAOException with getByParameter() operation.");
+            throw new RdbVoucherDAOException("RdbVoucherDAOException with getByParameter() operation.");
+        }
+        return voucher;
     }
 
     @Override
