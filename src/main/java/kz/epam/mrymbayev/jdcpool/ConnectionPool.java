@@ -34,6 +34,7 @@ public class ConnectionPool {
         DB_PASSWORD = propertyManager.getProperty("db.password");
         String conCount = propertyManager.getProperty("max.connection.count");
         MAX_CONNECTION_COUNT = Integer.parseInt(conCount);
+        poolLogger.trace("DB connectivity data was loaded and init successfully.");
 
         try {
             Connection connection;
