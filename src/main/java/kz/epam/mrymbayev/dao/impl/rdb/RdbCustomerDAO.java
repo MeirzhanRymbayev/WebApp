@@ -104,7 +104,7 @@ public class RdbCustomerDAO implements CustomerDAO {
     @Override
     public List<Customer> getAll() {
         List<Customer> list = new ArrayList<>();
-        String sql = propertyManager.getProperty("customer.getAll");
+        final String sql = propertyManager.getProperty("customer.getAll");
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);

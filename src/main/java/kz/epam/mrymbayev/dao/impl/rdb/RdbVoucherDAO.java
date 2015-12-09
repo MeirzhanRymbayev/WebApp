@@ -6,10 +6,8 @@ import kz.epam.mrymbayev.model.Voucher;
 import kz.epam.mrymbayev.pm.PropertyManager;
 import org.apache.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RdbVoucherDAO implements VoucherDAO {
@@ -90,16 +88,57 @@ public class RdbVoucherDAO implements VoucherDAO {
 
     @Override
     public Voucher getById(Long id) {
-        return null;
+        Voucher voucher = new Voucher();
+        final String sql = propertyManager.getProperty("voucher.getById");
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setLong(1, id);
+            ResultSet resultSet = ps.executeQuery();
+            voucher.setId(resultSet.getLong(1));
+            voucher.setType(resultSet.getString(2));
+            voucher.setCost(resultSet.getString(3));
+        } catch (SQLException e) {
+            logger.error("RdbVoucherDAOException with getById() operation.");
+            throw new RdbVoucherDAOException("RdbVoucherDAOException with getById() operation.");
+        }
+        return voucher;
     }
 
     @Override
     public List<Voucher> getAll() {
-        return null;
+        List<Voucher> list = new ArrayList<>();
+        final String sql = propertyManager.getProperty("voucher.getAll");
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            Voucher voucher;
+            while(resultSet.next()){
+                voucher = new Voucher();
+                voucher.setId(resultSet.getLong(1));
+                voucher.setType(resultSet.getString(2));
+                voucher.setCost(resultSet.getString(3));
+                list.add(voucher);
+            }
+        } catch (SQLException e) {
+            logger.error("Error with RdbVoucherDAO getAll() method");
+            throw new RdbVoucherDAOException("Error with RdbVoucherDAO getAll() method");
+        }
+        return list;
     }
 
     @Override
-    public boolean delete(Voucher entity) {
-        return false;
+    public boolean delete(Voucher voucher) {
+        final String sql = propertyManager.getProperty("customer.delete");
+        boolean isDelete;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setLong(1, voucher.getId());
+            int affectedRows = ps.executeUpdate();
+            isDelete = (affectedRows > 0) ? true : false;
+        } catch (SQLException e) {
+            logger.error("Error with RdbVoucherDAO delete() method");
+            throw new RdbVoucherDAOException("Error with RdbVoucherDAO delete() method");
+        }
+        return isDelete;
     }
 }
