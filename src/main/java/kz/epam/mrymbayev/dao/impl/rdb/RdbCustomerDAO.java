@@ -51,28 +51,6 @@ public class RdbCustomerDAO implements CustomerDAO {
         return entity;
     }
 
-    public Customer findByLogin(String login) {
-        Customer customer = new Customer();
-        long id;
-        String customerLogin;
-        String password;
-        try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM CUSTOMER WHERE LOGIN = ?");
-            ps.setString(1, login);
-            ResultSet rs = ps.executeQuery();
-            id = rs.getLong(1);
-            customerLogin = rs.getString(2);
-            password = rs.getString(3);
-
-            customer.setId(id);
-            customer.setLogin(customerLogin);
-            customer.setPassword(password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return customer;
-    }
-
     @Override
     public Customer save(Customer entity) {
         return entity.isPersisted() ? update(entity) : insert(entity);
@@ -99,7 +77,20 @@ public class RdbCustomerDAO implements CustomerDAO {
 
     @Override
     public Customer getById(Long id) {
-        return null;
+        String query = propertyManager.getProperty("customer.getById");
+        Customer customer = new Customer();
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            customer.setId(rs.getLong(1));
+            customer.setLogin(rs.getString(2));
+            customer.setPassword(rs.getString(3));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customer;
     }
 
     @Override
