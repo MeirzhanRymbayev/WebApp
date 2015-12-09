@@ -4,6 +4,7 @@ import kz.epam.mrymbayev.dao.CustomerDAO;
 import kz.epam.mrymbayev.dao.exception.RdbDAOException;
 import kz.epam.mrymbayev.model.Customer;
 import kz.epam.mrymbayev.pm.PropertyManager;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class RdbCustomerDAO implements CustomerDAO {
 
     Connection connection;
     PropertyManager propertyManager = PropertyManager.getInstance();
+    Logger logger = Logger.getLogger(RdbCustomerDAO.class);
 
     public RdbCustomerDAO(Connection connection) {
         this.connection = connection;
@@ -33,7 +35,8 @@ public class RdbCustomerDAO implements CustomerDAO {
             long id = rs.getLong(1);
             customer.setId(id);
         } catch (SQLException e) {
-            throw new RdbDAOException();
+            logger.error("Error with RdbCustomerDAO insert() method");
+            throw new RdbDAOException("Error with RdbCustomerDAO insert() method");
         }
         return customer;
     }
@@ -45,9 +48,10 @@ public class RdbCustomerDAO implements CustomerDAO {
             ps = connection.prepareStatement(sql);
             ps.setString(1, entity.getLogin());
             ps.setString(2, entity.getPassword());
-            ps.setLong(3, entity.getId()); //example: UPDATE CUSTOMER SET LOGIN='Guitarist3', PASSWORD='123' WHERE ID = 1;
+            ps.setLong(3, entity.getId());
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error with RdbCustomerDAO update() method");
+            throw new RdbDAOException("Error with RdbCustomerDAO insert() method");
         }
         return entity;
     }

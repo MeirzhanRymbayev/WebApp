@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ConnectionPool {
     Logger poolLogger = Logger.getLogger(ConnectionPool.class);
-    //TODO вынести в проперти учетки из коннекшн пула
     private static final ConnectionPool INSTANCE = new ConnectionPool();
     PropertyManager propertyManager = PropertyManager.getInstance();
 

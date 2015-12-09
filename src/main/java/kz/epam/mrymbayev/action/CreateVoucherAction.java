@@ -1,6 +1,6 @@
 package kz.epam.mrymbayev.action;
 
-import kz.epam.mrymbayev.dao.exception.DAOException;
+import kz.epam.mrymbayev.dao.DAOFactory;
 import kz.epam.mrymbayev.dao.VoucherDAO;
 import kz.epam.mrymbayev.model.Voucher;
 
@@ -17,12 +17,8 @@ public class CreateVoucherAction implements Action {
         voucher.setType(type);
         voucher.setCost(cost);
 
-        VoucherDAO voucherDAO = new VoucherDAO();
-        try {
-            voucherDAO.insert(voucher);
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
+        VoucherDAO voucherDAO = DAOFactory.getInstance().getDao(VoucherDAO.class);
+        voucherDAO.save(voucher);
         return "redirect:voucher-added";
     }
 }
