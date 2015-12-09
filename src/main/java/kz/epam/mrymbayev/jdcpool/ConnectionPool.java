@@ -1,6 +1,7 @@
 package kz.epam.mrymbayev.jdcpool;
 
 
+import kz.epam.mrymbayev.pm.PropertyManager;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -15,16 +16,25 @@ public class ConnectionPool {
     Logger poolLogger = Logger.getLogger(ConnectionPool.class);
     //TODO вынести в проперти учетки из коннекшн пула
     private static final ConnectionPool INSTANCE = new ConnectionPool();
-    public static final String JDBC_DB_URL = "jdbc:h2:tcp://localhost/~/test";
-    public static final String DB_USER = "as";
-    public static final String DB_PASSWORD = "as";
-    private static final int MAX_CONNECTION_COUNT = 10;
+    PropertyManager propertyManager = PropertyManager.getInstance();
+
+    public static String JDBC_DB_URL;
+    public static String DB_USER;
+    public static String DB_PASSWORD;
+    private static int MAX_CONNECTION_COUNT;
 
     BlockingQueue<Connection> freeConnections = new LinkedBlockingQueue<>();
 
 
     private ConnectionPool() throws ConnectionPoolException {
         poolLogger.trace("Connection pool initialization start");
+        propertyManager.loadProperties("app.properties");
+        JDBC_DB_URL = propertyManager.getProperty("db.url");
+        DB_USER = propertyManager.getProperty("db.user");
+        DB_PASSWORD = propertyManager.getProperty("db.password");
+        String conCount = propertyManager.getProperty("max.connection.count");
+        MAX_CONNECTION_COUNT = Integer.parseInt(conCount);
+
         try {
             Connection connection;
             Class.forName("org.h2.Driver");
