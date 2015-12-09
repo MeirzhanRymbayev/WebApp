@@ -37,7 +37,7 @@ public class RdbCustomerDAO implements CustomerDAO {
             customer.setId(id);
         } catch (SQLException e) {
             logger.error("Error with RdbCustomerDAO insert() method");
-            throw new RdbDAOException("Error with RdbCustomerDAO insert() method");
+            throw new RdbCustomerDAOException("Error with RdbCustomerDAO insert() method");
         }
         return customer;
     }
@@ -76,7 +76,8 @@ public class RdbCustomerDAO implements CustomerDAO {
             customer.setLogin(rs.getString(2));
             customer.setPassword(rs.getString(3));
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error with RdbCustomerDAO getByParameter() method");
+            throw new RdbCustomerDAOException("Error with RdbCustomerDAO getByParameter() method");
         }
         return customer;
     }
@@ -94,7 +95,8 @@ public class RdbCustomerDAO implements CustomerDAO {
             customer.setLogin(rs.getString(2));
             customer.setPassword(rs.getString(3));
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error with RdbCustomerDAO getById() method");
+            throw new RdbCustomerDAOException("Error with RdbCustomerDAO getById() method");
         }
         return customer;
     }
@@ -119,7 +121,8 @@ public class RdbCustomerDAO implements CustomerDAO {
                 list.add(customer);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error with RdbCustomerDAO getAll() method");
+            throw new RdbCustomerDAOException("Error with RdbCustomerDAO getAll() method");
         }
         return list;
     }
@@ -134,8 +137,9 @@ public class RdbCustomerDAO implements CustomerDAO {
             int affectedRows = ps.executeUpdate();
             isDelete = (affectedRows > 0) ? true : false;
         } catch (SQLException e) {
-            throw new Rd
+            logger.error("Error with RdbCustomerDAO delete() method");
+            throw new RdbCustomerDAOException("Error with RdbCustomerDAO delete() method");
         }
-        return false;
+        return isDelete;
     }
 }
