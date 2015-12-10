@@ -2,7 +2,6 @@ package kz.epam.mrymbayev.dao.impl.rdb;
 
 import kz.epam.mrymbayev.dao.CustomerDAO;
 import kz.epam.mrymbayev.dao.exception.RdbCustomerDAOException;
-import kz.epam.mrymbayev.dao.exception.RdbDAOException;
 import kz.epam.mrymbayev.model.Customer;
 import kz.epam.mrymbayev.pm.PropertyManager;
 import org.apache.log4j.Logger;
@@ -16,6 +15,8 @@ public class RdbCustomerDAO implements CustomerDAO {
     Connection connection;
     PropertyManager propertyManager = PropertyManager.getInstance();
     Logger logger = Logger.getLogger(RdbCustomerDAO.class);
+
+    public RdbCustomerDAO(){}
 
     public RdbCustomerDAO(Connection connection) {
         this.connection = connection;
@@ -67,15 +68,18 @@ public class RdbCustomerDAO implements CustomerDAO {
         String sql = propertyManager.getProperty("customer.getByParameter");
         Customer customer = new Customer();
         try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, param);
-            ps.setString(2, value);
-            ResultSet rs = ps.executeQuery();
+            Statement ps = connection.createStatement();
 
+            ResultSet rs = ps.executeQuery("SELECT * FROM CUSTOMER WHERE "+ param +" = '"+value+"'");
+            rs.next();
             customer.setId(rs.getLong(1));
-            customer.setLogin(rs.getString(2));
-            customer.setPassword(rs.getString(3));
+            customer.setLogin(rs.getString("LOGIN"));
+            customer.setPassword(rs.getString("PASSWORD"));
+            if(rs.getLong("VOUCHER_ID") != 0L){
+                customer.setVoucherId(rs.getLong("VOUCHER_ID"));
+            }
         } catch (SQLException e) {
+            e.printStackTrace();
             logger.error("Error with RdbCustomerDAO getByParameter() method");
             throw new RdbCustomerDAOException("Error with RdbCustomerDAO getByParameter() method");
         }
@@ -116,7 +120,7 @@ public class RdbCustomerDAO implements CustomerDAO {
                 customer.setPassword(resultSet.getString(3));
                 //TODO check this condition
                 if(resultSet.getString(4) != null){
-                    customer.setVoucherID(resultSet.getLong(4));
+                    customer.setVoucherId(resultSet.getLong(4));
                 }
                 list.add(customer);
             }

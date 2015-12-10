@@ -94,6 +94,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setLong(1, id);
             ResultSet resultSet = ps.executeQuery();
+            resultSet.next();
             voucher.setId(resultSet.getLong(1));
             voucher.setType(resultSet.getString(2));
             voucher.setCost(resultSet.getString(3));

@@ -3,7 +3,7 @@ package kz.epam.mrymbayev.model;
 public class Customer extends BaseEntity {
     private String login;
     private String password;
-    private long voucherID;
+    private long voucherId;
 
     public String getLogin() {
         return login;
@@ -21,12 +21,12 @@ public class Customer extends BaseEntity {
         this.password = password;
     }
 
-    public long getVoucherID() {
-        return voucherID;
+    public long getVoucherId() {
+        return voucherId;
     }
 
-    public void setVoucherID(long voucherID) {
-        this.voucherID = voucherID;
+    public void setVoucherId(long voucherId) {
+        this.voucherId = voucherId;
     }
 
     @Override
@@ -34,6 +34,7 @@ public class Customer extends BaseEntity {
         return "Customer{" +
                 "login='" + login + '\'' +
                 ", password='" + password + '\'' +
+                ", voucher_id='" + voucherId + '\'' +
                 '}';
     }
 

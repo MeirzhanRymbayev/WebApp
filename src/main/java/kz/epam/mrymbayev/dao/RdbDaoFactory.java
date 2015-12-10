@@ -27,7 +27,7 @@ public class RdbDAOFactory<E extends BaseEntity> extends DAOFactory {
         GenericDao dao = null;
         try {
             log.trace("Trying to get DAO class object" + DaoClassName);
-            Class<?> daoClazz = Class.forName(DaoClassName);
+            Class daoClazz = Class.forName(DaoClassName);
             dao = (T) daoClazz.getDeclaredConstructor(Connection.class).newInstance(connection);
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             log.error("Unavailable create DAO instance");
