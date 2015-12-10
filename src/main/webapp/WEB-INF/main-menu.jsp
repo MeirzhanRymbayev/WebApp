@@ -5,6 +5,7 @@
 </head>
 <body>
 Hello ${sessionScope.customer}
+<a href="sign-out.jsp?action=sign-out">Sign out</a>
 
 </body>
 </html>

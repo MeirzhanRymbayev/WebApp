@@ -15,6 +15,7 @@ public class ActionFactory {
         actions.put("GET/register-success", new RegistrationSuccessAction());
         actions.put("POST/sign-in", new SignInAction());
         actions.put("GET/sign-in-success", new SignInSuccessAction());
+        actions.put("GET/sign-out", new SignOutAction());
         //actions.put("POST/login", new LoginAction());
         //actions.put("GET/register", new LogoutAction());
     }
