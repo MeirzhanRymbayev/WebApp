@@ -1,11 +1,16 @@
 package kz.epam.mrymbayev.dao.impl.rdb;
 
 import kz.epam.mrymbayev.dao.TourAgentDAO;
+import kz.epam.mrymbayev.dao.exception.RdbCustomerDAOException;
+import kz.epam.mrymbayev.dao.exception.RdbTourAgentDAOException;
 import kz.epam.mrymbayev.model.TourAgent;
 import kz.epam.mrymbayev.pm.PropertyManager;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class RdbTourAgentDAO implements TourAgentDAO {
@@ -23,7 +28,23 @@ public class RdbTourAgentDAO implements TourAgentDAO {
 
     @Override
     public TourAgent save(TourAgent tourAgent) {
-        return null;
+        PreparedStatement ps;
+        String sql = propertyManager.getProperty("tourAgent.insert");
+
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, tourAgent.getLogin());
+            ps.setString(2, tourAgent.getPassword());
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            long id = rs.getLong(1);
+            tourAgent.setId(id);
+        } catch (SQLException e) {
+            logger.error("Error with RdbTourAgentDAO insert() method");
+            throw new RdbTourAgentDAOException("Error with RdbCustomerDAO insert() method");
+        }
+        return tourAgent;
     }
 
     @Override
