@@ -59,7 +59,7 @@ public class TestFilter implements Filter {
 
             //resp.sendError(HttpServletResponse.SC_FORBIDDEN);//403 Manager goes to admin page
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401 User.ANONYMOUS;
-            req.getHeader("Referrer");
+            //req.getHeader("Referrer");
             resp.sendRedirect("");
             return;
         }
