@@ -27,6 +27,7 @@ public class TestFilter implements Filter {
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(customerRole);
         roleSet.add(managerRole);
+        roleSet.add(userRole);
 
         Set<Role> managerRoleSet = new HashSet<>();
         managerRoleSet.add(managerRole);
@@ -56,7 +57,7 @@ public class TestFilter implements Filter {
         String action = req.getParameter("action");
         Set<Role> roles = urlMapping.get(action);
         if(!roles.contains(customer.getRole())){
-
+            //TODO тут лучше сделать общий Юзер объект?
             //resp.sendError(HttpServletResponse.SC_FORBIDDEN);//403 TourAgent goes to admin page
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401 User.ANONYMOUS;
             //req.getHeader("Referrer");
