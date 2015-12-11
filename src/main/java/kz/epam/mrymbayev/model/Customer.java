@@ -1,9 +1,12 @@
 package kz.epam.mrymbayev.model;
 
 public class Customer extends BaseEntity {
+    public static final Customer ANONYMOUS = new Customer();
+
     private String login;
     private String password;
     private long voucherId;
+    private Role role;
 
     public String getLogin() {
         return login;
@@ -27,6 +30,14 @@ public class Customer extends BaseEntity {
 
     public void setVoucherId(long voucherId) {
         this.voucherId = voucherId;
+    }
+
+    public void setRole(Role role){
+        this.role = role;
+    }
+
+    public Role getRole() {
+        return role;
     }
 
     @Override

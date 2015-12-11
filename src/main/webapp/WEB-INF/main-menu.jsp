@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -5,7 +6,9 @@
 </head>
 <body>
 Hello ${sessionScope.customer}
-<a href="sign-out.jsp?action=sign-out">Sign out</a>
+<a href="/controller?action=sign-out">Sign out</a>
+<a href="/controller?action=view-vouchers">View vouchers</a>
+
 
 </body>
 </html>
