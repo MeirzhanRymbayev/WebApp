@@ -57,7 +57,7 @@ public class TestFilter implements Filter {
         Set<Role> roles = urlMapping.get(action);
         if(!roles.contains(customer.getRole())){
 
-            //resp.sendError(HttpServletResponse.SC_FORBIDDEN);//403 Manager goes to admin page
+            //resp.sendError(HttpServletResponse.SC_FORBIDDEN);//403 TourAgent goes to admin page
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401 User.ANONYMOUS;
             //req.getHeader("Referrer");
             resp.sendRedirect("");
