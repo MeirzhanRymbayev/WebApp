@@ -51,6 +51,8 @@ public class RdbCustomerDAO implements CustomerDAO {
             ps.setString(1, customer.getLogin());
             ps.setString(2, customer.getPassword());
             ps.setLong(3, customer.getId());
+            ps.executeUpdate();
+
         } catch (SQLException e) {
             logger.error("Error with RdbCustomerDAO update() method");
             throw new RdbCustomerDAOException("Error with RdbCustomerDAO insert() method");
@@ -94,7 +96,7 @@ public class RdbCustomerDAO implements CustomerDAO {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
-
+            rs.next();
             customer.setId(rs.getLong(1));
             customer.setLogin(rs.getString(2));
             customer.setPassword(rs.getString(3));
