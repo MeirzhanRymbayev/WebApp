@@ -12,9 +12,9 @@ import java.util.List;
 
 public class RdbCustomerDAO implements CustomerDAO {
 
-    Connection connection;
-    PropertyManager propertyManager = PropertyManager.getInstance();
-    Logger logger = Logger.getLogger(RdbCustomerDAO.class);
+    private Connection connection;
+    private PropertyManager propertyManager = PropertyManager.getInstance();
+    private Logger logger = Logger.getLogger(RdbCustomerDAO.class);
 
     public RdbCustomerDAO(){}
 
