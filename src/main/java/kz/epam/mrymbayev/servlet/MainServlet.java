@@ -36,7 +36,6 @@ public class MainServlet extends HttpServlet {
         }
 
         if (view.startsWith("redirect:")) {
-            getServletContext();
             resp.sendRedirect(getRedirectLocation(view));
             return;
         }

@@ -2,6 +2,7 @@ package kz.epam.mrymbayev.dao.impl.rdb;
 
 import kz.epam.mrymbayev.dao.CustomerDAO;
 import kz.epam.mrymbayev.dao.exception.RdbCustomerDAOException;
+import kz.epam.mrymbayev.model.Role;
 import kz.epam.mrymbayev.model.Customer;
 import kz.epam.mrymbayev.pm.PropertyManager;
 import org.apache.log4j.Logger;
@@ -72,7 +73,7 @@ public class RdbCustomerDAO implements CustomerDAO {
         try {
             Statement ps = connection.createStatement();
 
-            ResultSet rs = ps.executeQuery("SELECT * FROM CUSTOMER WHERE "+ param +" = '"+value+"'");
+            ResultSet rs = ps.executeQuery(sql);
             rs.next();
             customer.setId(rs.getLong(1));
             customer.setLogin(rs.getString("LOGIN"));
@@ -80,8 +81,8 @@ public class RdbCustomerDAO implements CustomerDAO {
             if(rs.getLong("VOUCHER_ID") != 0L){
                 customer.setVoucherId(rs.getLong("VOUCHER_ID"));
             }
+            customer.setRole(new Role(rs.getString("ROLE")));
         } catch (SQLException e) {
-            e.printStackTrace();
             logger.error("Error with RdbCustomerDAO getByParameter() method");
             throw new RdbCustomerDAOException("Error with RdbCustomerDAO getByParameter() method");
         }

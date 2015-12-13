@@ -1,12 +1,18 @@
 package kz.epam.mrymbayev.model;
 
 public class Customer extends BaseEntity {
-    public static final Customer ANONYMOUS = new Customer();
+    public static final Customer ANONYMOUS = new Customer(new Role("user"));
 
     private String login;
     private String password;
     private long voucherId;
     private Role role;
+
+    public Customer(){}
+
+    public Customer(Role role1) {
+        this.role = role1;
+    }
 
     public String getLogin() {
         return login;

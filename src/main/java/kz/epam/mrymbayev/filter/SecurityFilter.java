@@ -15,8 +15,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-@WebFilter(filterName = "TestFilter", urlPatterns="/*")
-public class TestFilter implements Filter {
+@WebFilter(filterName = "SecurityFilter", urlPatterns="/controller/*")
+public class SecurityFilter implements Filter {
 
     Map<String, Set<Role>> urlMapping = new HashMap<>();
 
@@ -24,21 +24,22 @@ public class TestFilter implements Filter {
         Role customerRole = new Role("customer");
         Role managerRole = new Role("manager");
         Role userRole = new Role("user");
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(customerRole);
-        roleSet.add(managerRole);
-        roleSet.add(userRole);
+        Set<Role> allRoles = new HashSet<>();
+        allRoles.add(customerRole);
+        allRoles.add(managerRole);
+        allRoles.add(userRole);
 
         Set<Role> managerRoleSet = new HashSet<>();
         managerRoleSet.add(managerRole);
 
         urlMapping.put("create-voucher", managerRoleSet);
         urlMapping.put("voucher-added", managerRoleSet );
-        urlMapping.put("register", roleSet);
-        urlMapping.put("register-success", roleSet);
-        urlMapping.put("sign-in", roleSet);
-        urlMapping.put("sign-in-success", roleSet);
-        urlMapping.put("sign-out", roleSet);
+        urlMapping.put("register", allRoles);
+        urlMapping.put("register-success", allRoles);
+        urlMapping.put("sign-in", allRoles);
+        urlMapping.put("sign-in-success", allRoles);
+        urlMapping.put("sign-out", allRoles);
+        urlMapping.put("registration-page", allRoles);
     }
 
     public void destroy() {
@@ -51,17 +52,23 @@ public class TestFilter implements Filter {
     public void doFilter0(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException, IOException {
         Customer customer = null;
         HttpSession session = req.getSession(false);
-        if(session == null) customer = Customer.ANONYMOUS;
         if(session != null) customer = (Customer) session.getAttribute("customer");
+
+        if(customer == null) {
+            customer = Customer.ANONYMOUS;
+        }
 
         String action = req.getParameter("action");
         Set<Role> roles = urlMapping.get(action);
         if(!roles.contains(customer.getRole())){
+            System.out.println(roles);
+            System.out.println(customer.getRole());
             //TODO тут лучше сделать общий Юзер объект?
             //resp.sendError(HttpServletResponse.SC_FORBIDDEN);//403 TourAgent goes to admin page
-            resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401 User.ANONYMOUS;
+            //resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401 User.ANONYMOUS;
             //req.getHeader("Referrer");
-            resp.sendRedirect("");
+
+            resp.sendRedirect("/controller?action=registration-page");
             return;
         }
         chain.doFilter(req, resp);

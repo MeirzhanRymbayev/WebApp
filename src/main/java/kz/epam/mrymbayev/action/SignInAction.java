@@ -19,10 +19,10 @@ public class SignInAction implements Action {
         }
         CustomerDAO CustomerDAO = DAOFactory.getInstance().getDao(CustomerDAO.class);
         Customer customer = CustomerDAO.getByParameter("LOGIN", login);
-        //TODO создать сессию и прикрутить в  рекуест
+
         HttpSession session = request.getSession();
         session.setAttribute("customer", customer);
 
-        return "main-menu";
+        return "redirect:main-menu";
     }
 }

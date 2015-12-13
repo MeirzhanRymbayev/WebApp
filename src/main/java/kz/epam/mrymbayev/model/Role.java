@@ -16,5 +16,21 @@ public class Role {
         this.role = role;
     }
 
+    @Override
+    public String toString() {
+        return role;
+    }
 
+    @Override
+    public int hashCode() {
+        return role.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Role)) return false;
+        if(obj == null) return false;
+        Role o = (Role) obj;
+        return role.equals(o.getRole());
+    }
 }

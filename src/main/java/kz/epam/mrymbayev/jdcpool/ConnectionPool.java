@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ConnectionPool {
     Logger poolLogger = Logger.getLogger(ConnectionPool.class);
-    private static final ConnectionPool INSTANCE = new ConnectionPool();
     PropertyManager propertyManager = PropertyManager.getInstance();
 
     public static String JDBC_DB_URL;
@@ -50,8 +49,12 @@ public class ConnectionPool {
         poolLogger.info("Connection pool initialization finish. " + MAX_CONNECTION_COUNT + "connections were created.");
     }
 
+    static class InstanceHolder{
+        static final ConnectionPool INSTANCE = new ConnectionPool();
+    }
+
     public static ConnectionPool getInstance() {
-        return INSTANCE;
+        return InstanceHolder.INSTANCE;
     }
 
     public Connection getConnection(){
@@ -84,7 +87,7 @@ public class ConnectionPool {
         //TODO проверить правильно ли я возвращаю connection в RdbDAOFactory
         @Override
         public void close(){
-            INSTANCE.freeConnections.add(this.connection);
+            InstanceHolder.INSTANCE.freeConnections.add(this.connection);
         }
 
         @Override
