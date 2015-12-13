@@ -40,6 +40,7 @@ public class SecurityFilter implements Filter {
         urlMapping.put("sign-in-success", allRoles);
         urlMapping.put("sign-out", allRoles);
         urlMapping.put("registration-page", allRoles);
+        urlMapping.put("sign-in-page", allRoles);
     }
 
     public void destroy() {
@@ -68,7 +69,7 @@ public class SecurityFilter implements Filter {
             //resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401 User.ANONYMOUS;
             //req.getHeader("Referrer");
 
-            resp.sendRedirect("/controller?action=registration-page");
+            resp.sendRedirect("/controller?action=sign-in-page");
             return;
         }
         chain.doFilter(req, resp);

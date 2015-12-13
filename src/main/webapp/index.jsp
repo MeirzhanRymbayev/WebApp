@@ -9,7 +9,7 @@ Hello ${sessionScope.customer}
     <li><a href="manage-index.jsp">Tour agent page</a></li>
     <li><a href="create-voucher.jsp">Create voucher page</a></li>
     <li><a href="/controller?action=registration-page">Registration</a></li>
-    <li><a href="/controler?action=sign-in-page">Sign in</a></li>
+    <li><a href="/controller?action=sign-in-page">Sign in</a></li>
 </ul>
 
 </body>

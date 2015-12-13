@@ -4,11 +4,13 @@
     <title>Sign in</title>
 </head>
 <body>
+<fieldset>Войти
 <form action="/controller" method="post" >
     <input type="hidden" name="action" value="sign-in"/>
     <input type="text" name="login" id="login" placeholder="Login"/>
     <input type="password" name="password" id="password" placeholder="password"/>
     <button type="submit">Ok</button>
 </form>
+</fieldset>
 </body>
 </html>
