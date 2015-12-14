@@ -21,7 +21,7 @@ public class SignInAction implements Action {
         User user = UserDAO.getByParameter("LOGIN", login);
 
         HttpSession session = request.getSession();
-        session.setAttribute("customer", user);
+        session.setAttribute("user", user);
 
         return "redirect:main-menu-page";
     }

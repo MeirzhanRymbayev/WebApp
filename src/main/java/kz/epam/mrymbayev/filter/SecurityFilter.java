@@ -42,6 +42,8 @@ public class SecurityFilter implements Filter {
         urlMapping.put("sign-in-page", allRoles);
         urlMapping.put("main-menu-page", allRoles);
         urlMapping.put("main-menu", allRoles);
+        urlMapping.put("create-voucher-page", managerRoleSet);
+        urlMapping.put("manage-index-page", managerRoleSet);
 
     }
 

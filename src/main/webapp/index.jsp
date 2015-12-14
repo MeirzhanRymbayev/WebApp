@@ -6,8 +6,8 @@
 <body>
 Hello ${sessionScope.user}
 <ul>
-    <li><a href="manage-index.jsp">Tour agent page</a></li>
-    <li><a href="create-voucher.jsp">Create voucher page</a></li>
+    <li><a href="/controller?action=manage-index-page">Tour agent page</a></li>
+    <li><a href="/controller?action=create-voucher-page">Create voucher page</a></li>
     <li><a href="/controller?action=registration-page">Registration</a></li>
     <li><a href="/controller?action=sign-in-page">Sign in</a></li>
 </ul>
