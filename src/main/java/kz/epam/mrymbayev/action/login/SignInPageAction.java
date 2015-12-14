@@ -1,4 +1,6 @@
-package kz.epam.mrymbayev.action;
+package kz.epam.mrymbayev.action.login;
+
+import kz.epam.mrymbayev.action.Action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

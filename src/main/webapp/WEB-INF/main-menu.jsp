@@ -5,7 +5,7 @@
     <title>Main Page</title>
 </head>
 <body>
-Hello ${sessionScope.customer}
+Hello ${sessionScope.user}
 <a href="/controller?action=sign-out">Sign out</a>
 <a href="/controller?action=view-vouchers">View vouchers</a>
 

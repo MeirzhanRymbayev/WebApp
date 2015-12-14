@@ -4,7 +4,7 @@
     <title>Main Page</title>
 </head>
 <body>
-Hello ${sessionScope.customer}
+Hello ${sessionScope.user}
 <ul>
     <li><a href="manage-index.jsp">Tour agent page</a></li>
     <li><a href="create-voucher.jsp">Create voucher page</a></li>

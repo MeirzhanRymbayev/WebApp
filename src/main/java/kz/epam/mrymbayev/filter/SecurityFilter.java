@@ -1,7 +1,6 @@
 package kz.epam.mrymbayev.filter;
 
-import kz.epam.mrymbayev.action.RegistrationSuccessAction;
-import kz.epam.mrymbayev.model.Customer;
+import kz.epam.mrymbayev.model.User;
 import kz.epam.mrymbayev.model.Role;
 
 import javax.servlet.*;
@@ -41,6 +40,9 @@ public class SecurityFilter implements Filter {
         urlMapping.put("sign-out", allRoles);
         urlMapping.put("registration-page", allRoles);
         urlMapping.put("sign-in-page", allRoles);
+        urlMapping.put("main-menu-page", allRoles);
+        urlMapping.put("main-menu", allRoles);
+
     }
 
     public void destroy() {
@@ -51,19 +53,19 @@ public class SecurityFilter implements Filter {
     }
 
     public void doFilter0(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException, IOException {
-        Customer customer = null;
+        User user = null;
         HttpSession session = req.getSession(false);
-        if(session != null) customer = (Customer) session.getAttribute("customer");
+        if(session != null) user = (User) session.getAttribute("user");
 
-        if(customer == null) {
-            customer = Customer.ANONYMOUS;
+        if(user == null) {
+            user = User.ANONYMOUS;
         }
 
         String action = req.getParameter("action");
         Set<Role> roles = urlMapping.get(action);
-        if(!roles.contains(customer.getRole())){
+        if(!roles.contains(user.getRole())){
             System.out.println(roles);
-            System.out.println(customer.getRole());
+            System.out.println(user.getRole());
             //TODO тут лучше сделать общий Юзер объект?
             //resp.sendError(HttpServletResponse.SC_FORBIDDEN);//403 TourAgent goes to admin page
             //resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401 User.ANONYMOUS;

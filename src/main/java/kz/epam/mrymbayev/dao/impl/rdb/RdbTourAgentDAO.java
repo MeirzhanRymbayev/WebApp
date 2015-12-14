@@ -1,7 +1,6 @@
 package kz.epam.mrymbayev.dao.impl.rdb;
 
 import kz.epam.mrymbayev.dao.TourAgentDAO;
-import kz.epam.mrymbayev.dao.exception.RdbCustomerDAOException;
 import kz.epam.mrymbayev.dao.exception.RdbTourAgentDAOException;
 import kz.epam.mrymbayev.model.TourAgent;
 import kz.epam.mrymbayev.pm.PropertyManager;

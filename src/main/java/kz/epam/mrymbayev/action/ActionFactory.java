@@ -1,5 +1,12 @@
 package kz.epam.mrymbayev.action;
 
+import kz.epam.mrymbayev.action.login.SignInAction;
+import kz.epam.mrymbayev.action.login.SignInPageAction;
+import kz.epam.mrymbayev.action.login.SignInSuccessAction;
+import kz.epam.mrymbayev.action.registration.RegisterAction;
+import kz.epam.mrymbayev.action.registration.RegistrationPageAction;
+import kz.epam.mrymbayev.action.registration.RegistrationSuccessAction;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +25,7 @@ public class ActionFactory {
         actions.put("GET/sign-out", new SignOutAction());
         actions.put("GET/registration-page", new RegistrationPageAction());
         actions.put("GET/sign-in-page", new SignInPageAction());
+        actions.put("GET/main-menu-page", new MainPageAction());
         //actions.put("POST/login", new LoginAction());
         //actions.put("GET/register", new LogoutAction());
     }

@@ -1,11 +1,13 @@
-package kz.epam.mrymbayev.action;
+package kz.epam.mrymbayev.action.registration;
+
+import kz.epam.mrymbayev.action.Action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class RegistrationPageAction implements Action {
+public class RegistrationSuccessAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        return "registration-page";
+        return "register-success";
     }
 }
