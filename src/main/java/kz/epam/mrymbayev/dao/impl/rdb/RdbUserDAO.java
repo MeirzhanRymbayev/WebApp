@@ -17,14 +17,15 @@ public class RdbUserDAO implements UserDAO {
     private PropertyManager propertyManager = PropertyManager.getInstance();
     private Logger logger = Logger.getLogger(RdbUserDAO.class);
 
-    public RdbUserDAO(){}
+    public RdbUserDAO() {
+    }
 
     public RdbUserDAO(Connection connection) {
         this.connection = connection;
         propertyManager.loadProperties("query.properties");
     }
 
-    public User insert(User user){
+    public User insert(User user) {
         PreparedStatement ps;
         String sql = propertyManager.getProperty("user.insert");
 
@@ -32,6 +33,8 @@ public class RdbUserDAO implements UserDAO {
             ps = connection.prepareStatement(sql);
             ps.setString(1, user.getLogin());
             ps.setString(2, user.getPassword());
+            ps.setString(3, user.getFirstName());
+            ps.setString(4, user.getLastName());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
@@ -44,14 +47,16 @@ public class RdbUserDAO implements UserDAO {
         return user;
     }
 
-    public User update(User user){
+    public User update(User user) {
         PreparedStatement ps;
         String sql = propertyManager.getProperty("user.update");
         try {
             ps = connection.prepareStatement(sql);
             ps.setString(1, user.getLogin());
             ps.setString(2, user.getPassword());
-            ps.setLong(3, user.getId());
+            ps.setString(3, user.getFirstName());
+            ps.setString(4, user.getLastName());
+            ps.setLong(5, user.getId());
             ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -73,12 +78,14 @@ public class RdbUserDAO implements UserDAO {
         try {
             Statement ps = connection.createStatement();
 
-            ResultSet rs = ps.executeQuery("SELECT * FROM "USER" WHERE "+ param + " = '"+value+"';");
+            ResultSet rs = ps.executeQuery("SELECT * FROM USER WHERE " + param + " = '" + value + "';");
             rs.next();
             user.setId(rs.getLong(1));
             user.setLogin(rs.getString("LOGIN"));
             user.setPassword(rs.getString("PASSWORD"));
-            if(rs.getLong("VOUCHER_ID") != 0L){
+            user.setFirstName(rs.getString("FIRSTNAME"));
+            user.setLastName(rs.getString("LASTNAME"));
+            if (rs.getLong("VOUCHER_ID") != 0L) {
                 user.setVoucherId(rs.getLong("VOUCHER_ID"));
             }
             user.setRole(new Role(rs.getString("ROLE")));
@@ -101,6 +108,8 @@ public class RdbUserDAO implements UserDAO {
             user.setId(rs.getLong(1));
             user.setLogin(rs.getString(2));
             user.setPassword(rs.getString(3));
+            user.setFirstName(rs.getString("FIRSTNAME"));
+            user.setLastName(rs.getString("LASTNAME"));
         } catch (SQLException e) {
             logger.error("Error with RdbUserDAO getById() method");
             throw new RdbUserDAOException("Error with RdbUserDAO getById() method");
@@ -114,16 +123,18 @@ public class RdbUserDAO implements UserDAO {
         final String sql = propertyManager.getProperty("user.getAll");
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSet rs = statement.executeQuery(sql);
             User user;
-            while(resultSet.next()){
+            while (rs.next()) {
                 user = new User();
-                user.setId(resultSet.getLong(1));
-                user.setLogin(resultSet.getString(2));
-                user.setPassword(resultSet.getString(3));
+                user.setId(rs.getLong(1));
+                user.setLogin(rs.getString(2));
+                user.setPassword(rs.getString(3));
+                user.setFirstName(rs.getString("FIRSTNAME"));
+                user.setLastName(rs.getString("LASTNAME"));
                 //TODO check this condition
-                if(resultSet.getString(4) != null){
-                    user.setVoucherId(resultSet.getLong(4));
+                if (rs.getString(4) != null) {
+                    user.setVoucherId(rs.getLong(4));
                 }
                 list.add(user);
             }
