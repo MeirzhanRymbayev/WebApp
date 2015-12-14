@@ -73,7 +73,7 @@ public class RdbUserDAO implements UserDAO {
         try {
             Statement ps = connection.createStatement();
 
-            ResultSet rs = ps.executeQuery("SELECT * FROM CUSTOMER WHERE "+ param + " = '"+value+"';");
+            ResultSet rs = ps.executeQuery("SELECT * FROM "USER" WHERE "+ param + " = '"+value+"';");
             rs.next();
             user.setId(rs.getLong(1));
             user.setLogin(rs.getString("LOGIN"));
