@@ -30,8 +30,11 @@ public class RegisterAction implements Action {
         formData.put("firstname", firstname);
         formData.put("lastname", lastname);
         Map<String, String> violations = Validator.registerValidate(formData);
-        for(Map.Entry<String, String> e: violations.entrySet()){
-            request.setAttribute(e.getKey(), e.getValue());
+        if(violations.size() != 0) {
+            for (Map.Entry<String, String> e : violations.entrySet()) {
+                request.setAttribute(e.getKey(), e.getValue());
+            }
+            return "registration-page";
         }
 
         // TODO check dublicate logins from DB

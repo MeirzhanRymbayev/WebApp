@@ -13,10 +13,11 @@ public class RdbDAOFactory<E extends BaseEntity> extends DAOFactory {
     public static final String DAO_IMPLS_PATH = "kz.epam.mrymbayev.dao.impl.rdb";
     private static final Logger log = Logger.getLogger(RdbDAOFactory.class);
     Connection connection;
+    ConnectionPool instance;
 
     public RdbDAOFactory(){
         log.trace("Get connection from connection pool.");
-        ConnectionPool instance = ConnectionPool.getInstance();
+        instance = ConnectionPool.getInstance();
         connection = instance.getConnection();
     }
 
