@@ -28,8 +28,6 @@ public class ActionFactory {
         actions.put("GET/main-menu-page", new MainPageAction());
         actions.put("GET/create-voucher-page", new CreateVoucherPageAction());
         actions.put("GET/manage-index-page", new ManageIndexPageAction());
-        //actions.put("POST/login", new LoginAction());
-        //actions.put("GET/register", new LogoutAction());
     }
 
     public Action getAction(HttpServletRequest request) {
