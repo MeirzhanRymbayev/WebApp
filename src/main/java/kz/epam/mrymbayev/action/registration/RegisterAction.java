@@ -1,11 +1,10 @@
 package kz.epam.mrymbayev.action.registration;
 
-import kz.epam.mrymbayev.dao.RdbDAOFactory;
-import kz.epam.mrymbayev.validator.Validator;
 import kz.epam.mrymbayev.action.Action;
-import kz.epam.mrymbayev.dao.UserDAO;
 import kz.epam.mrymbayev.dao.DAOFactory;
+import kz.epam.mrymbayev.dao.UserDAO;
 import kz.epam.mrymbayev.model.User;
+import kz.epam.mrymbayev.validator.Validator;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +29,7 @@ public class RegisterAction implements Action {
         formData.put("firstname", firstname);
         formData.put("lastname", lastname);
         Map<String, String> violations = Validator.registerValidate(formData);
-        if(violations.size() != 0) {
+        if (violations.size() != 0) {
             for (Map.Entry<String, String> e : violations.entrySet()) {
                 request.setAttribute(e.getKey(), e.getValue());
             }

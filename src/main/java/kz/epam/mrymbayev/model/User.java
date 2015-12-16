@@ -1,7 +1,8 @@
 package kz.epam.mrymbayev.model;
 
 public class User extends BaseEntity {
-    public static final User ANONYMOUS = new User(new Role("user"));
+    public static final User ANONYMOUS = new User("Guest", new Role("guest"));
+
 
     private String login;
     private String password;
@@ -10,11 +11,11 @@ public class User extends BaseEntity {
     private String firstName;
     private String lastName;
 
-    public User() {
-    }
+    public User() {}
 
-    public User(Role role1) {
-        this.role = role1;
+    public User(String name, Role role) {
+        this.firstName = name;
+        this.role = role;
     }
 
     public String getFirstName() {

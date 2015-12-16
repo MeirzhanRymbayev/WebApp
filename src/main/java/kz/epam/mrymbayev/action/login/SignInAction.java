@@ -23,6 +23,9 @@ public class SignInAction implements Action {
 
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
+        if(session.getAttribute("roleError") != null){
+            session.removeAttribute("roleError");
+        }
 
         return "redirect:main-menu-page";
     }

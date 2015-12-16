@@ -11,9 +11,9 @@ public class CreateVoucherAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-        String type = request.getParameter("voucher-type");
-        String cost = request.getParameter("voucher-cost");
         Voucher voucher = new Voucher();
+        String type = request.getParameter("typeOfTour");
+        Integer cost = Integer.valueOf(request.getParameter("cost"));
         voucher.setType(type);
         voucher.setCost(cost);
 

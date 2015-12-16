@@ -2,28 +2,28 @@ package kz.epam.mrymbayev.model;
 
 public class Role {
 
-    private String role;
+    private String name;
 
-    public Role(String role) {
-        this.role = role;
+    public Role(String name) {
+        this.name = name;
     }
 
-    public String getRole() {
-        return role;
+    public String getName() {
+        return name;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return role;
+        return name;
     }
 
     @Override
     public int hashCode() {
-        return role.hashCode();
+        return name.hashCode();
     }
 
     @Override
@@ -31,6 +31,6 @@ public class Role {
         if(!(obj instanceof Role)) return false;
         if(obj == null) return false;
         Role o = (Role) obj;
-        return role.equals(o.getRole());
+        return name.equals(o.getName());
     }
 }

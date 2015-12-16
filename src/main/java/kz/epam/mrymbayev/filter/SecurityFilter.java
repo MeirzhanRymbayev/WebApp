@@ -20,11 +20,11 @@ public class SecurityFilter implements Filter {
     Map<String, Set<Role>> urlMapping = new HashMap<>();
 
     {
-        Role customerRole = new Role("customer");
         Role managerRole = new Role("manager");
         Role userRole = new Role("user");
+        Role guestRole = new Role("guest");
         Set<Role> allRoles = new HashSet<>();
-        allRoles.add(customerRole);
+        allRoles.add(guestRole);
         allRoles.add(managerRole);
         allRoles.add(userRole);
 
@@ -61,6 +61,8 @@ public class SecurityFilter implements Filter {
 
         if(user == null) {
             user = User.ANONYMOUS;
+            //TODO стоит ли тут создавать сессию?
+            session.setAttribute("user", user);
         }
 
         String action = req.getParameter("action");
@@ -72,7 +74,7 @@ public class SecurityFilter implements Filter {
             //resp.sendError(HttpServletResponse.SC_FORBIDDEN);//403 TourAgent goes to admin page
             //resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401 User.ANONYMOUS;
             //req.getHeader("Referrer");
-
+            session.setAttribute("roleError", "Для этих действии Вам необходимо войти в систему с правами администратора.");
             resp.sendRedirect("/controller?action=sign-in-page");
             return;
         }

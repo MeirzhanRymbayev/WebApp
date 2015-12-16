@@ -31,7 +31,7 @@ public class RdbVoucherDAO implements VoucherDAO {
 
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, voucher.getType());
-            ps.setString(2, voucher.getCost());
+            ps.setInt(2, voucher.getCost());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
@@ -51,7 +51,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             final String sql = propertyManager.getProperty("voucher.update");
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, voucher.getType());
-            ps.setString(2, voucher.getCost());
+            ps.setInt(2, voucher.getCost());
             ps.setLong(3, voucher.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -78,7 +78,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             ResultSet resultSet = ps.executeQuery();
             voucher.setId(resultSet.getLong(1));
             voucher.setType(resultSet.getString(2));
-            voucher.setCost(resultSet.getString(3));
+            voucher.setCost(resultSet.getInt(3));
         } catch (SQLException e) {
             logger.error("RdbVoucherDAOException with getByParameter() operation.");
             throw new RdbVoucherDAOException("RdbVoucherDAOException with getByParameter() operation.");
@@ -97,7 +97,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             resultSet.next();
             voucher.setId(resultSet.getLong(1));
             voucher.setType(resultSet.getString(2));
-            voucher.setCost(resultSet.getString(3));
+            voucher.setCost(resultSet.getInt(3));
         } catch (SQLException e) {
             logger.error("RdbVoucherDAOException with getById() operation.");
             throw new RdbVoucherDAOException("RdbVoucherDAOException with getById() operation.");
@@ -117,7 +117,7 @@ public class RdbVoucherDAO implements VoucherDAO {
                 voucher = new Voucher();
                 voucher.setId(resultSet.getLong(1));
                 voucher.setType(resultSet.getString(2));
-                voucher.setCost(resultSet.getString(3));
+                voucher.setCost(resultSet.getInt(3));
                 list.add(voucher);
             }
         } catch (SQLException e) {

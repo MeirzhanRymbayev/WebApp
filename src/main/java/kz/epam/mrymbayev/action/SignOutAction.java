@@ -9,6 +9,6 @@ public class SignOutAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         if(session != null) session.invalidate();
-        return "sign-out";
+        return "main-menu";
     }
 }

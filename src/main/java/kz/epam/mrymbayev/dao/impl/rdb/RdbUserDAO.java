@@ -74,7 +74,7 @@ public class RdbUserDAO implements UserDAO {
     @Override
     public User getByParameter(String param, String value) {
         String sql = propertyManager.getProperty("user.getByParameter");
-        User user = new User();
+        User user = new User("Guest", new Role("guest"));
         try {
             Statement ps = connection.createStatement();
 
@@ -99,7 +99,7 @@ public class RdbUserDAO implements UserDAO {
     @Override
     public User getById(Long id) {
         String sql = propertyManager.getProperty("user.getById");
-        User user = new User();
+        User user = new User("Guest", new Role("guest"));
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setLong(1, id);
@@ -126,7 +126,7 @@ public class RdbUserDAO implements UserDAO {
             ResultSet rs = statement.executeQuery(sql);
             User user;
             while (rs.next()) {
-                user = new User();
+                user = new User("Guest", new Role("guest"));
                 user.setId(rs.getLong(1));
                 user.setLogin(rs.getString(2));
                 user.setPassword(rs.getString(3));
