@@ -46,3 +46,4 @@
     <p><button type="submit">Add voucher to catalog</button></p>
     <p><label><input type="reset" value="Тазарту (Сбросить)"></label></p>
 </form>
+</body>

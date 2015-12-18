@@ -45,6 +45,9 @@ public class SecurityFilter implements Filter {
         urlMapping.put("create-voucher-page", managerRoleSet);
         urlMapping.put("manage-index-page", managerRoleSet);
 
+        //View voucher actions
+        urlMapping.put("view-vouchers-page", allRoles);
+
     }
 
     public void destroy() {
@@ -66,17 +69,13 @@ public class SecurityFilter implements Filter {
         }
 
         String action = req.getParameter("action");
-        System.out.println("req.getParameter(\"action\") = " + action);
         Set<Role> roles = urlMapping.get(action);
-        System.out.println("action = " + action);
-        System.out.println("user.getRole() = " + user.getRole());
-        System.out.println("roles = " + roles);
         if(!roles.contains(user.getRole())){
             //TODO тут лучше сделать общий Юзер объект?
             //resp.sendError(HttpServletResponse.SC_FORBIDDEN);//403 TourAgent goes to admin page
             //resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401 User.ANONYMOUS;
             //req.getHeader("Referrer");
-            session.setAttribute("roleError", "У вас нет прав на данные действия.");
+            session.setAttribute("roleError", "У вас нет прав на данные действия. Пожалуйста, авторизуйтесь для данного действия");
             resp.sendRedirect("/controller?action=sign-in-page");
             return;
         }

@@ -21,7 +21,7 @@
     <a href="/controller?action=sign-out">Sign out</a><br>
 </c:if>
 </ul>
-<a href="/controller?action=view-vouchers">View vouchers</a><br>
+<a href="/controller?action=view-vouchers-page">View vouchers</a><br>
 </body>
 </html>
 
