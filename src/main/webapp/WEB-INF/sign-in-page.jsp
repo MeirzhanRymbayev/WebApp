@@ -12,7 +12,13 @@
     <form action="/controller" method="post" >
         <input type="hidden" name="action" value="sign-in"/>
         <input type="text" name="login" id="login" placeholder="Login"/>
+        <c:if test="${not empty loginError}">
+            <font color="red">${loginError}</font>
+        </c:if>
         <input type="password" name="password" id="password" placeholder="password"/>
+        <c:if test="${not empty passwordError}">
+            <font color="red">${passwordError}</font>
+        </c:if>
         <button type="submit">Ok</button>
     </form>
 </fieldset>

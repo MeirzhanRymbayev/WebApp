@@ -10,7 +10,7 @@
 <body>
 <%--@elvariable id="user" type="kz.epam.mrymbayev.model.User"--%>
 <fmt:message key="welcome" bundle="${msg}">
-    <fmt:param value="${user.firstName}"/>
+    <fmt:param value="${user}"/>
 </fmt:message>
 <ul>
     <li><a href="/controller?action=manage-index-page">Tour agent page</a></li>

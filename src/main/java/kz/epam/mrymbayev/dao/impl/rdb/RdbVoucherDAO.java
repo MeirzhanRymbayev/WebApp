@@ -26,19 +26,36 @@ public class RdbVoucherDAO implements VoucherDAO {
     public Voucher insert(Voucher voucher) {
 
         final String sql;
+        final String sql2;
         try {
             sql = propertyManager.getProperty("voucher.insert");
 
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, voucher.getType());
-            ps.setInt(2, voucher.getCost());
-            ps.executeUpdate();
+            PreparedStatement ps1 = connection.prepareStatement(sql);
+            ps1.setString(1, voucher.getHotel());
+            ps1.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
+            ResultSet rs = ps1.getGeneratedKeys();
             rs.next();
             long id = rs.getLong(1);
             voucher.setId(id);
+            ps1.close();
+
+            sql2 = propertyManager.getProperty("voucherI18n.insert");
+            PreparedStatement ps2 = connection.prepareStatement(sql2);
+            ps2.setLong(1, id);
+            ps2.setLong(2, voucher.getLocaleId());
+            ps2.setString(3, voucher.getType());
+            ps2.setInt(4, voucher.getCost());
+            ps2.setString(5, voucher.getCountry());
+            ps2.setString(6, voucher.getDayNightAmount());
+            ps2.setString(7, voucher.getTransport());
+            ps2.executeUpdate();
+
+            ResultSet rs2 = ps2.getGeneratedKeys();
+            rs2.next();
+            ps2.close();
         } catch (SQLException e) {
+            e.printStackTrace();
             logger.error("RdbVoucherDAOException with insert() operation.");
             throw new RdbVoucherDAOException("Issue with insert() operation.");
         }

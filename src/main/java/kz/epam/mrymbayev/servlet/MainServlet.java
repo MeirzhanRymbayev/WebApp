@@ -6,13 +6,17 @@ import kz.epam.mrymbayev.action.ActionFactory;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.IOException;
+import java.io.InputStream;
 
 @WebServlet(name = "MainServlet", urlPatterns = "/controller")
+@MultipartConfig
 public class MainServlet extends HttpServlet {
     ActionFactory actionFactory;
     Logger log = Logger.getLogger(MainServlet.class);
@@ -40,7 +44,6 @@ public class MainServlet extends HttpServlet {
             return;
         }
         req.getRequestDispatcher("/WEB-INF/" + view + ".jsp").forward(req, resp);
-
     }
 
     private String getRedirectLocation(String view) {

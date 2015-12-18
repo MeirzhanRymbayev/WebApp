@@ -71,8 +71,10 @@ public class User extends BaseEntity {
         return "User{" +
                 "login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", voucher_id='" + voucherId + '\'' +
+                ", voucherId=" + voucherId +
+                ", role=" + role +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 '}';
     }
-
 }
