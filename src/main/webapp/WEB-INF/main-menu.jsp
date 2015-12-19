@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<fmt:setLocale value="kk"/>
+<fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="messages" var="msg"/>
 <html>
 <head>
@@ -22,9 +22,9 @@
 </c:if>
 </ul>
 <a href="/controller?action=view-vouchers-page">View vouchers</a><br>
-<a href="/controller?action=set-locale&locale=1">KZ</a><br>
-<a href="/controller?action=set-locale&locale=2">RU</a><br>
-<a href="/controller?action=set-locale&locale=3">EN</a><br>
+<a href="/controller?action=set-locale&locale=kk">KZ</a><br>
+<a href="/controller?action=set-locale&locale=ru">RU</a><br>
+<a href="/controller?action=set-locale&locale=en">EN</a><br>
 </body>
 </html>
 

@@ -11,8 +11,7 @@ public class SetLocaleAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession(false);
         String locale = request.getParameter("locale");
-        int intLocale = Integer.parseInt(locale);
-        session.setAttribute("locale", intLocale);
+        session.setAttribute("locale", locale);
         return "main-menu";
     }
 }
