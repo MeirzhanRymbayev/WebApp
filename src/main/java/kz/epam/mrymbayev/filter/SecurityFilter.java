@@ -48,6 +48,8 @@ public class SecurityFilter implements Filter {
         //View voucher actions
         urlMapping.put("view-vouchers-page", allRoles);
 
+        //Locale
+        urlMapping.put("set-locale", allRoles);
     }
 
     public void destroy() {

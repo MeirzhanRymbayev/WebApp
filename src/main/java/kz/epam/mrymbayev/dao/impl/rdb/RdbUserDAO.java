@@ -118,6 +118,11 @@ public class RdbUserDAO implements UserDAO {
     }
 
     @Override
+    public List<User> getAllByLocale(int locale) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public List<User> getAll() {
         List<User> list = new ArrayList<>();
         final String sql = propertyManager.getProperty("user.getAll");

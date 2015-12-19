@@ -12,6 +12,7 @@ public interface GenericDao<T extends BaseEntity> {
     T getByParameter(String param, String value);
     T getById(Long id);
     List<T> getAll();
+    List<T> getAllByLocale(int locale);
 
     //DELETE
     boolean delete(T entity);

@@ -22,4 +22,7 @@ public interface VoucherDAO extends GenericDao<Voucher> {
 
     @Override
     boolean delete(Voucher entity);
+
+    @Override
+    List<Voucher> getAllByLocale(int locale);
 }

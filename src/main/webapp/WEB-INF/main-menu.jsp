@@ -22,6 +22,9 @@
 </c:if>
 </ul>
 <a href="/controller?action=view-vouchers-page">View vouchers</a><br>
+<a href="/controller?action=set-locale&locale=1">KZ</a><br>
+<a href="/controller?action=set-locale&locale=2">RU</a><br>
+<a href="/controller?action=set-locale&locale=3">EN</a><br>
 </body>
 </html>
 

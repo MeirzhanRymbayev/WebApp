@@ -124,19 +124,31 @@ public class RdbVoucherDAO implements VoucherDAO {
 
     @Override
     public List<Voucher> getAll() {
+        return null;
+    }
+
+    @Override
+    public List<Voucher> getAllByLocale(int locale) {
         List<Voucher> list = new ArrayList<>();
         final String sql = propertyManager.getProperty("voucher.getAll");
         try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, locale);
+            ResultSet resultSet = ps.executeQuery();
             Voucher voucher;
             while(resultSet.next()){
                 voucher = new Voucher();
-                voucher.setId(resultSet.getLong(1));
-                voucher.setType(resultSet.getString(2));
-                voucher.setCost(resultSet.getInt(3));
+                voucher.setId(resultSet.getLong("ID"));
+                voucher.setType(resultSet.getString("TYPE"));
+                voucher.setCost(resultSet.getInt("COST"));
+                voucher.setHotel(resultSet.getString("HOTEL"));
+                voucher.setCountry(resultSet.getString("COUNTRY"));
+                voucher.setDayNightAmount(resultSet.getString("DAY_NIGHT_AMOUNT"));
+                voucher.setTransport(resultSet.getString("TRANSPORT"));
+                voucher.setLocaleId(resultSet.getLong("LOCALE_ID"));
                 list.add(voucher);
             }
+            ps.close();
         } catch (SQLException e) {
             logger.error("Error with RdbVoucherDAO getAll() method");
             throw new RdbVoucherDAOException("Error with RdbVoucherDAO getAll() method");
@@ -159,4 +171,5 @@ public class RdbVoucherDAO implements VoucherDAO {
         }
         return isDelete;
     }
+
 }

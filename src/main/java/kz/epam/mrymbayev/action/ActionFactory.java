@@ -31,6 +31,9 @@ public class ActionFactory {
 
         //view actions
         actions.put("GET/view-vouchers-page", new ViewVouchersAction());
+
+        //Locale
+        actions.put("GET/set-locale", new SetLocaleAction());
     }
 
     public Action getAction(HttpServletRequest request) {
