@@ -1,13 +1,11 @@
-package kz.epam.mrymbayev.action.registration;
-
-import kz.epam.mrymbayev.action.Action;
+package kz.epam.mrymbayev.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class RegistrationPageAction implements Action {
+public class ShowMainPageAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        return "registration-page";
+        return "main-menu";
     }
 }

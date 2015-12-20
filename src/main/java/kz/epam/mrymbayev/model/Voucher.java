@@ -8,7 +8,7 @@ public class Voucher extends BaseEntity{
     private String country;
     private String dayNightAmount;
     private String transport;
-    private long localeId;
+    private int localeId;
     private boolean status;
 
 
@@ -54,11 +54,11 @@ public class Voucher extends BaseEntity{
         this.transport = transport;
     }
 
-    public long getLocaleId() {
+    public int getLocaleId() {
         return localeId;
     }
 
-    public void setLocaleId(long localeId) {
+    public void setLocaleId(int localeId) {
         this.localeId = localeId;
     }
 

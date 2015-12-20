@@ -12,6 +12,16 @@ public class SetLocaleAction implements Action {
         HttpSession session = request.getSession(false);
         String locale = request.getParameter("locale");
         session.setAttribute("locale", locale);
+
+        String contextPath = request.getServletContext().getContextPath();
+        System.out.println("contextPath = " + contextPath);
+
+        String requestURI = request.getRequestURI();
+        System.out.println("requestURI = " + requestURI);
+
+        StringBuffer requestURL1 = request.getRequestURL();
+        String requestURL = requestURL1.toString();
+        System.out.println("requestURL = " + requestURL);
         return "main-menu";
     }
 }

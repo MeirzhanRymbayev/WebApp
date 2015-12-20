@@ -5,7 +5,7 @@ import kz.epam.mrymbayev.action.Action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class SignInPageAction implements Action {
+public class ShowSignInPageAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 

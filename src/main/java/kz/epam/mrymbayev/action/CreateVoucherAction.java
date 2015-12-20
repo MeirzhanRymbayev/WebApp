@@ -62,7 +62,7 @@ public class CreateVoucherAction implements Action {
         voucher.setCountry(country);
         voucher.setDayNightAmount(dayNightAmount);
         voucher.setTransport(transport);
-        voucher.setLocaleId(Long.parseLong(localeId));
+        voucher.setLocaleId(Integer.parseInt(localeId));
 
         VoucherDAO voucherDAO = DAOFactory.getInstance().getDao(VoucherDAO.class);
         voucherDAO.save(voucher);

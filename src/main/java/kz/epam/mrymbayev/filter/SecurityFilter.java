@@ -67,7 +67,8 @@ public class SecurityFilter implements Filter {
         if(user == null) {
             user = User.ANONYMOUS;
             //TODO стоит ли тут создавать сессию?
-            //session.setAttribute("user", user);
+            session.setAttribute("user", user);
+            session.setAttribute("locale", "kk");
         }
 
         String action = req.getParameter("action");

@@ -17,6 +17,9 @@ public class SignInAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
+        //TODO make sure validate form to type application/x-www-form-urlencoded
+        //String contentType = request.getContentType();
+        //System.out.println("contentType = " + contentType);
 
         Map<String, String> formData = new HashMap<>();
         formData.put("login", login);
@@ -34,12 +37,12 @@ public class SignInAction implements Action {
         User user = UserDAO.getByParameter("LOGIN", login);
 
 
-        /*HttpSession guestSession = request.getSession(false);
+        HttpSession guestSession = request.getSession(false);
         User guestUser = (User) guestSession.getAttribute("user");
         if(guestUser.getRole().getName() == "guest"){
-            guestSession.invalidate();
-        }*/
-        HttpSession session = request.getSession();
+            guestSession.removeAttribute("user");
+        }
+        HttpSession session = request.getSession(false);
         session.setAttribute("user", user);
         if(session.getAttribute("roleError") != null){
             session.removeAttribute("roleError");

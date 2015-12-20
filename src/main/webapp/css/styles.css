@@ -1,0 +1,36 @@
+.my-forms {
+    position: absolute;
+    left: 20px;
+    width: 200px;
+}
+
+#wrapper{
+    width: 90%;
+    margin: auto;
+}
+
+#content-wrapper{
+    position: relative;
+    margin-top: auto;
+}
+
+#left-bar{
+    position: absolute;
+    width: 200px;
+    padding: 10px 5px;
+    margin-bottom: 20px;
+    color: inherit;
+    background-color: #eee;
+    border-radius: 4px;
+
+}
+
+#content-center{
+    position: relative;
+    margin-left: 210px;
+    padding: 10px 5px;
+    margin-bottom: 20px;
+    color: inherit;
+    background-color: #eee;
+    border-radius: 4px;
+}

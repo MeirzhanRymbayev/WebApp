@@ -134,22 +134,23 @@ public class RdbVoucherDAO implements VoucherDAO {
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, locale);
-            ResultSet resultSet = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
             Voucher voucher;
-            while(resultSet.next()){
+            while(rs.next()){
                 voucher = new Voucher();
-                voucher.setId(resultSet.getLong("ID"));
-                voucher.setType(resultSet.getString("TYPE"));
-                voucher.setCost(resultSet.getInt("COST"));
-                voucher.setHotel(resultSet.getString("HOTEL"));
-                voucher.setCountry(resultSet.getString("COUNTRY"));
-                voucher.setDayNightAmount(resultSet.getString("DAY_NIGHT_AMOUNT"));
-                voucher.setTransport(resultSet.getString("TRANSPORT"));
-                voucher.setLocaleId(resultSet.getLong("LOCALE_ID"));
+                voucher.setId(rs.getLong("ID"));
+                voucher.setType(rs.getString("TYPE"));
+                voucher.setCost(rs.getInt("COST"));
+                voucher.setHotel(rs.getString("HOTEL"));
+                voucher.setCountry(rs.getString("COUNTRY"));
+                voucher.setDayNightAmount(rs.getString("DAY_NIGHT_AMOUNT"));
+                voucher.setTransport(rs.getString("TRANSPORT"));
+                voucher.setLocaleId(rs.getInt("LOCALE_ID"));
                 list.add(voucher);
             }
             ps.close();
         } catch (SQLException e) {
+            e.printStackTrace();
             logger.error("Error with RdbVoucherDAO getAll() method");
             throw new RdbVoucherDAOException("Error with RdbVoucherDAO getAll() method");
         }
