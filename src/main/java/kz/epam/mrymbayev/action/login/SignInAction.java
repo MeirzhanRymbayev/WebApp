@@ -39,13 +39,18 @@ public class SignInAction implements Action {
 
         HttpSession guestSession = request.getSession(false);
         User guestUser = (User) guestSession.getAttribute("user");
-        if(guestUser.getRole().getName() == "guest"){
+        if(guestUser.getRole().getName().equals("guest")){
             guestSession.removeAttribute("user");
         }
         HttpSession session = request.getSession(false);
         session.setAttribute("user", user);
         if(session.getAttribute("roleError") != null){
             session.removeAttribute("roleError");
+        }
+
+        /* If role of user equals MANAGER then we redirect user to manage-index-page */
+        if(user.getRole().getName().equals("manager")){
+            return "redirect:manage-index-page";
         }
 
         return "redirect:main-menu-page";

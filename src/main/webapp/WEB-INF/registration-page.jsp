@@ -16,6 +16,5 @@
             </div>
             <t:footer/>
         </div>
-
     </jsp:body>
 </t:page>

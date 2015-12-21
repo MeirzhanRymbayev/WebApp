@@ -16,8 +16,8 @@
         <c:if test="${sessionScope.user.role.name != 'guest'}">
             <li><a href="/controller?action=sign-out"><fmt:message key="sign.out" bundle="${msg}"/></a></li>
         </c:if>
-        <li role="separator" class="divider"></li>
-        <c:if test="${sessionScope.user.role.name == 'manager'}">
+        <c:if test="${sessionScope.user.role.name != 'manager'}">
+            <li role="separator" class="divider"></li>
             <li><a href="/controller?action=manage-index-page"><fmt:message key="tour.agent.page" bundle="${msg}"/></a></li>
         </c:if>
     </ul>

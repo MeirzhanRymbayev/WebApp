@@ -41,7 +41,7 @@ public class SecurityFilter implements Filter {
         urlMapping.put("registration-page", allRoles);
         urlMapping.put("sign-in-page", allRoles);
         urlMapping.put("main-menu-page", allRoles);
-        urlMapping.put("main-menu", allRoles);
+        /*urlMapping.put("main-menu", allRoles);*/
         urlMapping.put("create-voucher-page", managerRoleSet);
         urlMapping.put("manage-index-page", managerRoleSet);
 
@@ -68,7 +68,7 @@ public class SecurityFilter implements Filter {
             user = User.ANONYMOUS;
             //TODO стоит ли тут создавать сессию?
             session.setAttribute("user", user);
-            session.setAttribute("locale", "kk");
+            session.setAttribute("locale", "ru");
         }
 
         String action = req.getParameter("action");

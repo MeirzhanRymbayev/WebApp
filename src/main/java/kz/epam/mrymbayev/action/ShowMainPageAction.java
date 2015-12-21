@@ -6,6 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 public class ShowMainPageAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        return "main-menu";
+        return "main-menu-page";
     }
 }

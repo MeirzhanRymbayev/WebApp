@@ -12,16 +12,30 @@ public class SetLocaleAction implements Action {
         HttpSession session = request.getSession(false);
         String locale = request.getParameter("locale");
         session.setAttribute("locale", locale);
-
-        String contextPath = request.getServletContext().getContextPath();
-        System.out.println("contextPath = " + contextPath);
-
-        String requestURI = request.getRequestURI();
-        System.out.println("requestURI = " + requestURI);
-
-        StringBuffer requestURL1 = request.getRequestURL();
-        String requestURL = requestURL1.toString();
-        System.out.println("requestURL = " + requestURL);
-        return "main-menu";
+        String referer = request.getHeader("Referer");
+        String currentPage = getReferrerPage(referer);
+        if(!currentPage.contains("page")) return "main-menu-page";
+        return currentPage;
     }
+
+    /**
+     * This method define referrer page(action) from request header
+     * and returns it.
+     * @param referrer Referrer string from request's header
+     * @return Returns referrer action, which send client to current page he was.
+     */
+    private String getReferrerPage(String referrer){
+        int indexOfQuestionMark = referrer.indexOf("?");
+        int actionParamStartIndex = indexOfQuestionMark + 8;
+        boolean containsTwoAndMoreParams = referrer.contains("&");
+        String respPage;
+        if(containsTwoAndMoreParams){
+            respPage = referrer.substring(actionParamStartIndex, referrer.indexOf("&"));
+        } else {
+            respPage = referrer.substring(actionParamStartIndex);
+        }
+        return respPage;
+    }
+
+
 }
