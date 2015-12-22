@@ -6,6 +6,7 @@ import kz.epam.mrymbayev.model.Voucher;
 import kz.epam.mrymbayev.pm.PropertyManager;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class RdbVoucherDAO implements VoucherDAO {
 
             PreparedStatement ps1 = connection.prepareStatement(sql);
             ps1.setString(1, voucher.getHotel());
+            ps1.setString(2, voucher.getFolderName());
             ps1.executeUpdate();
 
             ResultSet rs = ps1.getGeneratedKeys();
@@ -146,6 +148,8 @@ public class RdbVoucherDAO implements VoucherDAO {
                 voucher.setDayNightAmount(rs.getString("DAY_NIGHT_AMOUNT"));
                 voucher.setTransport(rs.getString("TRANSPORT"));
                 voucher.setLocaleId(rs.getInt("LOCALE_ID"));
+                voucher.setFolderName(rs.getString("FOLDER_NAME"));
+                voucher.setFileNames(getFileNames(rs.getString("FOLDER_NAME")));
                 list.add(voucher);
             }
             ps.close();
@@ -171,6 +175,39 @@ public class RdbVoucherDAO implements VoucherDAO {
             throw new RdbVoucherDAOException("Error with RdbVoucherDAO delete() method");
         }
         return isDelete;
+    }
+
+    @Override
+    public boolean saveFolderName(Voucher savedVoucher) {
+        String sql = propertyManager.getProperty("voucher.saveFolderName");
+        PreparedStatement ps = null;
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, savedVoucher.getFolderName());
+            ps.setLong(2, savedVoucher.getId());
+            int i = ps.executeUpdate();
+            if(i != 0) return true;
+        } catch (SQLException e) {
+            logger.error("Error with RdbVoucherDAO saveFolderName() method");
+            throw new RdbVoucherDAOException("Error with RdbVoucherDAO saveFolderName() method");
+        }
+        return false;
+    }
+
+    private List<String> getFileNames(String voucherFolder){
+        PropertyManager pm = PropertyManager.getInstance();
+        List<String> fileNames = new ArrayList<>();
+        pm.loadProperties("app.properties");
+        String rootFolder = pm.getProperty("voucher.images.root.folder");
+        File dir = new File(rootFolder + voucherFolder + "/");
+        File[] dirContent = dir.listFiles();
+        //TODO if doesn't exist folder if(dirContent == null)
+        for (File file :
+                dirContent) {
+            String fileName = "/" + file.getName();
+            fileNames.add(fileName);
+        }
+        return fileNames;
     }
 
 }

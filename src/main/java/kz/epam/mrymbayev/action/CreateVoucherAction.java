@@ -50,11 +50,8 @@ public class CreateVoucherAction implements Action {
             }
             return "create-voucher-page";
         }
-        //TODO check for null parts
 
-        UUID uuid = UUID.randomUUID();
-        String pathToCreatedFolder = saveFiles(files, uuid);
-        log.trace("Files was successfully saved in " + pathToCreatedFolder + " directory.");
+
 
         voucher.setType(type);
         voucher.setCost(Integer.parseInt(cost));
@@ -65,8 +62,15 @@ public class CreateVoucherAction implements Action {
         voucher.setLocaleId(Integer.parseInt(localeId));
 
         VoucherDAO voucherDAO = DAOFactory.getInstance().getDao(VoucherDAO.class);
-        voucherDAO.save(voucher);
-        log.info("voucher saved on database.");
+        Voucher savedVoucher = voucherDAO.save(voucher);
+        log.info("Voucher saved on database successfully.");
+
+        String folderName = "/voucher" + savedVoucher.getId().toString();
+        savedVoucher.setFolderName(folderName);
+        voucherDAO.saveFolderName(savedVoucher);
+        String pathToCreatedFolder = saveFiles(files, folderName);
+        log.trace("Files was successfully saved in " + pathToCreatedFolder + " directory.");
+
         return "redirect:voucher-added";
     }
 
@@ -79,15 +83,14 @@ public class CreateVoucherAction implements Action {
         }
     }
 
-    private String saveFiles(Collection<Part> files, UUID uuid) throws IOException {
+    private String saveFiles(Collection<Part> files, String randNewFolderName) throws IOException {
         String imagesRootFolder = propertyManager.getProperty("voucher.images.root.folder");
-        String newFolderName = "/" + String.valueOf(uuid);
         String fileFormat;
         String contentType;
         String pathToFile;
 
         File root = new File(imagesRootFolder);
-        File newFolder = new File(root, newFolderName);
+        File newFolder = new File(root, randNewFolderName);
         newFolder.mkdir();
         for (Part file : files) {
             UUID nameUuid = UUID.randomUUID();

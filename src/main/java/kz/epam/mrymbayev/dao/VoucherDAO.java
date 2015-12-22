@@ -25,4 +25,6 @@ public interface VoucherDAO extends GenericDao<Voucher> {
 
     @Override
     List<Voucher> getAllByLocale(int locale);
+
+    boolean saveFolderName(Voucher savedVoucher);
 }

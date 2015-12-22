@@ -8,9 +8,9 @@
     <jsp:body>
         <div id="wrapper">
             <t:navbar/>
-            <div id="content-wrapper">
+            <div class="content-wrapper">
                 <t:leftcontent/>
-                <div id="content-center">
+                <div id="content-center" class="content">
                     //TODO
                     <a href="create-voucher-page.jsp">Create voucher</a>
                     <a href="../make-voucher-hot.jsp">Make voucher hot</a>

@@ -8,13 +8,12 @@
     <jsp:body>
         <div id="wrapper">
             <t:navbar/>
-            <div id="content-wrapper">
+            <div class="content-wrapper">
                 <t:leftcontent/>
-                <div id="content-center">
+                <div id="content-center" class="content">
                     <fmt:message key="voucher.added" bundle="${msg}"/>
                 </div>
             </div>
-        </div>
         <t:footer/>
         </div>
     </jsp:body>

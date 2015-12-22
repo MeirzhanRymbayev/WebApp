@@ -8,13 +8,13 @@
     <jsp:body>
         <div id="wrapper">
             <t:navbar/>
-            <div id="content-wrapper">
+            <div class="content-wrapper">
                 <t:leftcontent/>
-                <div id="content-center">
-                    <t:vouchersList vouchers="${vouchers}"/>
+                <div id="content-center" class="content">
+                    <%--<t:vouchersList vouchers="${vouchers}"/>--%>
+                    <t:vouchersList/>
                 </div>
             </div>
-        </div>
         <t:footer/>
         </div>
     </jsp:body>

@@ -8,9 +8,9 @@
     <jsp:body>
         <div id="wrapper">
             <t:navbar/>
-            <div id="content-wrapper">
+            <div class="content-wrapper">
                 <t:leftcontent/>
-                <div id="content-center">
+                <div id="content-center" class="content">
                     <t:signinform/>
                 </div>
             </div>

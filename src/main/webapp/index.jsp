@@ -8,7 +8,7 @@
     <jsp:body>
         <div id="wrapper">
             <t:navbar/>
-            <div id="content-wrapper">
+            <div class="content-wrapper">
                 <t:leftcontent/>
                 <t:maincontent/>
             </div>

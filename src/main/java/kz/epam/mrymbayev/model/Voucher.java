@@ -1,5 +1,7 @@
 package kz.epam.mrymbayev.model;
 
+import java.util.List;
+
 public class Voucher extends BaseEntity{
 
     private String type;
@@ -10,10 +12,10 @@ public class Voucher extends BaseEntity{
     private String transport;
     private int localeId;
     private boolean status;
-
+    private String folderName;
+    private List<String> fileNames;
 
     public Voucher() {
-
     }
 
     public Voucher(Long id, String type, Integer cost) {
@@ -21,7 +23,21 @@ public class Voucher extends BaseEntity{
         this.type = type;
         this.cost = cost;
     }
+    public List<String> getFileNames() {
+        return fileNames;
+    }
 
+    public void setFileNames(List<String> fileNames) {
+        this.fileNames = fileNames;
+    }
+
+    public String getFolderName() {
+        return folderName;
+    }
+
+    public void setFolderName(String folderName) {
+        this.folderName = folderName;
+    }
     public String getHotel() {
         return hotel;
     }
