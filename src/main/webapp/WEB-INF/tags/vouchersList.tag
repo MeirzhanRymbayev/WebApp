@@ -30,9 +30,20 @@
                     </td>
                 </tr>
                 <c:if test="${user.role.name == 'user'}">
-                <a href="/controller?action=buy&id=${voucher.id}">
-                    <button><fmt:message key="voucher.buy" bundle="${msg}"/></button>
-                </a>
+                    <form action="/controller" method="post">
+                        <input type="hidden" name="action" value="buy">
+                        <input type="hidden" name="id" value="${voucher.id}">
+                    <select name="amount" >
+                        <option value="1" selected >1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                    <button type="submit">
+                        <fmt:message key="voucher.buy" bundle="${msg}"/></button>
+                    </form>
                 </c:if>
             </table><div class='hr-vnutr'></div>
 </c:forEach>

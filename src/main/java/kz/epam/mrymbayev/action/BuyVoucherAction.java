@@ -22,10 +22,12 @@ public class BuyVoucherAction implements Action {
         User user = (User) session.getAttribute("user");
         Long userId = user.getId();
         VoucherService voucherService = new VoucherService();
-        voucherService.orderVoucher(voucherId, userId);
+        String amountString = request.getParameter("amount");
+        int amount = Integer.valueOf(amountString);
+        voucherService.orderVoucher(voucherId, userId, amount);
 
 
         daoFactory.close();
-        return "voucher-successfully-bought-page";
+        return "redirect:voucher-successfully-bought-page";
     }
 }

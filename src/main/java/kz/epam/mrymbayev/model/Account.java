@@ -3,9 +3,13 @@ package kz.epam.mrymbayev.model;
 public class Account extends BaseEntity{
 
     private long userId;
-    private long asset;
+    private int asset;
 
     public Account() {
+    }
+
+    public Account(long id, String tourAgency, int asset) {
+        super(id);
     }
 
     public void setUserId(long userId) {
@@ -16,11 +20,11 @@ public class Account extends BaseEntity{
         return userId;
     }
 
-    public void setAsset(long asset) {
+    public void setAsset(int asset) {
         this.asset = asset;
     }
 
-    public long getAsset() {
+    public int getAsset() {
         return asset;
     }
 }

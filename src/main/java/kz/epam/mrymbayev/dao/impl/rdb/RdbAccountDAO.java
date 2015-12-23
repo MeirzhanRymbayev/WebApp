@@ -32,7 +32,7 @@ public class RdbAccountDAO implements AccountDAO {
     }
 
     @Override
-    public Account getById(Long id) {
+    public Account getById(long id) {
         String sql = propertyManager.getProperty("account.getById");
         Account account = new Account();
         try {
@@ -42,7 +42,7 @@ public class RdbAccountDAO implements AccountDAO {
             rs.next();
             account.setId(rs.getLong(1));
             account.setUserId(rs.getLong(2));
-            account.setAsset(rs.getLong(3));
+            account.setAsset(rs.getInt(3));
         } catch (SQLException e) {
             logger.error("Error with RdbAccountDAO getById() method");
             throw new RdbAccountDAOException("Error with RdbAccountDAO getById() method");

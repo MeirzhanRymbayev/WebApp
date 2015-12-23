@@ -97,7 +97,7 @@ public class RdbUserDAO implements UserDAO {
     }
 
     @Override
-    public User getById(Long id) {
+    public User getById(long id) {
         String sql = propertyManager.getProperty("user.getById");
         User user = new User("Guest", new Role("guest"));
         try {

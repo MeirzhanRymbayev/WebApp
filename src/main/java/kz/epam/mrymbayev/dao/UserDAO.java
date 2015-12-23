@@ -12,7 +12,7 @@ public interface UserDAO extends GenericDao<User> {
     User getByParameter(String param, String value);
 
     @Override
-    User getById(Long id);
+    User getById(long id);
 
     @Override
     List<User> getAll();

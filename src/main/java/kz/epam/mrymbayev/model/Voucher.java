@@ -6,7 +6,7 @@ import java.util.List;
 public class Voucher extends BaseEntity{
 
     private String type;
-    private Integer cost;
+    private int cost;
     private String hotel;
     private String country;
     private String dayNightAmount;
@@ -17,6 +17,7 @@ public class Voucher extends BaseEntity{
     private List<String> fileNames;
     private Date startDate;
     private Date endDate;
+    private int quantity;
 
     public Voucher() {
     }
@@ -89,11 +90,11 @@ public class Voucher extends BaseEntity{
         return type;
     }
 
-    public void setCost(Integer cost) {
+    public void setCost(int cost) {
         this.cost = cost;
     }
 
-    public Integer getCost() {
+    public int getCost() {
         return cost;
     }
 
@@ -133,5 +134,13 @@ public class Voucher extends BaseEntity{
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

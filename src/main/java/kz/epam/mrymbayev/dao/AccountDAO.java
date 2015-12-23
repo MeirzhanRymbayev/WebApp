@@ -12,7 +12,7 @@ public interface AccountDAO extends GenericDao<Account>{
     Account getByParameter(String param, String value);
 
     @Override
-    Account getById(Long id);
+    Account getById(long id);
 
     @Override
     List<Account> getAll();

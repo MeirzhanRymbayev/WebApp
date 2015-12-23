@@ -34,6 +34,10 @@ public class ActionFactory {
 
         //Locale
         actions.put("GET/set-locale", new SetLocaleAction());
+
+        //Buy voucher
+        actions.put("POST/buy", new BuyVoucherAction());
+        actions.put("GET/voucher-successfully-bought-page", new ShowVoucherWasBoughtAction());
     }
 
     public Action getAction(HttpServletRequest request) {

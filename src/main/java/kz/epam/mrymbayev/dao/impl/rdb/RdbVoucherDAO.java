@@ -107,7 +107,7 @@ public class RdbVoucherDAO implements VoucherDAO {
     }
 
     @Override
-    public Voucher getById(Long id) {
+    public Voucher getById(long id) {
         Voucher voucher = new Voucher();
         final String sql = propertyManager.getProperty("voucher.getById");
         try {

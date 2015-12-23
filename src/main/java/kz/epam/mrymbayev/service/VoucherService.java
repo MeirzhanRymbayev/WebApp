@@ -7,25 +7,85 @@ import kz.epam.mrymbayev.model.User;
 import kz.epam.mrymbayev.model.Voucher;
 
 public class VoucherService {
-    public boolean orderVoucher(Long voucherId, Long userId){
-        DAOFactory daoFactory = DAOFactory.getInstance();
+    private DAOFactory daoFactory;
+    private VoucherDAO voucherDAO;
+    private UserDAO userDAO;
+    private AccountDAO accountDAO;
+    private OrderDAO orderDAO;
+    private Voucher voucher;
+    private User user;
+    private Long userAccountId;
+    private Account userAccount;
+    private Order order;
+    private static final Account companyAccount = new Account(1, "TourAgency", 1_000_000);//если это статический объект ему автоиатический присваевается null
+
+    public VoucherService() {
+    }
+
+
+    public boolean orderVoucher(long voucherId, long userId, int amount) {
+        daoFactory = DAOFactory.getInstance();
         daoFactory.beginTransaction();
-        VoucherDAO voucherDAO = daoFactory.getDao(VoucherDAO.class);
-        UserDAO userDAO = daoFactory.getDao(UserDAO.class);
-        AccountDAO accountDAO = daoFactory.getDao(AccountDAO.class);
-        Voucher voucher = voucherDAO.getById(voucherId);
-        User user = userDAO.getById(userId);
-        Long userAccountId = user.getAccountId();
+        voucherDAO = daoFactory.getDao(VoucherDAO.class);
+        userDAO = daoFactory.getDao(UserDAO.class);
+        accountDAO = daoFactory.getDao(AccountDAO.class);
+        voucher = voucherDAO.getById(voucherId);
+        user = userDAO.getById(userId);
+        userAccountId = user.getAccountId();
         Integer cost = voucher.getCost();
-        Account account = accountDAO.getById(userAccountId);
-        Order order = new Order();
+        userAccount = accountDAO.getById(userAccountId);
+        boolean transfered = transfer(cost, userAccount, companyAccount);
+        boolean removed = removeGoodsFromResidue(amount, voucherId);
+        boolean saving = saveOrder(voucher, user, amount);
+        if (transfered && removed && saving) {
+            //TODO предусмотреть есть ли доступные путевки с положительным количеством
+            daoFactory.commit();
+        } else {
+            daoFactory.rollback();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean removeGoodsFromResidue(int amount, long voucherId) {
+        Voucher voucher = voucherDAO.getById(voucherId);
+        int residue = voucher.getQuantity();
+        if (residue > amount) {
+            residue = residue - amount;
+            voucher.setQuantity(residue);
+            voucherDAO.save(voucher);
+        } else return false;
+        return true;
+    }
+
+    private boolean saveOrder(Voucher voucher, User user, int amount) {
+        order = new Order();
         order.setVoucherId(voucher.getId());
         order.setUserId(user.getId());
-        order.setCost(voucher.getCost());
+        order.setCost(voucher.getCost() * amount);
         order.setDiscount(user.getDiscount());
         order.setDate(new java.sql.Date(new java.util.Date().getTime()));
-        OrderDAO orderDAO = daoFactory.getDao(OrderDAO.class);
+        orderDAO = daoFactory.getDao(OrderDAO.class);
         orderDAO.save(order);
-
+        //TODO check result of save method with if condition
+        return true;
     }
+
+    private boolean transfer(Integer cost, Account userAccount, Account companyAccount) {
+        int userAsset = userAccount.getAsset();
+        int companyAsset = companyAccount.getAsset();
+        if (userAsset > 0 && userAsset > cost) {
+            userAsset = userAsset - cost;
+            companyAsset = companyAsset + cost;
+            userAccount.setAsset(userAsset);
+            companyAccount.setAsset(companyAsset);
+            accountDAO.save(userAccount);
+            accountDAO.save(companyAccount);
+        } else return false;
+
+
+        return true;
+    }
+
+
 }

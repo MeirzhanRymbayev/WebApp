@@ -12,7 +12,7 @@ public interface OrderDAO extends GenericDao<Order> {
     Order getByParameter(String param, String value);
 
     @Override
-    Order getById(Long id);
+    Order getById(long id);
 
     @Override
     List<Order> getAll();

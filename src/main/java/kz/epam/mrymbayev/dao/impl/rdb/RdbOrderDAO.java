@@ -36,6 +36,7 @@ public class RdbOrderDAO implements OrderDAO {
             ps.setInt(3, order.getCost());
             ps.setInt(4, order.getDiscount());
             ps.setDate(5, order.getDate());
+            ps.setInt(6, order.getAmount());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
@@ -58,7 +59,8 @@ public class RdbOrderDAO implements OrderDAO {
             ps.setInt(3, order.getCost());
             ps.setInt(4, order.getDiscount());
             ps.setDate(5, order.getDate());
-            ps.setLong(6, order.getId());
+            ps.setInt(6, order.getAmount());
+            ps.setLong(7, order.getId());
             ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -70,26 +72,26 @@ public class RdbOrderDAO implements OrderDAO {
 
     @Override
     public Order getByParameter(String param, String value) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public Order getById(Long id) {
-        return null;
+    public Order getById(long id) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<Order> getAll() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<Order> getAllByLocale(int locale) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean delete(Order entity) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 }

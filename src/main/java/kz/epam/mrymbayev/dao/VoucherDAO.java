@@ -15,7 +15,7 @@ public interface VoucherDAO extends GenericDao<Voucher> {
     Voucher getByParameter(String param, String value);
 
     @Override
-    Voucher getById(Long id);
+    Voucher getById(long id);
 
     @Override
     List<Voucher> getAll();

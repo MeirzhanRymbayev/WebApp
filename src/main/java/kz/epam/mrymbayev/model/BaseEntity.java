@@ -2,9 +2,9 @@ package kz.epam.mrymbayev.model;
 
 public abstract class BaseEntity {
 
-    protected Long id;
+    protected long id;
 
-    public BaseEntity(Long id){
+    public BaseEntity(long id){
         this.id = id;
     }
 
@@ -16,7 +16,7 @@ public abstract class BaseEntity {
         return id;
     }
 
-    public void setId(Long id){
+    public void setId(long id){
         this.id = id;
     }
 
@@ -25,7 +25,7 @@ public abstract class BaseEntity {
      *
      */
     public boolean isPersisted(){
-        return id != null;
+        return id != 0L;
     }
 
     /*
@@ -33,7 +33,7 @@ public abstract class BaseEntity {
      *
      */
     public boolean isNotPersisted() {
-        return id == null;
+        return id == 0L;
     }
 
 }

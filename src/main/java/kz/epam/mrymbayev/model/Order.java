@@ -9,20 +9,21 @@ public class Order extends BaseEntity {
     private Integer cost;
     private Integer discount;
     private Date date;
+    private int amount;
 
-    public void setVoucherId(Long voucherId) {
+    public void setVoucherId(long voucherId) {
         this.voucherId = voucherId;
     }
 
-    public Long getVoucherId() {
+    public long getVoucherId() {
         return voucherId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
@@ -48,5 +49,13 @@ public class Order extends BaseEntity {
 
     public Date getDate() {
         return date;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }
