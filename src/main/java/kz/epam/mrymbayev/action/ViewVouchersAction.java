@@ -28,6 +28,7 @@ public class ViewVouchersAction implements Action {
         if(locale.equals("en")) intLocale = 3;
         List<Voucher> vouchers = voucherDAO.getAllByLocale(intLocale);
         request.setAttribute("vouchers", vouchers);
+        daoFactory.close();
 
         return "view-vouchers-page";
     }

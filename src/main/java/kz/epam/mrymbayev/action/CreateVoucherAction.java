@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.*;
 
 public class CreateVoucherAction implements Action {
@@ -31,6 +34,18 @@ public class CreateVoucherAction implements Action {
         String dayNightAmount = request.getParameter("dayNightAmount");
         String transport = request.getParameter("transport");
         String localeId = request.getParameter("localeId");
+        String startDateString = request.getParameter("start-date");
+        String endDateString = request.getParameter("end-date");
+        java.util.Date startDate = null;
+        java.util.Date endDate = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            startDate = sdf.parse(startDateString);
+            endDate = sdf.parse(endDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         Collection<Part> allParts = request.getParts();
         Collection<Part> files = getFiles(allParts);
 
@@ -60,6 +75,8 @@ public class CreateVoucherAction implements Action {
         voucher.setDayNightAmount(dayNightAmount);
         voucher.setTransport(transport);
         voucher.setLocaleId(Integer.parseInt(localeId));
+        voucher.setStartDate(new java.sql.Date(startDate.getTime()));
+        voucher.setEndDate(new java.sql.Date(endDate.getTime()));
 
         VoucherDAO voucherDAO = DAOFactory.getInstance().getDao(VoucherDAO.class);
         Voucher savedVoucher = voucherDAO.save(voucher);
@@ -70,7 +87,7 @@ public class CreateVoucherAction implements Action {
         voucherDAO.saveFolderName(savedVoucher);
         String pathToCreatedFolder = saveFiles(files, folderName);
         log.trace("Files was successfully saved in " + pathToCreatedFolder + " directory.");
-
+        DAOFactory.getInstance().close();
         return "redirect:voucher-added";
     }
 
@@ -84,6 +101,7 @@ public class CreateVoucherAction implements Action {
     }
 
     private String saveFiles(Collection<Part> files, String randNewFolderName) throws IOException {
+        propertyManager.loadProperties("app.properties");
         String imagesRootFolder = propertyManager.getProperty("voucher.images.root.folder");
         String fileFormat;
         String contentType;
@@ -94,6 +112,7 @@ public class CreateVoucherAction implements Action {
         newFolder.mkdir();
         for (Part file : files) {
             UUID nameUuid = UUID.randomUUID();
+            //TODO don't change file name file.getName()
             contentType = file.getContentType();
             fileFormat = "." + contentType.substring(contentType.indexOf('/') + 1);
             pathToFile = newFolder + "/" + nameUuid + fileFormat;

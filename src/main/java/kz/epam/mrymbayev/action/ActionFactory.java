@@ -17,7 +17,7 @@ public class ActionFactory {
     public ActionFactory() throws ActionException {
         actions = new HashMap<>();
         actions.put("POST/create-voucher", new CreateVoucherAction());
-        actions.put("GET/voucher-added", new VoucherAddedAction());
+        actions.put("GET/voucher-added", new ShowVoucherAddedAction());
         actions.put("POST/register", new RegisterAction());
         actions.put("GET/register-success", new RegistrationSuccessAction());
         actions.put("POST/sign-in", new SignInAction());
@@ -26,8 +26,8 @@ public class ActionFactory {
         actions.put("GET/registration-page", new ShowRegistrationPageAction());
         actions.put("GET/sign-in-page", new ShowSignInPageAction());
         actions.put("GET/main-menu-page", new ShowMainPageAction());
-        actions.put("GET/create-voucher-page", new CreateVoucherPageAction());
-        actions.put("GET/manage-index-page", new ManageIndexPageAction());
+        actions.put("GET/create-voucher-page", new ShowCreateVoucherPageAction());
+        actions.put("GET/manage-index-page", new ShowManageIndexPageAction());
 
         //view actions
         actions.put("GET/view-vouchers-page", new ViewVouchersAction());

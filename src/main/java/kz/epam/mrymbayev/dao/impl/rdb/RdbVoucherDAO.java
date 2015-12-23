@@ -33,7 +33,8 @@ public class RdbVoucherDAO implements VoucherDAO {
 
             PreparedStatement ps1 = connection.prepareStatement(sql);
             ps1.setString(1, voucher.getHotel());
-            ps1.setString(2, voucher.getFolderName());
+            ps1.setDate(2, voucher.getStartDate());
+            ps1.setDate(3, voucher.getEndDate());
             ps1.executeUpdate();
 
             ResultSet rs = ps1.getGeneratedKeys();
@@ -188,6 +189,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             int i = ps.executeUpdate();
             if(i != 0) return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             logger.error("Error with RdbVoucherDAO saveFolderName() method");
             throw new RdbVoucherDAOException("Error with RdbVoucherDAO saveFolderName() method");
         }

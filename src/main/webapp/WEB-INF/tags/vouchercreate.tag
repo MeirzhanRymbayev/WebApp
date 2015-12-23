@@ -40,6 +40,8 @@
         <p><input type="hidden" name="localeId" value="1"/></p>
         <p><input type="file" name="image" multiple/></p>
         <c:if test="${not empty uploadError}"><font color="red">${uploadError}</font></c:if>
+        <input type="date" name="start-date" />
+        <input type="date" name="end-date"/>
         <button type="submit" class="btn btn-default"><fmt:message key="submit" bundle="${msg}"/></button>
         <label><input type="reset" class="btn btn-default" value="Тазарту (Сбросить)"></label>
     </form>

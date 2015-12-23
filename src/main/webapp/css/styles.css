@@ -34,3 +34,39 @@
     background-color: #eee;
     border-radius: 4px;
 }
+
+.ssyl a:active {
+    color:#FF9532;
+    text-decoration:none;
+}
+
+.ssyl a:hover {
+    text-decoration: underline;
+}
+.ssyl a:visited {
+    color:#FF3333;
+    text-decoration:none;
+}
+.ssyl a{
+    text-decoration: none;
+    vertical-align:top;
+    color:#333333;
+    font-weight: bold;
+}
+
+.tabl1{
+    margin:5px 0;
+    font-size:12px;
+    width:100%;
+}
+
+.pr1{
+    width:70%;
+}
+.hr-vnutr {
+    border-bottom: 1px solid #B8DBE4;
+    border-top: 1px solid #E5F4F7;
+    font-size: 0;
+    height: 0;
+    margin: 6px 0;
+}

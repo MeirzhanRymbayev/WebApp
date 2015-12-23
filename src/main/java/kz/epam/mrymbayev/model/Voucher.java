@@ -1,5 +1,6 @@
 package kz.epam.mrymbayev.model;
 
+import java.sql.Date;
 import java.util.List;
 
 public class Voucher extends BaseEntity{
@@ -14,6 +15,8 @@ public class Voucher extends BaseEntity{
     private boolean status;
     private String folderName;
     private List<String> fileNames;
+    private Date startDate;
+    private Date endDate;
 
     public Voucher() {
     }
@@ -114,5 +117,21 @@ public class Voucher extends BaseEntity{
                 ", transport='" + transport + '\'' +
                 ", localeId='" + localeId + '\'' +
                 '}';
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }
