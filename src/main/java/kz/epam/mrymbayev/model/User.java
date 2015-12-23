@@ -11,6 +11,7 @@ public class User extends BaseEntity {
     private String firstName;
     private String lastName;
     private Long accountId;
+    private Integer discount;
 
     public User() {}
 
@@ -85,5 +86,13 @@ public class User extends BaseEntity {
 
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
+    }
+
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
     }
 }

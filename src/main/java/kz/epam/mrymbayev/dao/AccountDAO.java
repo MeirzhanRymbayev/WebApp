@@ -4,7 +4,7 @@ import kz.epam.mrymbayev.model.Account;
 
 import java.util.List;
 
-interface AccountDAO extends GenericDao<Account>{
+public interface AccountDAO extends GenericDao<Account>{
     @Override
     Account save(Account entity);
 
