@@ -1,6 +1,7 @@
 package kz.epam.mrymbayev.dao.impl.rdb;
 
 import kz.epam.mrymbayev.dao.AccountDAO;
+import kz.epam.mrymbayev.dao.exception.RdbAccountDAOException;
 import kz.epam.mrymbayev.dao.exception.RdbUserDAOException;
 import kz.epam.mrymbayev.model.Account;
 import kz.epam.mrymbayev.model.Role;
@@ -44,7 +45,7 @@ public class RdbAccountDAO implements AccountDAO {
             account.setAsset(rs.getLong(3));
         } catch (SQLException e) {
             logger.error("Error with RdbAccountDAO getById() method");
-            throw new RdbUserDAOException("Error with RdbAccountDAO getById() method");
+            throw new RdbAccountDAOException("Error with RdbAccountDAO getById() method");
         }
         return account;
     }
