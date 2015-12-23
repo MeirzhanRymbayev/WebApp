@@ -31,7 +31,7 @@ public class SecurityFilter implements Filter {
         Set<Role> managerRoleSet = new HashSet<>();
         managerRoleSet.add(managerRole);
         Set<Role> userRoleSet = new HashSet<>();
-        managerRoleSet.add(userRole);
+        userRoleSet.add(userRole);
 
         urlMapping.put("create-voucher", managerRoleSet);
         urlMapping.put("voucher-added", managerRoleSet );
@@ -43,7 +43,6 @@ public class SecurityFilter implements Filter {
         urlMapping.put("registration-page", allRoles);
         urlMapping.put("sign-in-page", allRoles);
         urlMapping.put("main-menu-page", allRoles);
-        /*urlMapping.put("main-menu", allRoles);*/
         urlMapping.put("create-voucher-page", managerRoleSet);
         urlMapping.put("manage-index-page", managerRoleSet);
 
