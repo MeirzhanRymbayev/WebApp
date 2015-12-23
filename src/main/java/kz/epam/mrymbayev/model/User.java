@@ -10,6 +10,7 @@ public class User extends BaseEntity {
     private Role role;
     private String firstName;
     private String lastName;
+    private Long accountId;
 
     public User() {}
 
@@ -76,5 +77,13 @@ public class User extends BaseEntity {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';
+    }
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 }
