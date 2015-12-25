@@ -11,7 +11,6 @@
             <div class="content-wrapper">
                 <t:leftcontent/>
                 <div id="content-center" class="content">
-                        <%--<t:vouchersList vouchers="${vouchers}"/>--%>
                     <t:usersListManage/>
                 </div>
             </div>

@@ -9,10 +9,10 @@
 <%--@elvariable id="fileNames" type="java.util.List"--%>
 <%--@elvariable id="voucher" type="kz.epam.mrymbayev.model.Voucher"--%>
 <%--@elvariable id="user" type="kz.epam.mrymbayev.model.User"--%>
+<c:if test="${user.role.name != 'user'}">
+    <label><fmt:message key="authorization.necessary" bundle="${msg}"/></label>
+</c:if>
 <c:forEach items="${vouchers}" var="voucher">
-    <c:if test="${user.role.name != 'user'}">
-        <label><fmt:message key="authorization.necessary" bundle="${msg}"/></label>
-    </c:if>
 
 
     <table class='tabl1'>

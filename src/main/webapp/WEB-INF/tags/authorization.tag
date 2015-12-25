@@ -13,7 +13,7 @@
             <li><a href="/controller?action=sign-in-page"><fmt:message key="sign.in" bundle="${msg}"/></a></li>
             <li><a href="/controller?action=registration-page"><fmt:message key="registration" bundle="${msg}"/></a></li>
         </c:if>
-        <c:if test="${sessionScope.user.role.name == 'user' && sessionScope.user.role.name == 'manager'}">
+        <c:if test="${sessionScope.user.role.name == 'user' || sessionScope.user.role.name == 'manager'}">
             <li><a href="/controller?action=sign-out"><fmt:message key="sign.out" bundle="${msg}"/></a></li>
         </c:if>
         <c:if test="${sessionScope.user.role.name != 'manager'}">

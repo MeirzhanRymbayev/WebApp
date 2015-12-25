@@ -4,6 +4,7 @@ import kz.epam.mrymbayev.dao.DAOFactory;
 import kz.epam.mrymbayev.dao.VoucherDAO;
 import kz.epam.mrymbayev.model.Voucher;
 import kz.epam.mrymbayev.pm.PropertyManager;
+import kz.epam.mrymbayev.util.Util;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,10 +23,7 @@ public class ViewVouchersAction implements Action {
         VoucherDAO voucherDAO = daoFactory.getDao(VoucherDAO.class);
         HttpSession session = request.getSession(false);
         String locale = (String) session.getAttribute("locale");
-        int intLocale = 2;
-        if(locale.equals("kk")) intLocale = 1;
-        if(locale.equals("ru")) intLocale = 2;
-        if(locale.equals("en")) intLocale = 3;
+        int intLocale = Util.localeConverter(locale);
         List<Voucher> vouchers = voucherDAO.getAllByLocale(intLocale);
         request.setAttribute("vouchers", vouchers);
         daoFactory.close();
@@ -35,3 +33,4 @@ public class ViewVouchersAction implements Action {
 
 
 }
+

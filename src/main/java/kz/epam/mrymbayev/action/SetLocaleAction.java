@@ -25,8 +25,8 @@ public class SetLocaleAction implements Action {
      * @return Returns referrer action, which send client to current page he was.
      */
     private String getReferrerPage(String referrer){
-        int indexOfQuestionMark = referrer.indexOf("?");
-        int actionParamStartIndex = indexOfQuestionMark + 8;
+        int questionMarkIndex = referrer.indexOf("?");
+        int actionParamStartIndex = questionMarkIndex + 8;
         boolean containsTwoAndMoreParams = referrer.contains("&");
         String respPage;
         if(containsTwoAndMoreParams){
