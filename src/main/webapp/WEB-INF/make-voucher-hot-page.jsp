@@ -12,7 +12,7 @@
                 <t:leftcontent/>
                 <div id="content-center" class="content">
                         <%--<t:vouchersList vouchers="${vouchers}"/>--%>
-                    <t:vouchersListManage />
+                    <t:vouchersListManage/>
                 </div>
             </div>
             <t:footer/>

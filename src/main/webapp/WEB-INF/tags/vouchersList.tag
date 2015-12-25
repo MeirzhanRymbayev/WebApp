@@ -29,7 +29,7 @@
     </table>
         <div align="center">
             <c:forEach items="${voucher.fileNames}" var="fileName">
-                <img src="${pageContext.request.contextPath}/image${voucher.folderName}${fileName}"/>
+                <img width="300" height="250" src="${pageContext.request.contextPath}/image${voucher.folderName}${fileName}"/>
             </c:forEach>
         </div>
         <c:if test="${user.role.name == 'user'}">

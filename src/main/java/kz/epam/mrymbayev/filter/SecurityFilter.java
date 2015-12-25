@@ -59,11 +59,13 @@ public class SecurityFilter implements Filter {
         //MakeVoucherHotAction
         urlMapping.put("make-voucher-hot", managerRoleSet);
         urlMapping.put("make-voucher-hot-page", managerRoleSet);
+        urlMapping.put("voucher-was-made-hot-successfully-page", managerRoleSet);
 
 
         //SetUserDiscountAction
         urlMapping.put("set-user-discount", managerRoleSet);
         urlMapping.put("set-user-discount-page", managerRoleSet);
+        urlMapping.put("user-discount-was-set-successfully-page", managerRoleSet);
     }
 
     public void destroy() {

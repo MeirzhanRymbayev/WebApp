@@ -5,8 +5,11 @@ import kz.epam.mrymbayev.model.Account;
 import kz.epam.mrymbayev.model.Order;
 import kz.epam.mrymbayev.model.User;
 import kz.epam.mrymbayev.model.Voucher;
+import org.apache.log4j.Logger;
 
 public class VoucherService {
+    Logger logger = Logger.getLogger(VoucherService.class);
+
     private DAOFactory daoFactory;
     private VoucherDAO voucherDAO;
     private UserDAO userDAO;
@@ -23,36 +26,37 @@ public class VoucherService {
     }
 
 
-    public boolean orderVoucher(long voucherId, long userId, int amount) {
+    public boolean orderVoucher(Voucher voucher, User user, int amount) {
         daoFactory = DAOFactory.getInstance();
         daoFactory.beginTransaction();
-        voucherDAO = daoFactory.getDao(VoucherDAO.class);
-        userDAO = daoFactory.getDao(UserDAO.class);
         accountDAO = daoFactory.getDao(AccountDAO.class);
-        voucher = voucherDAO.getById(voucherId);
-        user = userDAO.getById(userId);
         accountId = user.getAccountId();
-        Integer cost = voucher.getCost();
+        int cost = voucher.getCost();
         userAccount = accountDAO.getById(accountId);
-        boolean transferred = transfer(cost, userAccount, companyAccount);
-        System.out.println("transferred = " + transferred);
-        boolean removed = removeGoodsFromResidue(amount, voucherId);
-        System.out.println("removed = " + removed);
-        boolean saving = saveOrder(voucher, user, amount);
-        System.out.println("saving = " + saving);
-        if (transferred && removed && saving) {
-            //TODO предусмотреть есть ли доступные путевки с положительным количеством
-            daoFactory.commit();
+        if(voucher.getQuantity() >= amount) {
+            boolean transferred = transfer(cost, userAccount, companyAccount);
+            System.out.println("transferred = " + transferred);
+            boolean removed = removeGoodsFromResidue(amount, voucher);
+            System.out.println("removed = " + removed);
+            boolean saving = saveOrder(this.voucher, this.user, amount);
+            System.out.println("saving = " + saving);
+            if (transferred && removed && saving) {
+                //TODO предусмотреть есть ли доступные путевки с положительным количеством
+                daoFactory.commit();
+                logger.info("Voucher was successfully bought.");
+            } else {
+                daoFactory.rollback();
+                logger.error("Rollback commit");
+                return false;
+            }
         } else {
-            daoFactory.rollback();
-            System.out.println("Rollback commit");
+            logger.error("Vouchers quantity is lack for buying.");
             return false;
         }
         return true;
     }
 
-    private boolean removeGoodsFromResidue(int amount, long voucherId) {
-        Voucher voucher = voucherDAO.getById(voucherId);
+    private boolean removeGoodsFromResidue(int amount, Voucher voucher) {
         System.out.println("voucher.getId() = " + voucher.getId());
         int residue = voucher.getQuantity();
         if (residue > amount) {

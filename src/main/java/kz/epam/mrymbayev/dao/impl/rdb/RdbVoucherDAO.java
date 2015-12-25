@@ -36,7 +36,11 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps1.setDate(2, voucher.getStartDate());
             ps1.setDate(3, voucher.getEndDate());
             ps1.setInt(4, voucher.getQuantity());
-            ps1.executeUpdate();
+            ps1.setBoolean(5, voucher.isHot());
+            float discount = voucher.getDiscount();
+            ps1.setFloat(5, discount);
+            int rowCount = ps1.executeUpdate();
+            if(rowCount == 1) logger.trace("Voucher was successfully inserted into VOUCHER table.");
 
             ResultSet rs = ps1.getGeneratedKeys();
             rs.next();
@@ -49,11 +53,14 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps2.setLong(1, id);
             ps2.setLong(2, voucher.getLocaleId());
             ps2.setString(3, voucher.getType());
-            ps2.setInt(4, voucher.getCost());
+            int cost = voucher.getCost();
+            cost = (int) (cost - cost*discount);
+            ps2.setInt(4, cost);
             ps2.setString(5, voucher.getCountry());
             ps2.setString(6, voucher.getDayNightAmount());
             ps2.setString(7, voucher.getTransport());
-            ps2.executeUpdate();
+            int rowCountPs2 = ps2.executeUpdate();
+            if(rowCountPs2 == 1) logger.trace("Voucher was successfully inserted into VOUCHER_I18N table.");
 
             ResultSet rs2 = ps2.getGeneratedKeys();
             rs2.next();
@@ -69,15 +76,29 @@ public class RdbVoucherDAO implements VoucherDAO {
 
     public Voucher update(Voucher voucher) {
         try {
-            final String sql = propertyManager.getProperty("voucher.update");
+            String sql = propertyManager.getProperty("voucher.update");
+            String sql2 = propertyManager.getProperty("voucherI18n.update");
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, voucher.getHotel());
             ps.setDate(2, voucher.getStartDate());
             ps.setDate(3, voucher.getEndDate());
             ps.setInt(4, voucher.getQuantity());
-            ps.setLong(5, voucher.getId());
-            ps.executeUpdate();
+            ps.setFloat(5, voucher.getDiscount());
+            ps.setBoolean(6, voucher.isHot());
+            ps.setLong(7, voucher.getId());
+            int rowCount = ps.executeUpdate();
+            if(rowCount == 1) logger.trace("Voucher cost was successfully updated into VOUCHER table.");
             ps.close();
+
+            PreparedStatement ps2 = connection.prepareStatement(sql2);
+            float discount = voucher.getDiscount();
+            int cost = voucher.getCost();
+            cost = (int) (cost - cost*discount);
+            ps2.setInt(1, cost);
+            ps2.setLong(2, voucher.getId());
+            int rowCountPs2 = ps2.executeUpdate();
+            if(rowCountPs2 == 1) logger.trace("Voucher cost was successfully updated into VOUCHER_I18N table.");
+            ps2.close();
         } catch (SQLException e) {
             e.printStackTrace();
             logger.error("RdbVoucherDAOException with update() operation.");
@@ -122,7 +143,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             ResultSet rs = ps.executeQuery();
             rs.next();
             voucher.setId(rs.getLong("ID"));
-            voucher.setStatus(rs.getBoolean("IS_HOT"));
+            voucher.setHot(rs.getBoolean("IS_HOT"));
             voucher.setType(rs.getString("TYPE"));
             voucher.setCost(rs.getInt("COST"));
             voucher.setCountry(rs.getString("COUNTRY"));
@@ -133,6 +154,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             voucher.setStartDate(rs.getDate("START_DATE"));
             voucher.setEndDate(rs.getDate("END_DATE"));
             voucher.setQuantity(rs.getInt("QUANTITY"));
+            voucher.setDiscount(rs.getFloat("DISCOUNT"));
             ps.close();
         } catch (SQLException e) {
             logger.error("RdbVoucherDAOException with getById() operation.");
@@ -143,13 +165,13 @@ public class RdbVoucherDAO implements VoucherDAO {
 
     @Override
     public List<Voucher> getAll() {
-        return null;
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     @Override
     public List<Voucher> getAllByLocale(int locale) {
         List<Voucher> list = new ArrayList<>();
-        final String sql = propertyManager.getProperty("voucher.getAll");
+        final String sql = propertyManager.getProperty("voucher.getAllByLocale");
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, locale);
@@ -159,6 +181,7 @@ public class RdbVoucherDAO implements VoucherDAO {
                 voucher = new Voucher();
                 voucher.setId(rs.getLong("ID"));
                 voucher.setType(rs.getString("TYPE"));
+                voucher.setDiscount(rs.getFloat("DISCOUNT"));
                 voucher.setCost(rs.getInt("COST"));
                 voucher.setHotel(rs.getString("HOTEL"));
                 voucher.setCountry(rs.getString("COUNTRY"));
@@ -167,14 +190,17 @@ public class RdbVoucherDAO implements VoucherDAO {
                 voucher.setLocaleId(rs.getInt("LOCALE_ID"));
                 voucher.setFolderName(rs.getString("FOLDER_NAME"));
                 voucher.setQuantity(rs.getInt("QUANTITY"));
+                voucher.setStartDate(rs.getDate("START_DATE"));
+                voucher.setEndDate(rs.getDate("END_DATE"));
                 voucher.setFileNames(getFileNames(rs.getString("FOLDER_NAME")));
+                voucher.setHot(rs.getBoolean("IS_HOT"));
                 list.add(voucher);
             }
             ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            logger.error("Error with RdbVoucherDAO getAll() method");
-            throw new RdbVoucherDAOException("Error with RdbVoucherDAO getAll() method");
+            logger.error("Error with RdbVoucherDAO getAllById() method");
+            throw new RdbVoucherDAOException("Error with RdbVoucherDAO getAllById() method");
         }
         return list;
     }

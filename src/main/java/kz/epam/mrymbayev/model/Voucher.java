@@ -12,12 +12,13 @@ public class Voucher extends BaseEntity{
     private String dayNightAmount;
     private String transport;
     private int localeId;
-    private boolean status;
+    private boolean hot;
     private String folderName;
     private List<String> fileNames;
     private Date startDate;
     private Date endDate;
     private int quantity;
+    private float discount;
 
     public Voucher() {
     }
@@ -98,12 +99,12 @@ public class Voucher extends BaseEntity{
         return cost;
     }
 
-    public boolean isStatus() {
-        return status;
+    public boolean isHot() {
+        return hot;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setHot(boolean hot) {
+        this.hot = hot;
     }
 
 
@@ -142,5 +143,13 @@ public class Voucher extends BaseEntity{
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public void setDiscount(float discount) {
+        this.discount = discount;
+    }
+
+    public float getDiscount() {
+        return discount;
     }
 }

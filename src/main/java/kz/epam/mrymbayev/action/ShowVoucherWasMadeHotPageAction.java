@@ -8,6 +8,6 @@ import java.io.IOException;
 public class ShowVoucherWasMadeHotPageAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        return "user-discount-was-set-successfully-page";
+        return "voucher-was-made-hot-successfully-page";
     }
 }
