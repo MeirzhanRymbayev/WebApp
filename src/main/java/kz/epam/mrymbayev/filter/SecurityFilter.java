@@ -55,6 +55,15 @@ public class SecurityFilter implements Filter {
 
         //Locale
         urlMapping.put("set-locale", allRoles);
+
+        //MakeVoucherHotAction
+        urlMapping.put("make-voucher-hot", managerRoleSet);
+        urlMapping.put("make-voucher-hot-page", managerRoleSet);
+
+
+        //SetUserDiscountAction
+        urlMapping.put("set-user-discount", managerRoleSet);
+        urlMapping.put("set-user-discount-page", managerRoleSet);
     }
 
     public void destroy() {

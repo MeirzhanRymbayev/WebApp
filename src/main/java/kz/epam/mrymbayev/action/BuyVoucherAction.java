@@ -24,7 +24,8 @@ public class BuyVoucherAction implements Action {
         VoucherService voucherService = new VoucherService();
         String amountString = request.getParameter("amount");
         int amount = Integer.valueOf(amountString);
-        voucherService.orderVoucher(voucherId, userId, amount);
+        boolean orderVoucherResult = voucherService.orderVoucher(voucherId, userId, amount);
+        System.out.println(orderVoucherResult);
 
 
         daoFactory.close();

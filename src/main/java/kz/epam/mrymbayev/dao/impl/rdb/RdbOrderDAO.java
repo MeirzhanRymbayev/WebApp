@@ -20,6 +20,12 @@ public class RdbOrderDAO implements OrderDAO {
     private PropertyManager propertyManager = PropertyManager.getInstance();
     private Logger logger = Logger.getLogger(RdbOrderDAO.class);
 
+    public RdbOrderDAO(Connection connection) {
+        this.connection = connection;
+        this.propertyManager = propertyManager;
+        propertyManager.loadProperties("query.properties");
+    }
+
     @Override
     public Order save(Order order) {
         return order.isPersisted() ? update(order) : insert(order);
@@ -27,14 +33,16 @@ public class RdbOrderDAO implements OrderDAO {
 
     public Order insert(Order order) {
         PreparedStatement ps;
+        PreparedStatement ps2;
         String sql = propertyManager.getProperty("order.insert");
+        String sql2 = propertyManager.getProperty("user.order.table");
 
         try {
             ps = connection.prepareStatement(sql);
             ps.setLong(1, order.getVoucherId());
             ps.setLong(2, order.getUserId());
             ps.setInt(3, order.getCost());
-            ps.setInt(4, order.getDiscount());
+            ps.setFloat(4, order.getDiscount());
             ps.setDate(5, order.getDate());
             ps.setInt(6, order.getAmount());
             ps.executeUpdate();
@@ -42,6 +50,13 @@ public class RdbOrderDAO implements OrderDAO {
             rs.next();
             long id = rs.getLong(1);
             order.setId(id);
+            ps.close();
+            ps2 = connection.prepareStatement(sql2);
+            ps2.setLong(1, order.getUserId());
+            ps2.setLong(2, order.getId());
+            int rowCount = ps2.executeUpdate();
+            if(rowCount == 1) logger.trace("Row was successfully added into USER_ORDER table.");
+            ps2.close();
         } catch (SQLException e) {
             logger.error("Error with RdbOrderDAO insert() method");
             throw new RdbOrderDAOException("Error with RdbOrderDAO insert() method");
@@ -57,7 +72,7 @@ public class RdbOrderDAO implements OrderDAO {
             ps.setLong(1, order.getVoucherId());
             ps.setLong(2, order.getUserId());
             ps.setInt(3, order.getCost());
-            ps.setInt(4, order.getDiscount());
+            ps.setFloat(4, order.getDiscount());
             ps.setDate(5, order.getDate());
             ps.setInt(6, order.getAmount());
             ps.setLong(7, order.getId());

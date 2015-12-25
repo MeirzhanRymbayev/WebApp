@@ -4,17 +4,18 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="messages" var="msg"/>
-<t:page title="Congratulations!">
+<t:page title="Set user discount">
     <jsp:body>
         <div id="wrapper">
             <t:navbar/>
             <div class="content-wrapper">
                 <t:leftcontent/>
                 <div id="content-center" class="content">
-                    <fmt:message key="voucher.bought" bundle="${msg}"/>
+                        <%--<t:vouchersList vouchers="${vouchers}"/>--%>
+                    <t:usersListManage/>
                 </div>
             </div>
-        <t:footer/>
+            <t:footer/>
         </div>
     </jsp:body>
 </t:page>

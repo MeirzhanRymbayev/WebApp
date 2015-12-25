@@ -14,7 +14,6 @@
                     <fmt:message key="registration.congratulations" bundle="${msg}"/>
                 </div>
             </div>
-        </div>
         <t:footer/>
         </div>
     </jsp:body>

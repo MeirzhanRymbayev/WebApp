@@ -22,13 +22,21 @@ public class Validator {
         String country = form.get("country");
         String dayNightAmount = form.get("dayNightAmount");
         String transport = form.get("transport");
+        String quantity = form.get("quantity");
         isValidType(type, violations);
         isValidCost(cost, violations);
         isValidHotel(hotel, violations);
         isValidCountry(country, violations);
         isValidDayAndNightAmount(dayNightAmount, violations);
         isValidTransport(transport, violations);
+        isValidQuantity(quantity, violations);
         return violations;
+    }
+
+    private static void isValidQuantity(String quantity, Map<String, String> violations) {
+        if(quantity == null) violations.put("quantityError", "quantity is null.");
+        else if(quantity.isEmpty()) violations.put("quantityError", "quantity is empty.");
+        else if(quantity.length() > 5) violations.put("quantityError", "quantity is too many.");
     }
 
     public static Map<String, String> registerValidate(Map<String, String> form){

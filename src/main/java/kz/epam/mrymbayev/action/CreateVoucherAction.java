@@ -36,6 +36,8 @@ public class CreateVoucherAction implements Action {
         String localeId = request.getParameter("localeId");
         String startDateString = request.getParameter("start-date");
         String endDateString = request.getParameter("end-date");
+        String quantityString = request.getParameter("quantity");
+        int quantity = Integer.valueOf(quantityString);
         java.util.Date startDate = null;
         java.util.Date endDate = null;
         try {
@@ -56,6 +58,7 @@ public class CreateVoucherAction implements Action {
         formData.put("country", country);
         formData.put("dayNightAmount", dayNightAmount);
         formData.put("transport", transport);
+        formData.put("quantity", quantityString);
         if(files.size() == 0) request.setAttribute("uploadError", "Files were not found. Please, try again.");
         Map<String, String> violations = Validator.voucherCreateValidate(formData);
         if(violations.size() != 0){
@@ -77,6 +80,7 @@ public class CreateVoucherAction implements Action {
         voucher.setLocaleId(Integer.parseInt(localeId));
         voucher.setStartDate(new java.sql.Date(startDate.getTime()));
         voucher.setEndDate(new java.sql.Date(endDate.getTime()));
+        voucher.setQuantity(quantity);
 
         VoucherDAO voucherDAO = DAOFactory.getInstance().getDao(VoucherDAO.class);
         Voucher savedVoucher = voucherDAO.save(voucher);

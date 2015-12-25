@@ -10,8 +10,8 @@ public class User extends BaseEntity {
     private Role role;
     private String firstName;
     private String lastName;
-    private Long accountId;
-    private Integer discount;
+    private long accountId;
+    private float discount;
 
     public User() {}
 
@@ -88,11 +88,11 @@ public class User extends BaseEntity {
         this.accountId = accountId;
     }
 
-    public Integer getDiscount() {
+    public float getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Integer discount) {
+    public void setDiscount(float discount) {
         this.discount = discount;
     }
 }

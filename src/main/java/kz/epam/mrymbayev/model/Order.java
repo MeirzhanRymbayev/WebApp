@@ -7,9 +7,11 @@ public class Order extends BaseEntity {
     private Long voucherId;
     private Long userId;
     private Integer cost;
-    private Integer discount;
+    private float discount;
     private Date date;
     private int amount;
+
+    public Order(){}
 
     public void setVoucherId(long voucherId) {
         this.voucherId = voucherId;
@@ -35,11 +37,11 @@ public class Order extends BaseEntity {
         return cost;
     }
 
-    public void setDiscount(Integer discount) {
+    public void setDiscount(float discount) {
         this.discount = discount;
     }
 
-    public Integer getDiscount() {
+    public float getDiscount() {
         return discount;
     }
 

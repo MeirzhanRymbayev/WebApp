@@ -2,6 +2,7 @@ package kz.epam.mrymbayev.dao.impl.rdb;
 
 import kz.epam.mrymbayev.dao.AccountDAO;
 import kz.epam.mrymbayev.dao.exception.RdbAccountDAOException;
+import kz.epam.mrymbayev.dao.exception.RdbOrderDAOException;
 import kz.epam.mrymbayev.dao.exception.RdbUserDAOException;
 import kz.epam.mrymbayev.model.Account;
 import kz.epam.mrymbayev.model.Role;
@@ -21,9 +22,56 @@ public class RdbAccountDAO implements AccountDAO {
     private PropertyManager propertyManager = PropertyManager.getInstance();
     private Logger logger = Logger.getLogger(RdbAccountDAO.class);
 
+    public RdbAccountDAO(Connection connection) {
+        this.connection = connection;
+        propertyManager = PropertyManager.getInstance();
+        propertyManager.loadProperties("query.properties");
+    }
+
     @Override
-    public Account save(Account entity) {
-        return null;
+    public Account save(Account account) {
+        return account.isPersisted()? update(account):insert(account);
+    }
+
+    private Account insert(Account account) {
+        PreparedStatement ps;
+        String sql = propertyManager.getProperty("account.insert");
+
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setLong(1, account.getUserId());
+            ps.setInt(2, account.getAsset());
+            int rowCount = ps.executeUpdate();
+            if(rowCount == 1) logger.trace("Account № " + account.getId() + " was successfully inserted.");
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            long id = rs.getLong(1);
+            account.setId(id);
+            ps.close();
+        } catch (SQLException e) {
+            logger.error("Error with RdbAccountDAO insert() method");
+            throw new RdbAccountDAOException("Error with RdbAccountDAO insert() method");
+        }
+        return account;
+    }
+
+    private Account update(Account account) {
+        PreparedStatement ps;
+        String sql = propertyManager.getProperty("account.updateAsset");
+
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, account.getAsset());
+            ps.setLong(2, account.getId());
+            int rowCount = ps.executeUpdate();
+            if(rowCount == 1) logger.trace("Account № " + account.getId() + " was successfully updated.");
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error("Error with RdbAccountDAO update() method");
+            throw new RdbAccountDAOException("Error with RdbAccountDAO update() method");
+        }
+        return account;
     }
 
     @Override
@@ -40,15 +88,18 @@ public class RdbAccountDAO implements AccountDAO {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             rs.next();
-            account.setId(rs.getLong(1));
-            account.setUserId(rs.getLong(2));
-            account.setAsset(rs.getInt(3));
+            account.setId(id);
+            account.setAsset(rs.getInt(2));
+            account.setUserId(rs.getLong(3));
         } catch (SQLException e) {
+            e.printStackTrace();
             logger.error("Error with RdbAccountDAO getById() method");
             throw new RdbAccountDAOException("Error with RdbAccountDAO getById() method");
         }
         return account;
     }
+
+
 
     @Override
     public List<Account> getAll() {

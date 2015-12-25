@@ -10,11 +10,6 @@
 <%--@elvariable id="voucher" type="kz.epam.mrymbayev.model.Voucher"--%>
 <%--@elvariable id="user" type="kz.epam.mrymbayev.model.User"--%>
 <c:forEach items="${vouchers}" var="voucher">
-    <c:if test="${user.role.name != 'user'}">
-        <label><fmt:message key="authorization.necessary" bundle="${msg}"/></label>
-    </c:if>
-
-
     <table class='tabl1'>
         <tr>
             <td rowspan='2' class='lv1'><img src='%s'/></td>
@@ -33,24 +28,21 @@
             </c:forEach>
         </div>
         <c:if test="${user.role.name == 'user'}">
-
-            <p>
-            <form action="/controller" method="post">
-                <input type="hidden" name="action" value="buy">
+            <p><form action="/controller" method="post">
+                <input type="hidden" name="action" value="make-voucher-hot">
                 <input type="hidden" name="id" value="${voucher.id}">
-
-                <select name="amount">
-                    <option value="1" selected>1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
+            <label for="discount"><fmt:message key="voucher.discount.percentage" bundle="${msg}"/>
+                <select name="discount" id="discount">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30" selected >30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                    <option value="60">60</option>
                 </select>
-                <button type="submit">
-                    <fmt:message key="voucher.buy" bundle="${msg}"/></button>
-            </form>
-            </p>
+            </label>
+                <button type="submit"><fmt:message key="voucher.make.hot" bundle="${msg}"/></button>
+            </form></p>
         </c:if>
     <div class='hr-vnutr'></div>
 </c:forEach>

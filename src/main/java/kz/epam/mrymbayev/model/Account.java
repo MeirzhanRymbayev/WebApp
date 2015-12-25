@@ -8,7 +8,7 @@ public class Account extends BaseEntity{
     public Account() {
     }
 
-    public Account(long id, String tourAgency, int asset) {
+    public Account(long id, long tourAgency, int asset) {
         super(id);
     }
 

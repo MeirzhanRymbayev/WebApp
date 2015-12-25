@@ -80,16 +80,19 @@ public class RdbUserDAO implements UserDAO {
 
             ResultSet rs = ps.executeQuery("SELECT * FROM USER WHERE " + param + " = '" + value + "';");
             rs.next();
-            user.setId(rs.getLong(1));
+            user.setId(rs.getLong("ID"));
+            user.setAccountId(rs.getLong("ACCOUNT_ID"));
             user.setLogin(rs.getString("LOGIN"));
             user.setPassword(rs.getString("PASSWORD"));
             user.setFirstName(rs.getString("FIRSTNAME"));
             user.setLastName(rs.getString("LASTNAME"));
+            /*
             if (rs.getLong("VOUCHER_ID") != 0L) {
                 user.setVoucherId(rs.getLong("VOUCHER_ID"));
-            }
+            }*/
             user.setRole(new Role(rs.getString("ROLE")));
         } catch (SQLException e) {
+            e.printStackTrace();
             logger.error("Error with RdbUserDAO getByParameter() method");
             throw new RdbUserDAOException("Error with RdbUserDAO getByParameter() method");
         }
@@ -110,7 +113,10 @@ public class RdbUserDAO implements UserDAO {
             user.setPassword(rs.getString(3));
             user.setFirstName(rs.getString("FIRSTNAME"));
             user.setLastName(rs.getString("LASTNAME"));
+            user.setDiscount(rs.getFloat("DISCOUNT"));
+            user.setAccountId(rs.getLong("ACCOUNT_ID"));
         } catch (SQLException e) {
+            e.printStackTrace();
             logger.error("Error with RdbUserDAO getById() method");
             throw new RdbUserDAOException("Error with RdbUserDAO getById() method");
         }

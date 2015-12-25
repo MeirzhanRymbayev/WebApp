@@ -37,7 +37,12 @@
             <p><input type="text" name="transport" id="transport" class="form-control"/></p>
             <c:if test="${not empty transportError}"><font color="red">${transportError}</font></c:if>
         </div>
-        <p><input type="hidden" name="localeId" value="1"/></p>
+        <div class="form-group">
+            <label for="quantity"><fmt:message key="voucher.quantity" bundle="${msg}"/></label>
+            <p><input type="number" name="quantity" id="quantity" class="form-control"/></p>
+            <c:if test="${not empty quantityError}"><font color="red">${quantityError}</font></c:if>
+        </div>
+        <p><input type="hidden" name="localeId" value="3"/></p>
         <p><input type="file" name="image" multiple/></p>
         <c:if test="${not empty uploadError}"><font color="red">${uploadError}</font></c:if>
         <input type="date" name="start-date" />

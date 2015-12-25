@@ -35,6 +35,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps1.setString(1, voucher.getHotel());
             ps1.setDate(2, voucher.getStartDate());
             ps1.setDate(3, voucher.getEndDate());
+            ps1.setInt(4, voucher.getQuantity());
             ps1.executeUpdate();
 
             ResultSet rs = ps1.getGeneratedKeys();
@@ -70,11 +71,15 @@ public class RdbVoucherDAO implements VoucherDAO {
         try {
             final String sql = propertyManager.getProperty("voucher.update");
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, voucher.getType());
-            ps.setInt(2, voucher.getCost());
-            ps.setLong(3, voucher.getId());
+            ps.setString(1, voucher.getHotel());
+            ps.setDate(2, voucher.getStartDate());
+            ps.setDate(3, voucher.getEndDate());
+            ps.setInt(4, voucher.getQuantity());
+            ps.setLong(5, voucher.getId());
             ps.executeUpdate();
+            ps.close();
         } catch (SQLException e) {
+            e.printStackTrace();
             logger.error("RdbVoucherDAOException with update() operation.");
             throw new RdbVoucherDAOException("Issue with update() operation.");
         }
@@ -99,6 +104,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             voucher.setId(resultSet.getLong(1));
             voucher.setType(resultSet.getString(2));
             voucher.setCost(resultSet.getInt(3));
+            ps.close();
         } catch (SQLException e) {
             logger.error("RdbVoucherDAOException with getByParameter() operation.");
             throw new RdbVoucherDAOException("RdbVoucherDAOException with getByParameter() operation.");
@@ -113,11 +119,21 @@ public class RdbVoucherDAO implements VoucherDAO {
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setLong(1, id);
-            ResultSet resultSet = ps.executeQuery();
-            resultSet.next();
-            voucher.setId(resultSet.getLong(1));
-            voucher.setType(resultSet.getString(2));
-            voucher.setCost(resultSet.getInt(3));
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            voucher.setId(rs.getLong("ID"));
+            voucher.setStatus(rs.getBoolean("IS_HOT"));
+            voucher.setType(rs.getString("TYPE"));
+            voucher.setCost(rs.getInt("COST"));
+            voucher.setCountry(rs.getString("COUNTRY"));
+            voucher.setCountry(rs.getString("DAY_NIGHT_AMOUNT"));
+            voucher.setCountry(rs.getString("TRANSPORT"));
+            voucher.setHotel(rs.getString("HOTEL"));
+            voucher.setFolderName(rs.getString("FOLDER_NAME"));
+            voucher.setStartDate(rs.getDate("START_DATE"));
+            voucher.setEndDate(rs.getDate("END_DATE"));
+            voucher.setQuantity(rs.getInt("QUANTITY"));
+            ps.close();
         } catch (SQLException e) {
             logger.error("RdbVoucherDAOException with getById() operation.");
             throw new RdbVoucherDAOException("RdbVoucherDAOException with getById() operation.");
@@ -150,6 +166,7 @@ public class RdbVoucherDAO implements VoucherDAO {
                 voucher.setTransport(rs.getString("TRANSPORT"));
                 voucher.setLocaleId(rs.getInt("LOCALE_ID"));
                 voucher.setFolderName(rs.getString("FOLDER_NAME"));
+                voucher.setQuantity(rs.getInt("QUANTITY"));
                 voucher.setFileNames(getFileNames(rs.getString("FOLDER_NAME")));
                 list.add(voucher);
             }
@@ -178,6 +195,7 @@ public class RdbVoucherDAO implements VoucherDAO {
         return isDelete;
     }
 
+    //TODO проверить нужен ли этот метод
     @Override
     public boolean saveFolderName(Voucher savedVoucher) {
         String sql = propertyManager.getProperty("voucher.saveFolderName");
@@ -196,7 +214,7 @@ public class RdbVoucherDAO implements VoucherDAO {
         return false;
     }
 
-    private List<String> getFileNames(String voucherFolder){
+    private static List<String> getFileNames(String voucherFolder){
         PropertyManager pm = PropertyManager.getInstance();
         List<String> fileNames = new ArrayList<>();
         pm.loadProperties("app.properties");

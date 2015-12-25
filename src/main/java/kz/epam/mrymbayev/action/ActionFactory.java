@@ -38,6 +38,16 @@ public class ActionFactory {
         //Buy voucher
         actions.put("POST/buy", new BuyVoucherAction());
         actions.put("GET/voucher-successfully-bought-page", new ShowVoucherWasBoughtAction());
+
+        //Make voucher hot actions
+        actions.put("GET/make-voucher-hot-page", new ShowMakeVoucherHotPageAction());
+        actions.put("POST/make-voucher-hot", new MakeVoucherHotAction());
+        actions.put("GET/voucher-was-made-hot-successfully-page", new ShowVoucherWasMadeHotPageAction());
+
+        //Set user discount actions
+        actions.put("GET/set-user-discount-page", new ShowSetUserDiscountPageAction());
+        actions.put("POST/set-user-discount", new SetUserDiscountAction());
+        actions.put("GET/user-discount-was-set-successfully-page", new ShowUserDiscountWasSetSuccessfullyPageAction());
     }
 
     public Action getAction(HttpServletRequest request) {
