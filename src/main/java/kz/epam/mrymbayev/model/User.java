@@ -11,7 +11,7 @@ public class User extends BaseEntity {
     private String firstName;
     private String lastName;
     private long accountId;
-    private float discount;
+    private double discount;
 
     public User() {}
 
@@ -88,11 +88,11 @@ public class User extends BaseEntity {
         this.accountId = accountId;
     }
 
-    public float getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(float discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
 }

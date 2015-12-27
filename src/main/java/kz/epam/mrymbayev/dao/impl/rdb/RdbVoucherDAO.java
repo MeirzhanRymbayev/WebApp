@@ -36,9 +36,9 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps1.setDate(2, voucher.getStartDate());
             ps1.setDate(3, voucher.getEndDate());
             ps1.setInt(4, voucher.getQuantity());
-            ps1.setBoolean(5, voucher.isHot());
-            float discount = voucher.getDiscount();
-            ps1.setFloat(5, discount);
+            double discount = voucher.getDiscount();
+            ps1.setDouble(5, discount);
+            ps1.setBoolean(6, voucher.isHot());
             int rowCount = ps1.executeUpdate();
             if(rowCount == 1) logger.trace("Voucher was successfully inserted into VOUCHER table.");
 
@@ -83,7 +83,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps.setDate(2, voucher.getStartDate());
             ps.setDate(3, voucher.getEndDate());
             ps.setInt(4, voucher.getQuantity());
-            ps.setFloat(5, voucher.getDiscount());
+            ps.setDouble(5, voucher.getDiscount());
             ps.setBoolean(6, voucher.isHot());
             ps.setLong(7, voucher.getId());
             int rowCount = ps.executeUpdate();
@@ -91,7 +91,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps.close();
 
             PreparedStatement ps2 = connection.prepareStatement(sql2);
-            float discount = voucher.getDiscount();
+            double discount = voucher.getDiscount();
             int cost = voucher.getCost();
             cost = (int) (cost - cost*discount);
             ps2.setInt(1, cost);

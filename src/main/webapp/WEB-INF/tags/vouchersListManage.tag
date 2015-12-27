@@ -18,11 +18,10 @@
 
                         <li class="list-group-item">
                             <span class="well well-sm"><fmt:message key="type"/></span>
-                                ${voucher.type}
-                        </li>
+                                ${voucher.type}</li>
                         <li class="list-group-item">
                             <span class="well well-sm"><fmt:message key="cost"/></span>
-                        ${voucher.cost}</li>
+                        ${voucher.cost}$</li>
                         <li class="list-group-item">
                             <span class="well well-sm"><fmt:message key="hotel"/></span>
                         ${voucher.hotel}</li>
@@ -47,8 +46,10 @@
                         <li class="list-group-item">
                             <span class="well well-sm"><fmt:message key="status"/></span>
                             <c:if test="${!voucher.hot}"><fmt:message key="status.voucher.is.not.hot"/></c:if>
-                            <c:if test="${voucher.hot}"><fmt:message key="status.voucher.is.hot"/></c:if>
-                        </li>
+                            <c:if test="${voucher.hot}"><fmt:message key="status.voucher.is.hot"/></c:if></li>
+                        <li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="discount.percentage"/></span>
+                            <fmt:formatNumber value="${voucher.discount}"/></li>
                     </ul>
                 </fmt:bundle>
             </td>

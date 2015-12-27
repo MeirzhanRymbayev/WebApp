@@ -13,32 +13,67 @@
     <label><fmt:message key="authorization.necessary" bundle="${msg}"/></label>
 </c:if>
 <c:forEach items="${vouchers}" var="voucher">
-
-
     <table class='tabl1'>
         <tr>
-            <td rowspan='2' class='lv1'><img src='%s'/></td>
-        </tr>
-        <tr>
-            <td class='pr1'>${v.type}<br/>
-                    ${voucher.cost}<br/>
-                    ${voucher.hotel}<br/>
-                    ${voucher.country}<br/>
-            </td>
-        </tr>
-    </table>
-        <div align="center">
-            <c:forEach items="${voucher.fileNames}" var="fileName">
-                <img width="300" height="250" src="${pageContext.request.contextPath}/image${voucher.folderName}${fileName}"/>
-            </c:forEach>
-        </div>
-        <c:if test="${user.role.name == 'user'}">
+            <td class='pr1'>
+                <fmt:bundle basename="messages" prefix="manager.voucher.">
+                    <ul class="list-group">
 
-            <p>
-            <form action="/controller" method="post">
+                        <li class="list-group-item">
+                            <span class="well well-sm">ID</span>
+                                ${voucher.id}</li>
+                        <li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="type"/></span>
+                                ${voucher.type}</li>
+                        <li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="cost"/></span>
+                                ${voucher.cost}$</li>
+                        <c:if test="${user.discount > 0}">
+                        <li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="cost.with.user.discount"/></span>
+                                ${voucher.cost - voucher.cost * user.discount}$</li></c:if>
+                        <li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="status"/></span>
+                            <c:if test="${!voucher.hot}"><fmt:message key="status.voucher.is.not.hot"/></c:if>
+                            <c:if test="${voucher.hot}"><fmt:message key="status.voucher.is.hot"/></c:if></li>
+                        <c:if test="${voucher.hot}">
+                            <li class="list-group-item">
+                                <span class="well well-sm"><fmt:message key="cost.hot"/></span>
+                                    ${voucher.cost - voucher.cost * voucher.discount}$</li></c:if>
+                        <c:if test="${voucher.discount > 0}"><li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="discount.percentage"/></span>
+                                ${voucher.discount*100}%</li>
+                        </c:if>
+                        <li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="hotel"/></span>
+                                ${voucher.hotel}</li>
+                        <li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="country"/></span>
+                                ${voucher.country}</li>
+                        <li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="days.and.nights.quantity"/></span>
+                                ${voucher.dayNightAmount}</li>
+                        <li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="start.date"/></span>
+                                ${voucher.startDate.toString()}</li>
+                        <li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="end.date"/></span>
+                                ${voucher.endDate}</li>
+                        <li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="transport"/></span>
+                                ${voucher.transport}</li>
+                        <li class="list-group-item">
+                            <span class="well well-sm"><fmt:message key="residue"/></span>
+                                ${voucher.quantity}</li>
+
+                    </ul>
+                </fmt:bundle>
+            </td>
+            <td>
+                <c:if test="${user.role.name == 'user'}">
+                <form action="/controller" method="post">
                 <input type="hidden" name="action" value="buy">
                 <input type="hidden" name="id" value="${voucher.id}">
-
                 <select name="amount">
                     <option value="1" selected>1</option>
                     <option value="2">2</option>
@@ -49,8 +84,14 @@
                 </select>
                 <button type="submit">
                     <fmt:message key="voucher.buy" bundle="${msg}"/></button>
-            </form>
-            </p>
-        </c:if>
+                </form></c:if>
+            </td>
+        </tr>
+    </table>
+    <div align="left">
+        <c:forEach items="${voucher.fileNames}" var="fileName">
+            <img width="300" height="250" src="${pageContext.request.contextPath}/image${voucher.folderName}${fileName}"/>
+        </c:forEach>
+    </div>
     <div class='hr-vnutr'></div>
 </c:forEach>

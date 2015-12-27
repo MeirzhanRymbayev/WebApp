@@ -11,9 +11,6 @@
             <div class="content-wrapper">
                 <t:leftcontent/>
                 <div id="content-center" class="content">
-                    //TODO
-                    <a href="create-voucher-page.jsp">Create voucher</a>
-                    <a href="make-voucher-hot-page.jsp">Make voucher hot</a>
                 </div>
             </div>
             <t:footer/>

@@ -27,13 +27,14 @@ public class VoucherService {
 
 
     public boolean orderVoucher(Voucher voucher, User user, int amount) {
-        daoFactory = DAOFactory.getInstance();
+        daoFactory = DAOFactory.newInstance();
         daoFactory.beginTransaction();
         accountDAO = daoFactory.getDao(AccountDAO.class);
         accountId = user.getAccountId();
-        int cost = voucher.getCost();
+        int cost = defineTotalCost(voucher, user);
+
         userAccount = accountDAO.getById(accountId);
-        if(voucher.getQuantity() >= amount) {
+        if (voucher.getQuantity() >= amount) {
             boolean transferred = transfer(cost, userAccount, companyAccount);
             System.out.println("transferred = " + transferred);
             boolean removed = removeGoodsFromResidue(amount, voucher);
@@ -56,6 +57,21 @@ public class VoucherService {
         return true;
     }
 
+    private int defineTotalCost(Voucher voucher, User user) {
+        int cost = voucher.getCost();
+        double discount;
+        if (voucher.isHot()) {
+            cost = voucher.getCost();
+            discount = voucher.getDiscount();
+            cost = (int) (cost - cost * discount);
+        } else if (user.getDiscount() > 0) {
+            cost = voucher.getCost();
+            discount = user.getDiscount();
+            cost = (int) (cost - cost * discount);
+        }
+        return cost;
+    }
+
     private boolean removeGoodsFromResidue(int amount, Voucher voucher) {
         System.out.println("voucher.getId() = " + voucher.getId());
         int residue = voucher.getQuantity();
@@ -71,9 +87,21 @@ public class VoucherService {
         order = new Order();
         order.setVoucherId(voucher.getId());
         order.setUserId(user.getId());
-        order.setCost(voucher.getCost() * amount);
+        if (voucher.isHot()) {
+            int cost = voucher.getCost();
+            double discount = voucher.getDiscount();
+            cost = (int) (cost - cost * discount) * amount;
+            order.setCost(cost);
+            order.setDiscount(voucher.getDiscount());
+
+        } else if (user.getDiscount() > 0) {
+            double discount = user.getDiscount();
+            int cost = voucher.getCost();
+            cost = (int) (cost - cost * discount) * amount;
+            order.setCost(cost);
+            order.setDiscount(user.getDiscount());
+        }
         order.setAmount(amount);
-        order.setDiscount(user.getDiscount());
         order.setDate(new java.sql.Date(new java.util.Date().getTime()));
         orderDAO = daoFactory.getDao(OrderDAO.class);
         orderDAO.save(order);
@@ -92,8 +120,6 @@ public class VoucherService {
             accountDAO.save(userAccount);
             accountDAO.save(companyAccount);
         } else return false;
-
-
         return true;
     }
 

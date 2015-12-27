@@ -18,7 +18,7 @@ public class Voucher extends BaseEntity{
     private Date startDate;
     private Date endDate;
     private int quantity;
-    private float discount;
+    private double discount;
 
     public Voucher() {
     }
@@ -145,11 +145,11 @@ public class Voucher extends BaseEntity{
         this.quantity = quantity;
     }
 
-    public void setDiscount(float discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
 
-    public float getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 }

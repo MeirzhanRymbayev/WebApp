@@ -8,40 +8,45 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class RdbDAOFactory<E extends BaseEntity> extends DAOFactory {
+public class RdbDAOFactory extends DAOFactory {
 
     public static final String DAO_IMPLS_PATH = "kz.epam.mrymbayev.dao.impl.rdb";
     private static final Logger log = Logger.getLogger(RdbDAOFactory.class);
     Connection connection;
-    ConnectionPool instance;
+    ConnectionPool pool;
 
     public RdbDAOFactory(){
         log.trace("Get connection from connection pool.");
-        instance = ConnectionPool.getInstance();
-        connection = instance.getConnection();
+        pool = ConnectionPool.getInstance();
+        connection = pool.getConnection(); //ты коннекшн из пула когда берешь?
+        // при создании фабрики
+        // а сколько раз за всю работу прилаги создаешь фабрику? 1
+        // итого сколько коннекшнов ты возьмешь из пула?
     }
 
     @SuppressWarnings("unchecked")//cast to T ensure
     @Override
     public <T extends GenericDao> T getDao(Class<T> clazz) {
         String DaoClassName = DAO_IMPLS_PATH + ".Rdb" + clazz.getSimpleName();
-        GenericDao dao = null;
+        T dao;
         try {
             log.trace("Trying to get DAO class object" + DaoClassName);
-            Class daoClazz = Class.forName(DaoClassName);
-            dao = (T) daoClazz.getDeclaredConstructor(Connection.class).newInstance(connection);
+            Class<T> daoClazz = (Class<T>) Class.forName(DaoClassName);
+            dao = daoClazz.getDeclaredConstructor(Connection.class).newInstance(connection);
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
-            log.error("Unavailable create DAO instance");
+            //если ты кидаешь вверх, то там где поймаешь тоже будешь логгировать тут может быть стремное дублирование логов
+            log.error("Unavailable create DAO instance", e);
             throw new RuntimeException("Unavailable to create DAO instance", e);
         }
         log.trace("DAO instance was created");
-        return (T) dao;
+        return dao;
     }
 
     @Override
     public void beginTransaction() {
         try {
             connection.setAutoCommit(false);
+            log.trace("Transaction was started.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -52,6 +57,7 @@ public class RdbDAOFactory<E extends BaseEntity> extends DAOFactory {
     public void commit() {
         try {
             connection.commit();
+            log.trace("Transaction was finished.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,6 +67,7 @@ public class RdbDAOFactory<E extends BaseEntity> extends DAOFactory {
     public void rollback() {
         try {
             connection.rollback();
+            log.trace("Transaction rollback.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -71,6 +78,7 @@ public class RdbDAOFactory<E extends BaseEntity> extends DAOFactory {
         try {
             ConnectionPool.ConnectionPooled connectionPooled = new ConnectionPool.ConnectionPooled(connection);
             connectionPooled.close();
+            log.trace("Connection was returned to connection pool.");
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -42,7 +42,7 @@ public class RdbOrderDAO implements OrderDAO {
             ps.setLong(1, order.getVoucherId());
             ps.setLong(2, order.getUserId());
             ps.setInt(3, order.getCost());
-            ps.setFloat(4, order.getDiscount());
+            ps.setDouble(4, order.getDiscount());
             ps.setDate(5, order.getDate());
             ps.setInt(6, order.getAmount());
             ps.executeUpdate();
@@ -72,7 +72,7 @@ public class RdbOrderDAO implements OrderDAO {
             ps.setLong(1, order.getVoucherId());
             ps.setLong(2, order.getUserId());
             ps.setInt(3, order.getCost());
-            ps.setFloat(4, order.getDiscount());
+            ps.setDouble(4, order.getDiscount());
             ps.setDate(5, order.getDate());
             ps.setInt(6, order.getAmount());
             ps.setLong(7, order.getId());
