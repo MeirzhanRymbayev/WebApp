@@ -2,11 +2,7 @@ package kz.epam.mrymbayev.dao.impl.rdb;
 
 import kz.epam.mrymbayev.dao.AccountDAO;
 import kz.epam.mrymbayev.dao.exception.RdbAccountDAOException;
-import kz.epam.mrymbayev.dao.exception.RdbOrderDAOException;
-import kz.epam.mrymbayev.dao.exception.RdbUserDAOException;
 import kz.epam.mrymbayev.model.Account;
-import kz.epam.mrymbayev.model.Role;
-import kz.epam.mrymbayev.model.User;
 import kz.epam.mrymbayev.pm.PropertyManager;
 import org.apache.log4j.Logger;
 
@@ -18,9 +14,10 @@ import java.util.List;
 
 public class RdbAccountDAO implements AccountDAO {
 
-    private Connection connection;
-    private PropertyManager propertyManager = PropertyManager.getInstance();
     private Logger logger = Logger.getLogger(RdbAccountDAO.class);
+
+    private Connection connection;
+    private PropertyManager propertyManager;
 
     public RdbAccountDAO(Connection connection) {
         this.connection = connection;
@@ -30,7 +27,7 @@ public class RdbAccountDAO implements AccountDAO {
 
     @Override
     public Account save(Account account) {
-        return account.isPersisted()? update(account):insert(account);
+        return account.isPersisted() ? update(account) : insert(account);
     }
 
     private Account insert(Account account) {
@@ -42,7 +39,7 @@ public class RdbAccountDAO implements AccountDAO {
             ps.setLong(1, account.getUserId());
             ps.setInt(2, account.getAsset());
             int rowCount = ps.executeUpdate();
-            if(rowCount == 1) logger.trace("Account № " + account.getId() + " was successfully inserted.");
+            if (rowCount == 1) logger.trace("Account № " + account.getId() + " was successfully inserted.");
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
             long id = rs.getLong(1);
@@ -64,7 +61,7 @@ public class RdbAccountDAO implements AccountDAO {
             ps.setInt(1, account.getAsset());
             ps.setLong(2, account.getId());
             int rowCount = ps.executeUpdate();
-            if(rowCount == 1) logger.trace("Account № " + account.getId() + " was successfully updated.");
+            if (rowCount == 1) logger.trace("Account № " + account.getId() + " was successfully updated.");
             ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,7 +73,7 @@ public class RdbAccountDAO implements AccountDAO {
 
     @Override
     public Account getByParameter(String param, String value) {
-        return null;
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     @Override
@@ -89,8 +86,9 @@ public class RdbAccountDAO implements AccountDAO {
             ResultSet rs = ps.executeQuery();
             rs.next();
             account.setId(id);
-            account.setAsset(rs.getInt(2));
-            account.setUserId(rs.getLong(3));
+            account.setAsset(rs.getInt("ASSET"));
+            account.setUserId(rs.getLong("USER_ID"));
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
             logger.error("Error with RdbAccountDAO getById() method");
@@ -100,19 +98,18 @@ public class RdbAccountDAO implements AccountDAO {
     }
 
 
-
     @Override
     public List<Account> getAll() {
-        return null;
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     @Override
     public List<Account> getAllByLocale(int locale) {
-        return null;
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     @Override
     public boolean delete(Account entity) {
-        return false;
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 }

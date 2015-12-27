@@ -1,7 +1,6 @@
 package kz.epam.mrymbayev.dao;
 
-import kz.epam.mrymbayev.jdcpool.ConnectionPool;
-import kz.epam.mrymbayev.model.BaseEntity;
+import kz.epam.mrymbayev.dbpool.ConnectionPool;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;

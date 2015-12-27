@@ -8,8 +8,7 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 
-import kz.epam.mrymbayev.jdcpool.ConnectionPool;
-import org.flywaydb.core.Flyway;
+import kz.epam.mrymbayev.dbpool.ConnectionPool;
 
 @WebListener()
 public class AppListener implements ServletContextListener,

@@ -8,10 +8,6 @@ public class Account extends BaseEntity{
     public Account() {
     }
 
-    public Account(long id, long tourAgency, int asset) {
-        super(id);
-    }
-
     public void setUserId(long userId) {
         this.userId = userId;
     }
@@ -26,5 +22,14 @@ public class Account extends BaseEntity{
 
     public int getAsset() {
         return asset;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", asset=" + asset +
+                '}';
     }
 }

@@ -42,12 +42,12 @@ public class RegisterAction implements Action {
         user.setPassword(password);
         user.setFirstName(firstname);
         user.setLastName(lastname);
-        UserDAO userDAO = DAOFactory.getInstance().getDao(UserDAO.class);
+        UserDAO userDAO = DAOFactory.newInstance().getDao(UserDAO.class);
 
         userDAO.save(user);
         registLog.info("User: " + user.getLogin() + " was added to DB.");
         //TODO проверить правильно ли он вернет коннекшн
-        DAOFactory.getInstance().close();
+        DAOFactory.newInstance().close();
         return "redirect:register-success";
     }
 }

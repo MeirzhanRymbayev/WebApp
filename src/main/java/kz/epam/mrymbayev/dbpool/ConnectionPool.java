@@ -1,4 +1,4 @@
-package kz.epam.mrymbayev.jdcpool;
+package kz.epam.mrymbayev.dbpool;
 
 
 import kz.epam.mrymbayev.pm.PropertyManager;
@@ -78,6 +78,7 @@ public class ConnectionPool {
 
     public static class ConnectionPooled implements Connection{
         private Connection connection;
+        Logger logger = Logger.getLogger(ConnectionPooled.class);
 
         public ConnectionPooled(Connection connection) throws SQLException {
             this.connection = connection;
@@ -85,8 +86,18 @@ public class ConnectionPool {
         }
 
         //TODO проверить правильно ли я возвращаю connection в RdbDAOFactory
+        //TODO проверять коннекшны на дохлость isClosed() вместо дохлых открывать и добавлять новые
         @Override
         public void close(){
+            try {
+                if(this.connection.isClosed()){
+                    Connection connection = DriverManager.getConnection(JDBC_DB_URL, DB_USER, DB_PASSWORD);
+                    InstanceHolder.INSTANCE.freeConnections.add(connection);
+                    return;
+                }
+            } catch (SQLException e) {
+                logger.error("Database access error was happened.", e);
+            }
             InstanceHolder.INSTANCE.freeConnections.add(this.connection);
         }
 

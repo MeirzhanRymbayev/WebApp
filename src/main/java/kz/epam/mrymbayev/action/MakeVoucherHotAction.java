@@ -7,9 +7,7 @@ import kz.epam.mrymbayev.model.Voucher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 public class MakeVoucherHotAction implements Action {
     @Override
@@ -18,7 +16,7 @@ public class MakeVoucherHotAction implements Action {
         Long id = Long.valueOf(idString);
         String discountString = req.getParameter("discount");
         float discount = Float.valueOf(discountString);
-        DAOFactory daoFactory = DAOFactory.getInstance();
+        DAOFactory daoFactory = DAOFactory.newInstance();
         VoucherDAO voucherDAO = daoFactory.getDao(VoucherDAO.class);
         Voucher voucher = voucherDAO.getById(id);
         voucher.setDiscount(discount);

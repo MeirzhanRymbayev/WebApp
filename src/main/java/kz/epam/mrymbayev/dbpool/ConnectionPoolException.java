@@ -1,4 +1,4 @@
-package kz.epam.mrymbayev.jdcpool;
+package kz.epam.mrymbayev.dbpool;
 
 public class ConnectionPoolException extends RuntimeException {
     //TODO почему ошибка исчезла от конструктора пула когда поставил рантайм

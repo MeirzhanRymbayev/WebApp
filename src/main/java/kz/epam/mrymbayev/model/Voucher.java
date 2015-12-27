@@ -107,20 +107,6 @@ public class Voucher extends BaseEntity{
         this.hot = hot;
     }
 
-
-    @Override
-    public String toString() {
-        return "Voucher{" +
-                "type='" + type + '\'' +
-                ", cost='" + cost + '\'' +
-                ", hotel='" + hotel + '\'' +
-                ", country='" + country + '\'' +
-                ", dayNightAmount='" + dayNightAmount + '\'' +
-                ", transport='" + transport + '\'' +
-                ", localeId='" + localeId + '\'' +
-                '}';
-    }
-
     public Date getStartDate() {
         return startDate;
     }
@@ -151,5 +137,25 @@ public class Voucher extends BaseEntity{
 
     public double getDiscount() {
         return discount;
+    }
+
+    @Override
+    public String toString() {
+        return "Voucher{" +
+                "type='" + type + '\'' +
+                ", cost=" + cost +
+                ", hotel='" + hotel + '\'' +
+                ", country='" + country + '\'' +
+                ", dayNightAmount='" + dayNightAmount + '\'' +
+                ", transport='" + transport + '\'' +
+                ", localeId=" + localeId +
+                ", hot=" + hot +
+                ", folderName='" + folderName + '\'' +
+                ", fileNames=" + fileNames +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", quantity=" + quantity +
+                ", discount=" + discount +
+                '}';
     }
 }

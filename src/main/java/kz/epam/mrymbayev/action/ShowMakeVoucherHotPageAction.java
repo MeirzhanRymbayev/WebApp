@@ -15,7 +15,7 @@ import java.util.List;
 public class ShowMakeVoucherHotPageAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        DAOFactory daoFactory = DAOFactory.getInstance();
+        DAOFactory daoFactory = DAOFactory.newInstance();
         VoucherDAO voucherDAO = daoFactory.getDao(VoucherDAO.class);
         HttpSession session = req.getSession(false);
         String locale = (String) session.getAttribute("locale");

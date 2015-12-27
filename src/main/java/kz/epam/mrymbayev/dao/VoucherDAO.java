@@ -1,10 +1,7 @@
 package kz.epam.mrymbayev.dao;
 
-import kz.epam.mrymbayev.dao.exception.DAOException;
-import kz.epam.mrymbayev.jdcpool.ConnectionPool;
 import kz.epam.mrymbayev.model.Voucher;
 
-import java.sql.*;
 import java.util.List;
 
 public interface VoucherDAO extends GenericDao<Voucher> {
@@ -26,5 +23,4 @@ public interface VoucherDAO extends GenericDao<Voucher> {
     @Override
     List<Voucher> getAllByLocale(int locale);
 
-    boolean saveFolderName(Voucher savedVoucher);
 }

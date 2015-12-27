@@ -26,7 +26,7 @@
                                 ${user.lastName}</li>
                         <li class="list-group-item">
                             <span class="well well-sm"><fmt:message key="discount"/></span>
-                            <fmt:formatNumber value="${user.discount*100}"/></li>
+                            <fmt:formatNumber value="${user.discount*100}"/>%</li>
                     </ul>
                 </fmt:bundle>
             </td>

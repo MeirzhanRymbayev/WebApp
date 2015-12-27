@@ -4,10 +4,13 @@ import kz.epam.mrymbayev.dao.VoucherDAO;
 import kz.epam.mrymbayev.dao.exception.RdbVoucherDAOException;
 import kz.epam.mrymbayev.model.Voucher;
 import kz.epam.mrymbayev.pm.PropertyManager;
+import kz.epam.mrymbayev.util.Util;
 import org.apache.log4j.Logger;
 
-import java.io.File;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,12 +43,15 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps1.setDouble(5, discount);
             ps1.setBoolean(6, voucher.isHot());
             int rowCount = ps1.executeUpdate();
-            if(rowCount == 1) logger.trace("Voucher was successfully inserted into VOUCHER table.");
+            if (rowCount == 1) logger.trace("Voucher was successfully inserted into VOUCHER table.");
 
             ResultSet rs = ps1.getGeneratedKeys();
             rs.next();
             long id = rs.getLong(1);
             voucher.setId(id);
+            String folderName = "/voucher" + voucher.getId().toString();
+            voucher.setFolderName(folderName);
+            Util.saveFolderName(voucher, connection);
             ps1.close();
 
             sql2 = propertyManager.getProperty("voucherI18n.insert");
@@ -54,13 +60,13 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps2.setLong(2, voucher.getLocaleId());
             ps2.setString(3, voucher.getType());
             int cost = voucher.getCost();
-            cost = (int) (cost - cost*discount);
+            cost = (int) (cost - cost * discount);
             ps2.setInt(4, cost);
             ps2.setString(5, voucher.getCountry());
             ps2.setString(6, voucher.getDayNightAmount());
             ps2.setString(7, voucher.getTransport());
             int rowCountPs2 = ps2.executeUpdate();
-            if(rowCountPs2 == 1) logger.trace("Voucher was successfully inserted into VOUCHER_I18N table.");
+            if (rowCountPs2 == 1) logger.trace("Voucher was successfully inserted into VOUCHER_I18N table.");
 
             ResultSet rs2 = ps2.getGeneratedKeys();
             rs2.next();
@@ -87,17 +93,17 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps.setBoolean(6, voucher.isHot());
             ps.setLong(7, voucher.getId());
             int rowCount = ps.executeUpdate();
-            if(rowCount == 1) logger.trace("Voucher cost was successfully updated into VOUCHER table.");
+            if (rowCount == 1) logger.trace("Voucher cost was successfully updated into VOUCHER table.");
             ps.close();
 
             PreparedStatement ps2 = connection.prepareStatement(sql2);
             double discount = voucher.getDiscount();
             int cost = voucher.getCost();
-            cost = (int) (cost - cost*discount);
+            cost = (int) (cost - cost * discount);
             ps2.setInt(1, cost);
             ps2.setLong(2, voucher.getId());
             int rowCountPs2 = ps2.executeUpdate();
-            if(rowCountPs2 == 1) logger.trace("Voucher cost was successfully updated into VOUCHER_I18N table.");
+            if (rowCountPs2 == 1) logger.trace("Voucher cost was successfully updated into VOUCHER_I18N table.");
             ps2.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -116,7 +122,7 @@ public class RdbVoucherDAO implements VoucherDAO {
     @Override
     public Voucher getByParameter(String param, String value) {
         Voucher voucher = new Voucher();
-        final String sql = propertyManager.getProperty("voucher.getByParameter");
+        String sql = propertyManager.getProperty("voucher.getByParameter");
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, param);
@@ -136,7 +142,7 @@ public class RdbVoucherDAO implements VoucherDAO {
     @Override
     public Voucher getById(long id) {
         Voucher voucher = new Voucher();
-        final String sql = propertyManager.getProperty("voucher.getById");
+        String sql = propertyManager.getProperty("voucher.getById");
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setLong(1, id);
@@ -154,7 +160,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             voucher.setStartDate(rs.getDate("START_DATE"));
             voucher.setEndDate(rs.getDate("END_DATE"));
             voucher.setQuantity(rs.getInt("QUANTITY"));
-            voucher.setDiscount(rs.getFloat("DISCOUNT"));
+            voucher.setDiscount(rs.getDouble("DISCOUNT"));
             ps.close();
         } catch (SQLException e) {
             logger.error("RdbVoucherDAOException with getById() operation.");
@@ -177,11 +183,11 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps.setInt(1, locale);
             ResultSet rs = ps.executeQuery();
             Voucher voucher;
-            while(rs.next()){
+            while (rs.next()) {
                 voucher = new Voucher();
                 voucher.setId(rs.getLong("ID"));
                 voucher.setType(rs.getString("TYPE"));
-                voucher.setDiscount(rs.getFloat("DISCOUNT"));
+                voucher.setDiscount(rs.getDouble("DISCOUNT"));
                 voucher.setCost(rs.getInt("COST"));
                 voucher.setHotel(rs.getString("HOTEL"));
                 voucher.setCountry(rs.getString("COUNTRY"));
@@ -192,7 +198,7 @@ public class RdbVoucherDAO implements VoucherDAO {
                 voucher.setQuantity(rs.getInt("QUANTITY"));
                 voucher.setStartDate(rs.getDate("START_DATE"));
                 voucher.setEndDate(rs.getDate("END_DATE"));
-                voucher.setFileNames(getFileNames(rs.getString("FOLDER_NAME")));
+                voucher.setFileNames(Util.getFileNames(rs.getString("FOLDER_NAME")));
                 voucher.setHot(rs.getBoolean("IS_HOT"));
                 list.add(voucher);
             }
@@ -222,38 +228,7 @@ public class RdbVoucherDAO implements VoucherDAO {
     }
 
     //TODO проверить нужен ли этот метод
-    @Override
-    public boolean saveFolderName(Voucher savedVoucher) {
-        String sql = propertyManager.getProperty("voucher.saveFolderName");
-        PreparedStatement ps = null;
-        try {
-            ps = connection.prepareStatement(sql);
-            ps.setString(1, savedVoucher.getFolderName());
-            ps.setLong(2, savedVoucher.getId());
-            int i = ps.executeUpdate();
-            if(i != 0) return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            logger.error("Error with RdbVoucherDAO saveFolderName() method");
-            throw new RdbVoucherDAOException("Error with RdbVoucherDAO saveFolderName() method");
-        }
-        return false;
-    }
 
-    private static List<String> getFileNames(String voucherFolder){
-        PropertyManager pm = PropertyManager.getInstance();
-        List<String> fileNames = new ArrayList<>();
-        pm.loadProperties("app.properties");
-        String rootFolder = pm.getProperty("voucher.images.root.folder");
-        File dir = new File(rootFolder + voucherFolder + "/");
-        File[] dirContent = dir.listFiles();
-        //TODO if doesn't exist folder if(dirContent == null)
-        for (File file :
-                dirContent) {
-            String fileName = "/" + file.getName();
-            fileNames.add(fileName);
-        }
-        return fileNames;
-    }
+
 
 }

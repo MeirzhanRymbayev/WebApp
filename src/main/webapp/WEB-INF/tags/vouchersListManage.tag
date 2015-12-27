@@ -49,7 +49,7 @@
                             <c:if test="${voucher.hot}"><fmt:message key="status.voucher.is.hot"/></c:if></li>
                         <li class="list-group-item">
                             <span class="well well-sm"><fmt:message key="discount.percentage"/></span>
-                            <fmt:formatNumber value="${voucher.discount}"/></li>
+                            <fmt:formatNumber value="${voucher.discount * 100}"/>%</li>
                     </ul>
                 </fmt:bundle>
             </td>

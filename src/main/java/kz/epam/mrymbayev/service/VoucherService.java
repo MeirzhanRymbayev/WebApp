@@ -10,44 +10,50 @@ import org.apache.log4j.Logger;
 public class VoucherService {
     Logger logger = Logger.getLogger(VoucherService.class);
 
+    private Account companyAccount;
     private DAOFactory daoFactory;
     private VoucherDAO voucherDAO;
-    private UserDAO userDAO;
     private AccountDAO accountDAO;
-    private OrderDAO orderDAO;
-    private Voucher voucher;
-    private User user;
-    private Long accountId;
-    private Account userAccount;
-    private Order order;
-    private static final Account companyAccount = new Account(1, 100L, 1_000_000);//если это статический объект ему автоиатический присваевается null
+    private int orderCost;
+    private int amount;
+    private double discount;
 
-    public VoucherService() {
+    public VoucherService(DAOFactory daoFactory) {
+        this.daoFactory = daoFactory;
+        AccountDAO accountDAO = daoFactory.getDao(AccountDAO.class);
+        this.companyAccount = accountDAO.getById(1);
     }
 
+    public Voucher getById(long id){
+        DAOFactory daoFactory = DAOFactory.newInstance();
+        voucherDAO = daoFactory.getDao(VoucherDAO.class);
+        Voucher voucher = voucherDAO.getById(id);
+        daoFactory.close();
+        return voucher;
+    }
 
     public boolean orderVoucher(Voucher voucher, User user, int amount) {
-        daoFactory = DAOFactory.newInstance();
+        this.amount = amount;
         daoFactory.beginTransaction();
-        accountDAO = daoFactory.getDao(AccountDAO.class);
-        accountId = user.getAccountId();
-        int cost = defineTotalCost(voucher, user);
 
-        userAccount = accountDAO.getById(accountId);
+        accountDAO = daoFactory.getDao(AccountDAO.class);
+        long accountId = user.getAccountId();
+        Account userAccount = accountDAO.getById(accountId);
+        orderCost = defineIndividualOrderCost(voucher, user); // Cost with user's discount
+
         if (voucher.getQuantity() >= amount) {
-            boolean transferred = transfer(cost, userAccount, companyAccount);
-            System.out.println("transferred = " + transferred);
+            boolean transferred = transfer(orderCost, userAccount, companyAccount);
+            logger.trace("Money transferred operation result: " + transferred);
             boolean removed = removeGoodsFromResidue(amount, voucher);
-            System.out.println("removed = " + removed);
-            boolean saving = saveOrder(this.voucher, this.user, amount);
-            System.out.println("saving = " + saving);
+            logger.trace("Removing from residues result: " + removed);
+            boolean saving = saveOrder(voucher, user, amount);
+            logger.trace("Order saving operation result: " + saving);
             if (transferred && removed && saving) {
-                //TODO предусмотреть есть ли доступные путевки с положительным количеством
                 daoFactory.commit();
                 logger.info("Voucher was successfully bought.");
             } else {
                 daoFactory.rollback();
-                logger.error("Rollback commit");
+                logger.error("Rollback commit was happened on ordering voucher operation.");
                 return false;
             }
         } else {
@@ -57,59 +63,48 @@ public class VoucherService {
         return true;
     }
 
-    private int defineTotalCost(Voucher voucher, User user) {
-        int cost = voucher.getCost();
-        double discount;
+    private int defineIndividualOrderCost(Voucher voucher, User user) {
+        int voucherPrice = voucher.getCost();
+        discount = voucher.getDiscount();
         if (voucher.isHot()) {
-            cost = voucher.getCost();
-            discount = voucher.getDiscount();
-            cost = (int) (cost - cost * discount);
+            orderCost = (int) (voucherPrice - voucherPrice * discount) * amount;
         } else if (user.getDiscount() > 0) {
-            cost = voucher.getCost();
             discount = user.getDiscount();
-            cost = (int) (cost - cost * discount);
+            orderCost = (int) (orderCost - orderCost * discount) * amount;
         }
-        return cost;
+        return orderCost;
     }
 
     private boolean removeGoodsFromResidue(int amount, Voucher voucher) {
         System.out.println("voucher.getId() = " + voucher.getId());
         int residue = voucher.getQuantity();
+        System.out.println("residue = " + residue);
+        System.out.println("voucher = " + voucher);
         if (residue > amount) {
             residue = residue - amount;
             voucher.setQuantity(residue);
-            voucherDAO.save(voucher);
+            System.out.println(voucher);
+            Voucher voucher1 = voucherDAO.save(voucher);
+            System.out.println("voucher1 = " + voucher1);
         } else return false;
         return true;
     }
 
     private boolean saveOrder(Voucher voucher, User user, int amount) {
-        order = new Order();
+        Order order = new Order();
         order.setVoucherId(voucher.getId());
         order.setUserId(user.getId());
-        if (voucher.isHot()) {
-            int cost = voucher.getCost();
-            double discount = voucher.getDiscount();
-            cost = (int) (cost - cost * discount) * amount;
-            order.setCost(cost);
-            order.setDiscount(voucher.getDiscount());
-
-        } else if (user.getDiscount() > 0) {
-            double discount = user.getDiscount();
-            int cost = voucher.getCost();
-            cost = (int) (cost - cost * discount) * amount;
-            order.setCost(cost);
-            order.setDiscount(user.getDiscount());
-        }
+        order.setCost(orderCost);
+        order.setDiscount(discount);
         order.setAmount(amount);
         order.setDate(new java.sql.Date(new java.util.Date().getTime()));
-        orderDAO = daoFactory.getDao(OrderDAO.class);
-        orderDAO.save(order);
-        //TODO check result of save method with if condition
+        OrderDAO orderDAO = daoFactory.getDao(OrderDAO.class);
+        Order savedOrder = orderDAO.save(order);
+        logger.trace("Order was saved on ORDERS table, order's ID is :" + savedOrder.getId());
         return true;
     }
 
-    private boolean transfer(Integer cost, Account userAccount, Account companyAccount) {
+    private boolean transfer(int cost, Account userAccount, Account companyAccount) {
         int userAsset = userAccount.getAsset();
         int companyAsset = companyAccount.getAsset();
         if (userAsset > 0 && userAsset > cost) {

@@ -33,7 +33,7 @@ public class SignInAction implements Action {
             }
             return "sign-in-page";
         }
-        UserDAO UserDAO = DAOFactory.getInstance().getDao(UserDAO.class);
+        UserDAO UserDAO = DAOFactory.newInstance().getDao(UserDAO.class);
         User user = UserDAO.getByParameter("LOGIN", login);
 
 

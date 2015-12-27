@@ -13,15 +13,17 @@ import java.util.List;
 
 public class RdbUserDAO implements UserDAO {
 
-    private Connection connection;
-    private PropertyManager propertyManager = PropertyManager.getInstance();
     private Logger logger = Logger.getLogger(RdbUserDAO.class);
+
+    private Connection connection;
+    private PropertyManager propertyManager;
 
     public RdbUserDAO() {
     }
 
     public RdbUserDAO(Connection connection) {
         this.connection = connection;
+        propertyManager = PropertyManager.getInstance();
         propertyManager.loadProperties("query.properties");
     }
 

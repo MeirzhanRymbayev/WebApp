@@ -2,9 +2,7 @@ package kz.epam.mrymbayev.dao.impl.rdb;
 
 import kz.epam.mrymbayev.dao.OrderDAO;
 import kz.epam.mrymbayev.dao.exception.RdbOrderDAOException;
-import kz.epam.mrymbayev.dao.exception.RdbUserDAOException;
 import kz.epam.mrymbayev.model.Order;
-import kz.epam.mrymbayev.model.User;
 import kz.epam.mrymbayev.pm.PropertyManager;
 import org.apache.log4j.Logger;
 
@@ -16,13 +14,14 @@ import java.util.List;
 
 public class RdbOrderDAO implements OrderDAO {
 
-    private Connection connection;
-    private PropertyManager propertyManager = PropertyManager.getInstance();
     private Logger logger = Logger.getLogger(RdbOrderDAO.class);
+
+    private Connection connection;
+    private PropertyManager propertyManager;
 
     public RdbOrderDAO(Connection connection) {
         this.connection = connection;
-        this.propertyManager = propertyManager;
+        propertyManager = PropertyManager.getInstance();
         propertyManager.loadProperties("query.properties");
     }
 
@@ -55,7 +54,7 @@ public class RdbOrderDAO implements OrderDAO {
             ps2.setLong(1, order.getUserId());
             ps2.setLong(2, order.getId());
             int rowCount = ps2.executeUpdate();
-            if(rowCount == 1) logger.trace("Row was successfully added into USER_ORDER table.");
+            if (rowCount == 1) logger.trace("Row was successfully added into USER_ORDER table.");
             ps2.close();
         } catch (SQLException e) {
             logger.error("Error with RdbOrderDAO insert() method");
@@ -77,7 +76,7 @@ public class RdbOrderDAO implements OrderDAO {
             ps.setInt(6, order.getAmount());
             ps.setLong(7, order.getId());
             ps.executeUpdate();
-
+            ps.close();
         } catch (SQLException e) {
             logger.error("Error with RdbOrderDAO update() method");
             throw new RdbOrderDAOException("Error with RdbOrderDAO insert() method");
