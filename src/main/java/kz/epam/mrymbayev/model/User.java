@@ -3,7 +3,6 @@ package kz.epam.mrymbayev.model;
 public class User extends BaseEntity {
     public static final User ANONYMOUS = new User("Guest", new Role("guest"));
 
-
     private String login;
     private String password;
     private long voucherId;
@@ -13,7 +12,8 @@ public class User extends BaseEntity {
     private long accountId;
     private double discount;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String name, Role role) {
         this.firstName = name;
@@ -68,18 +68,6 @@ public class User extends BaseEntity {
         return role;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", voucherId=" + voucherId +
-                ", role=" + role +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
-    }
-
     public long getAccountId() {
         return accountId;
     }
@@ -95,4 +83,17 @@ public class User extends BaseEntity {
     public void setDiscount(double discount) {
         this.discount = discount;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", voucherId=" + voucherId +
+                ", role=" + role +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
+
 }

@@ -13,7 +13,7 @@ public class UserService {
         this.daoFactory = daoFactory;
     }
 
-    public User getBy(long id){
+    public User getBy(long id) {
         DAOFactory daoFactory = DAOFactory.newInstance();
         UserDAO userDAO = daoFactory.getDao(UserDAO.class);
         User user = userDAO.getById(id);

@@ -4,11 +4,14 @@
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="messages" var="msg"/>
 <div class="container">
-    <div class="my-authorization-forms">
         <h3><label for="login"><fmt:message key="sign.in" bundle="${msg}"/></label></h3>
         <c:if test="${not empty roleError}">
             <font color="#d2691e">${roleError}</font><br>
         </c:if>
+        <c:if test="${not empty unknownLoginError}">
+            <font color="#d2691e"><fmt:message key="error.incorrect.data.entered" bundle="${msg}"/></font><br>
+        </c:if>
+    <div class="my-authorization-forms">
         <form action="/controller" method="post">
             <input type="hidden" name="action" value="sign-in"/>
             <div class="form-group">

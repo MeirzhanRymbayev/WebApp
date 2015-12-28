@@ -14,7 +14,7 @@ import java.util.List;
 
 public class RdbAccountDAO implements AccountDAO {
 
-    private Logger logger = Logger.getLogger(RdbAccountDAO.class);
+    private Logger logger = Logger.getLogger("kz.epam");
 
     private Connection connection;
     private PropertyManager propertyManager;
@@ -64,7 +64,6 @@ public class RdbAccountDAO implements AccountDAO {
             if (rowCount == 1) logger.trace("Account № " + account.getId() + " was successfully updated.");
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
             logger.error("Error with RdbAccountDAO update() method");
             throw new RdbAccountDAOException("Error with RdbAccountDAO update() method");
         }
@@ -90,7 +89,6 @@ public class RdbAccountDAO implements AccountDAO {
             account.setUserId(rs.getLong("USER_ID"));
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
             logger.error("Error with RdbAccountDAO getById() method");
             throw new RdbAccountDAOException("Error with RdbAccountDAO getById() method");
         }

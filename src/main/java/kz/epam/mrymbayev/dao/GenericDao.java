@@ -1,5 +1,6 @@
 package kz.epam.mrymbayev.dao;
 
+import kz.epam.mrymbayev.dao.exception.RdbUserDAOGetByParameterException;
 import kz.epam.mrymbayev.model.BaseEntity;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface GenericDao<T extends BaseEntity> {
     T save(T entity);
 
     //READ
-    T getByParameter(String param, String value);
+    T getByParameter(String param, String value) throws RdbUserDAOGetByParameterException;
     T getById(long id);
     List<T> getAll();
     //Check to necessary this method in all realizations

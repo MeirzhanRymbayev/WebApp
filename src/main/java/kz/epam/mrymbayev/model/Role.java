@@ -16,10 +16,6 @@ public class Role {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
 
     @Override
     public int hashCode() {
@@ -28,9 +24,14 @@ public class Role {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof Role)) return false;
-        if(obj == null) return false;
+        if (!(obj instanceof Role)) return false;
+        if (obj == null) return false;
         Role o = (Role) obj;
         return name.equals(o.getName());
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

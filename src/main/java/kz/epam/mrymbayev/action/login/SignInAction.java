@@ -3,6 +3,7 @@ package kz.epam.mrymbayev.action.login;
 import kz.epam.mrymbayev.action.Action;
 import kz.epam.mrymbayev.dao.DAOFactory;
 import kz.epam.mrymbayev.dao.UserDAO;
+import kz.epam.mrymbayev.dao.exception.RdbUserDAOGetByParameterException;
 import kz.epam.mrymbayev.model.User;
 import kz.epam.mrymbayev.validator.Validator;
 
@@ -31,9 +32,14 @@ public class SignInAction implements Action {
             }
             return "sign-in-page";
         }
-        UserDAO UserDAO = daoFactory.getDao(UserDAO.class);
-        User user = UserDAO.getByParameter("LOGIN", login);
-
+        UserDAO userDAO = daoFactory.getDao(UserDAO.class);
+        User user;
+        try {
+            user = userDAO.getByParameter("LOGIN", login);
+        } catch (RdbUserDAOGetByParameterException e) {
+            request.setAttribute("unknownLoginError", "Incorrect login or password. Please, enter correct data.");
+            return "sign-in-page";
+        }
 
         HttpSession guestSession = request.getSession(false);
         User guestUser = (User) guestSession.getAttribute("user");

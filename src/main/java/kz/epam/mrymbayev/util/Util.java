@@ -3,6 +3,7 @@ package kz.epam.mrymbayev.util;
 import kz.epam.mrymbayev.dao.exception.RdbVoucherDAOException;
 import kz.epam.mrymbayev.model.Voucher;
 import kz.epam.mrymbayev.pm.PropertyManager;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.sql.Connection;
@@ -10,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 public class Util {
 
@@ -18,6 +18,7 @@ public class Util {
     /**
      * Method converts locale values from String to int
      * For example, 1 => kk, 2 => ru etc.
+     *
      * @param locale String value of locale
      * @return Returns int value of locale for the application
      */
@@ -39,10 +40,11 @@ public class Util {
 
     /**
      * Method scans folder and returns list of files names
+     *
      * @param voucherFolder Folder name which will be scanned
      * @return List of files names
      */
-    public static List<String> getFileNames(String voucherFolder){
+    public static List<String> getFileNames(String voucherFolder) {
         List<String> fileNames = new ArrayList<>();
         PropertyManager pm = PropertyManager.getInstance();
         pm.loadProperties("app.properties");
@@ -61,8 +63,9 @@ public class Util {
 
     /**
      * This method generate folder name by voucher id value.
+     *
      * @param savedVoucher Voucher which was inserted to DB.
-     * @param connection Connection object.
+     * @param connection   Connection object.
      * @return Method returns true if folder name was successfully inserted to DB or false otherwise
      */
     public static boolean saveFolderName(Voucher savedVoucher, Connection connection) {

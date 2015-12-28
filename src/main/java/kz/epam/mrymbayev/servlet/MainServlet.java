@@ -17,7 +17,7 @@ import java.io.IOException;
 @MultipartConfig
 public class MainServlet extends HttpServlet {
     ActionFactory actionFactory;
-    Logger log = Logger.getLogger(MainServlet.class);
+    Logger log = Logger.getLogger("kz.epam");
 
     @Override
     public void init() throws ServletException {

@@ -4,19 +4,19 @@ public abstract class BaseEntity {
 
     protected long id;
 
-    public BaseEntity(long id){
+    public BaseEntity(long id) {
         this.id = id;
     }
 
-    public BaseEntity(){
+    public BaseEntity() {
 
     }
 
-    public long getId(){
+    public long getId() {
         return id;
     }
 
-    public void setId(long id){
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -24,7 +24,7 @@ public abstract class BaseEntity {
      * If method returns true - use update
      *
      */
-    public boolean isPersisted(){
+    public boolean isPersisted() {
         return id != 0L;
     }
 

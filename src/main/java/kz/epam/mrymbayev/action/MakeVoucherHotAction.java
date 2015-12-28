@@ -12,17 +12,16 @@ import java.io.IOException;
 public class MakeVoucherHotAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        DAOFactory daoFactory = DAOFactory.newInstance();
         String idString = req.getParameter("id");
         Long id = Long.valueOf(idString);
         String discountString = req.getParameter("discount");
         float discount = Float.valueOf(discountString);
-        DAOFactory daoFactory = DAOFactory.newInstance();
         VoucherDAO voucherDAO = daoFactory.getDao(VoucherDAO.class);
         Voucher voucher = voucherDAO.getById(id);
         voucher.setDiscount(discount);
         voucher.setHot(true);
         voucherDAO.save(voucher);
-
 
         return "redirect:voucher-was-made-hot-successfully-page";
     }

@@ -2,6 +2,7 @@ package kz.epam.mrymbayev.dao.impl.rdb;
 
 import kz.epam.mrymbayev.dao.UserDAO;
 import kz.epam.mrymbayev.dao.exception.RdbUserDAOException;
+import kz.epam.mrymbayev.dao.exception.RdbUserDAOGetByParameterException;
 import kz.epam.mrymbayev.model.Role;
 import kz.epam.mrymbayev.model.User;
 import kz.epam.mrymbayev.pm.PropertyManager;
@@ -59,7 +60,6 @@ public class RdbUserDAO implements UserDAO {
             ps.setString(3, user.getFirstName());
             ps.setString(4, user.getLastName());
             ps.setDouble(5, user.getDiscount());
-            System.out.println("user discount dao = " + user.getDiscount());
             ps.setLong(6, user.getId());
             ps.executeUpdate();
             ps.close();
@@ -77,7 +77,7 @@ public class RdbUserDAO implements UserDAO {
     }
 
     @Override
-    public User getByParameter(String param, String value) {
+    public User getByParameter(String param, String value) throws RdbUserDAOGetByParameterException {
         String sql = propertyManager.getProperty("user.getByParameter");
         User user = new User();
         try {
@@ -93,9 +93,8 @@ public class RdbUserDAO implements UserDAO {
             user.setLastName(rs.getString("LASTNAME"));
             user.setRole(new Role(rs.getString("ROLE")));
         } catch (SQLException e) {
-            e.printStackTrace();
-            logger.error("Error with RdbUserDAO getByParameter() method");
-            throw new RdbUserDAOException("Error with RdbUserDAO getByParameter() method");
+            logger.error("Error with RdbUserDAO getByParameter() method", e);
+            throw new RdbUserDAOGetByParameterException("Error with RdbUserDAO getByParameter() method", e);
         }
         return user;
     }
@@ -118,7 +117,6 @@ public class RdbUserDAO implements UserDAO {
             user.setDiscount(rs.getDouble("DISCOUNT"));
             user.setAccountId(rs.getLong("ACCOUNT_ID"));
         } catch (SQLException e) {
-            e.printStackTrace();
             logger.error("Error with RdbUserDAO getById() method");
             throw new RdbUserDAOException("Error with RdbUserDAO getById() method");
         }
@@ -151,7 +149,6 @@ public class RdbUserDAO implements UserDAO {
                 list.add(user);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             logger.error("Error with RdbUserDAO getAll() method");
             throw new RdbUserDAOException("Error with RdbUserDAO getAll() method");
         }

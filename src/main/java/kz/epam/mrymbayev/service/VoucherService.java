@@ -1,6 +1,9 @@
 package kz.epam.mrymbayev.service;
 
-import kz.epam.mrymbayev.dao.*;
+import kz.epam.mrymbayev.dao.AccountDAO;
+import kz.epam.mrymbayev.dao.DAOFactory;
+import kz.epam.mrymbayev.dao.OrderDAO;
+import kz.epam.mrymbayev.dao.VoucherDAO;
 import kz.epam.mrymbayev.model.Account;
 import kz.epam.mrymbayev.model.Order;
 import kz.epam.mrymbayev.model.User;
@@ -8,7 +11,7 @@ import kz.epam.mrymbayev.model.Voucher;
 import org.apache.log4j.Logger;
 
 public class VoucherService {
-    Logger logger = Logger.getLogger(VoucherService.class);
+    Logger logger = Logger.getLogger("kz.epam");
 
     private Account companyAccount;
     private DAOFactory daoFactory;
@@ -24,8 +27,7 @@ public class VoucherService {
         this.companyAccount = accountDAO.getById(1);
     }
 
-    public Voucher getById(long id){
-        DAOFactory daoFactory = DAOFactory.newInstance();
+    public Voucher getById(long id) {
         voucherDAO = daoFactory.getDao(VoucherDAO.class);
         Voucher voucher = voucherDAO.getById(id);
         daoFactory.close();
@@ -50,14 +52,14 @@ public class VoucherService {
             logger.trace("Order saving operation result: " + saving);
             if (transferred && removed && saving) {
                 daoFactory.commit();
-                logger.info("Voucher was successfully bought.");
+                logger.trace("Transaction commit was happened on ordering voucher operation.");
             } else {
                 daoFactory.rollback();
-                logger.error("Rollback commit was happened on ordering voucher operation.");
+                logger.trace("Rollback commit was happened on ordering voucher operation.");
                 return false;
             }
         } else {
-            logger.error("Vouchers quantity is lack for buying.");
+            logger.error("Vouchers quantity is lack for buying. Vouchers residue is: " + voucher.getQuantity());
             return false;
         }
         return true;
@@ -72,20 +74,17 @@ public class VoucherService {
             discount = user.getDiscount();
             orderCost = (int) (orderCost - orderCost * discount) * amount;
         }
+        logger.trace("Individual cost for user with his discount: " + orderCost + " was defined.");
         return orderCost;
     }
 
     private boolean removeGoodsFromResidue(int amount, Voucher voucher) {
-        System.out.println("voucher.getId() = " + voucher.getId());
         int residue = voucher.getQuantity();
-        System.out.println("residue = " + residue);
-        System.out.println("voucher = " + voucher);
         if (residue > amount) {
             residue = residue - amount;
             voucher.setQuantity(residue);
-            System.out.println(voucher);
-            Voucher voucher1 = voucherDAO.save(voucher);
-            System.out.println("voucher1 = " + voucher1);
+            voucherDAO.save(voucher);
+            logger.trace("The number of bought: [" + amount + "] voucher was deducted from residue.");
         } else return false;
         return true;
     }
@@ -118,19 +117,18 @@ public class VoucherService {
         return true;
     }
 
-    public Voucher save(Voucher voucher){
+    public Voucher save(Voucher voucher) {
         VoucherDAO voucherDAO = daoFactory.getDao(VoucherDAO.class);
         Voucher savedVoucher = voucherDAO.save(voucher);
 
         return savedVoucher;
     }
 
-    public Voucher saveI18nData(Voucher voucherI18nData){
+    public Voucher saveI18nData(Voucher voucherI18nData) {
         VoucherDAO voucherDAO = daoFactory.getDao(VoucherDAO.class);
         voucherDAO.insertI18nData(voucherI18nData);
         return voucherI18nData;
     }
-
 
 
 }

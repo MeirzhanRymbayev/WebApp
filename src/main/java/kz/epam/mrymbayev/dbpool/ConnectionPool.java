@@ -13,7 +13,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class ConnectionPool {
-    Logger poolLogger = Logger.getLogger(ConnectionPool.class);
+    Logger poolLogger = Logger.getLogger("kz.epam");
     PropertyManager propertyManager = PropertyManager.getInstance();
 
     public static String JDBC_DB_URL;
@@ -49,7 +49,7 @@ public class ConnectionPool {
         poolLogger.info("Connection pool initialization finish. " + MAX_CONNECTION_COUNT + "connections were created.");
     }
 
-    static class InstanceHolder{
+    static class InstanceHolder {
         static final ConnectionPool INSTANCE = new ConnectionPool();
     }
 
@@ -57,40 +57,38 @@ public class ConnectionPool {
         return InstanceHolder.INSTANCE;
     }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
         Connection connection = null;
         try {
             connection = freeConnections.poll(5, TimeUnit.SECONDS); // Sorry seems to be the hardest word!
         } catch (InterruptedException e) {
             throw new ConnectionPoolException(e);
         }
-        if(connection == null) throw new ConnectionPoolException("Sorry, no available connections");
-        /*Правильно ли здесь создать коннекшн если его нет*/
+        if (connection == null) throw new ConnectionPoolException("Sorry, no available connections");
+
         try {
-            if(connection.isClosed()){
+            if (connection.isClosed()) {
                 connection = DriverManager.getConnection(JDBC_DB_URL, DB_USER, DB_PASSWORD);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            poolLogger.error("Attempt to create connection was failed. ");
         }
         return connection;
     }
 
-    public static class ConnectionPooled implements Connection{
+    public static class ConnectionPooled implements Connection {
         private Connection connection;
-        Logger logger = Logger.getLogger(ConnectionPooled.class);
+        Logger logger = Logger.getLogger("kz.epam");
 
         public ConnectionPooled(Connection connection) throws SQLException {
             this.connection = connection;
             this.connection.setAutoCommit(true); //завершить транзакцию
         }
 
-        //TODO проверить правильно ли я возвращаю connection в RdbDAOFactory
-        //TODO проверять коннекшны на дохлость isClosed() вместо дохлых открывать и добавлять новые
         @Override
-        public void close(){
+        public void close() {
             try {
-                if(this.connection.isClosed()){
+                if (this.connection.isClosed()) {
                     Connection connection = DriverManager.getConnection(JDBC_DB_URL, DB_USER, DB_PASSWORD);
                     InstanceHolder.INSTANCE.freeConnections.add(connection);
                     return;
@@ -366,8 +364,6 @@ public class ConnectionPool {
             return connection.isWrapperFor(iface);
         }
     }
-
-
 
 
 }

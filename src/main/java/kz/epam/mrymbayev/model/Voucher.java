@@ -3,7 +3,7 @@ package kz.epam.mrymbayev.model;
 import java.sql.Date;
 import java.util.List;
 
-public class Voucher extends BaseEntity{
+public class Voucher extends BaseEntity {
 
     private String type;
     private int cost;
@@ -28,6 +28,7 @@ public class Voucher extends BaseEntity{
         this.type = type;
         this.cost = cost;
     }
+
     public List<String> getFileNames() {
         return fileNames;
     }
@@ -43,6 +44,7 @@ public class Voucher extends BaseEntity{
     public void setFolderName(String folderName) {
         this.folderName = folderName;
     }
+
     public String getHotel() {
         return hotel;
     }

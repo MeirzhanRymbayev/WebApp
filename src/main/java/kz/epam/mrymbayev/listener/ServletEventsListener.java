@@ -11,17 +11,15 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import kz.epam.mrymbayev.dbpool.ConnectionPool;
 
 @WebListener()
-public class AppListener implements ServletContextListener,
+public class ServletEventsListener implements ServletContextListener,
         HttpSessionListener, HttpSessionAttributeListener {
 
         public ConnectionPool connectionPool;
 
-    public AppListener() {
+    public ServletEventsListener() {
     }
 
     public void contextInitialized(ServletContextEvent sce) {
-        // TODO check why invisible FlyWay field
-        //FlyWay flyWay = new FlyWay();
         connectionPool = ConnectionPool.getInstance();
 
     }

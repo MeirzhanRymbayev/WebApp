@@ -16,7 +16,7 @@ import java.util.List;
 
 public class RdbVoucherDAO implements VoucherDAO {
 
-    Logger logger = Logger.getLogger(RdbVoucherDAO.class);
+    Logger logger = Logger.getLogger("kz.epam");
 
     Connection connection;
     PropertyManager propertyManager;
@@ -51,7 +51,6 @@ public class RdbVoucherDAO implements VoucherDAO {
             Util.saveFolderName(voucher, connection);
             ps1.close();
         } catch (SQLException e) {
-            e.printStackTrace();
             logger.error("RdbVoucherDAOException with insert() operation.");
             throw new RdbVoucherDAOException("Issue with insert() operation.");
         }
@@ -79,7 +78,6 @@ public class RdbVoucherDAO implements VoucherDAO {
         rs2.next();
         ps2.close();
         } catch (SQLException e) {
-            e.printStackTrace();
             logger.error("RdbVoucherDAOException with insertI18n() operation.");
             throw new RdbVoucherDAOException("Issue with insertI18n() operation.");
         }
@@ -103,7 +101,6 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
             logger.error("RdbVoucherDAOException with update() operation.");
             throw new RdbVoucherDAOException("Issue with update() operation.");
         }
@@ -121,7 +118,6 @@ public class RdbVoucherDAO implements VoucherDAO {
         if (rowCountPs2 == 1) logger.trace("Voucher cost was successfully updated into VOUCHER_I18N table.");
         ps2.close();
     } catch (SQLException e) {
-        e.printStackTrace();
         logger.error("RdbVoucherDAOException with update() operation.");
         throw new RdbVoucherDAOException("Issue with update() operation.");
     }
@@ -220,9 +216,6 @@ public class RdbVoucherDAO implements VoucherDAO {
             }
             ps.close();
         } catch (SQLException e) {
-            int errorCode = e.getErrorCode();
-            System.out.println("errorCode = " + errorCode);
-            e.printStackTrace();
             logger.error("Error with RdbVoucherDAO getAllById() method");
             throw new RdbVoucherDAOException("Error with RdbVoucherDAO getAllById() method");
         }

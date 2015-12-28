@@ -10,17 +10,14 @@ import java.sql.SQLException;
 public class RdbDAOFactory extends DAOFactory {
 
     public static final String DAO_IMPLS_PATH = "kz.epam.mrymbayev.dao.impl.rdb";
-    private static final Logger log = Logger.getLogger(RdbDAOFactory.class);
+    private static final Logger log = Logger.getLogger("kz.epam");
     Connection connection;
     ConnectionPool pool;
 
-    public RdbDAOFactory(){
+    public RdbDAOFactory() {
         log.trace("Get connection from connection pool.");
         pool = ConnectionPool.getInstance();
-        connection = pool.getConnection(); //ты коннекшн из пула когда берешь?
-        // при создании фабрики
-        // а сколько раз за всю работу прилаги создаешь фабрику? 1
-        // итого сколько коннекшнов ты возьмешь из пула?
+        connection = pool.getConnection();
     }
 
     @SuppressWarnings("unchecked")//cast to T ensure
@@ -33,7 +30,6 @@ public class RdbDAOFactory extends DAOFactory {
             Class<T> daoClazz = (Class<T>) Class.forName(DaoClassName);
             dao = daoClazz.getDeclaredConstructor(Connection.class).newInstance(connection);
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
-            //если ты кидаешь вверх, то там где поймаешь тоже будешь логгировать тут может быть стремное дублирование логов
             log.error("Unavailable create DAO instance", e);
             throw new RuntimeException("Unavailable to create DAO instance", e);
         }
@@ -47,7 +43,7 @@ public class RdbDAOFactory extends DAOFactory {
             connection.setAutoCommit(false);
             log.trace("Transaction was started.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Transaction start error.", e);
         }
 
     }
@@ -58,7 +54,7 @@ public class RdbDAOFactory extends DAOFactory {
             connection.commit();
             log.trace("Transaction was finished.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Transaction finish error.", e);
         }
     }
 
@@ -68,7 +64,7 @@ public class RdbDAOFactory extends DAOFactory {
             connection.rollback();
             log.trace("Transaction rollback.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Transaction rollback error.", e);
         }
     }
 
@@ -79,7 +75,7 @@ public class RdbDAOFactory extends DAOFactory {
             connectionPooled.close();
             log.trace("Connection was returned to connection pool.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Connection return to pool operation error.", e);
         }
     }
 }

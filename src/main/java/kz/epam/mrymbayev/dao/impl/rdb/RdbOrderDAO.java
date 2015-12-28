@@ -14,7 +14,7 @@ import java.util.List;
 
 public class RdbOrderDAO implements OrderDAO {
 
-    private Logger logger = Logger.getLogger(RdbOrderDAO.class);
+    private Logger logger = Logger.getLogger("kz.epam");
 
     private Connection connection;
     private PropertyManager propertyManager;

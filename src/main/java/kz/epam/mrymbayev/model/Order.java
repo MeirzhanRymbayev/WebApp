@@ -11,7 +11,8 @@ public class Order extends BaseEntity {
     private Date date;
     private int amount;
 
-    public Order(){}
+    public Order() {
+    }
 
     public void setVoucherId(long voucherId) {
         this.voucherId = voucherId;
@@ -60,4 +61,18 @@ public class Order extends BaseEntity {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "voucherId=" + voucherId +
+                ", userId=" + userId +
+                ", cost=" + cost +
+                ", discount=" + discount +
+                ", date=" + date +
+                ", amount=" + amount +
+                '}';
+    }
 }
+
+

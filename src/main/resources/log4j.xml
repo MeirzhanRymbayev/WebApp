@@ -10,38 +10,41 @@
         </layout>
     </appender>
 
-    <appender name="fileWithRootLogs" class="org.apache.log4j.RollingFileAppender">
+
+    <appender name="businessLogic" class="org.apache.log4j.RollingFileAppender">
         <param name="append" value="true" />
         <param name="maxFileSize" value="10MB" />
         <param name="maxBackupIndex" value="10" />
-        <param name="file" value="${HOMEPATH}/WebAppLogs/App.log"/>
+        <param name="file" value="${HOMEPATH}/WebAppLogs/businessLogic.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
                    value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
         </layout>
     </appender>
 
-    <appender name="io" class="org.apache.log4j.RollingFileAppender">
-        <param name="append" value="false" />
-        <param name="maxFileSize" value="10MB" />
-        <param name="maxBackupIndex" value="10" />
-        <param name="file" value="${HOMEPATH}/WebAppLogs/io.log"/>
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern"
-                   value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+    <appender name="developer" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="${HOMEPATH}/WebAppLogs/developer.log"/>
+        <param name="MaxFileSize" value="100MB"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="Encoding" value="UTF-8"/>
+        <layout class="org.apache.log4j.EnhancedPatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} [%-5p][%-16.16t][%15c{-2}] - %m%n"/>
         </layout>
     </appender>
 
     <root>
-        <level value="INFO"/>
-        <appender-ref ref="fileWithRootLogs" />
+        <priority value="WARN"/>
+        <appender-ref ref="console"/>
     </root>
 
-    <logger name="kz.epam.mrymbayev" additivity="false" >
+    <logger name="kz.epam" additivity="false" >
+        <level value="TRACE"/>
+        <appender-ref ref="developer"/>
+    </logger>
+
+    <logger name="kz.epam.businessLogic" additivity="false" >
         <level value="INFO"/>
-        <appender-ref ref="console"/>
-        <appender-ref ref="io"/>
-        <appender-ref ref="fileWithRootLogs" />
+        <appender-ref ref="businessLogic" />
     </logger>
 
 </log4j:configuration>

@@ -1,6 +1,6 @@
 package kz.epam.mrymbayev.model;
 
-public class Account extends BaseEntity{
+public class Account extends BaseEntity {
 
     private long userId;
     private int asset;

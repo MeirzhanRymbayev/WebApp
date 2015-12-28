@@ -3,7 +3,7 @@ package kz.epam.mrymbayev.dao;
 import org.apache.log4j.Logger;
 
 public abstract class DAOFactory {
-    private static Logger logger = Logger.getLogger(DAOFactory.class);
+    private static Logger logger = Logger.getLogger("kz.epam");
 
     public static DAOFactory newInstance() {
         DAOFactory daoFactory = new RdbDAOFactory();

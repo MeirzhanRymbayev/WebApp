@@ -13,7 +13,6 @@ import java.io.IOException;
 @WebServlet(name = "ErrorHandler", urlPatterns = "/ErrorHandler")
 public class ErrorHandler extends HttpServlet {
 
-
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response)
             throws ServletException, IOException {
