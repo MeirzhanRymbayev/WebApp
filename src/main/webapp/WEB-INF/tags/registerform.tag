@@ -3,7 +3,7 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="messages" var="msg"/>
-<div class="my-forms">
+<div class="my-authorization-forms">
     <h3><label for="login"><fmt:message key="registration" bundle="${msg}"/></label></h3>
     <form action="/controller" method="post">
         <input type="hidden" name="action" value="register"/>

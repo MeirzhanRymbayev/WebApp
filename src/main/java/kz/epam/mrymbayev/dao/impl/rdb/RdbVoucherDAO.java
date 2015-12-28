@@ -39,9 +39,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps1.setDate(2, voucher.getStartDate());
             ps1.setDate(3, voucher.getEndDate());
             ps1.setInt(4, voucher.getQuantity());
-            double discount = voucher.getDiscount();
-            ps1.setDouble(5, discount);
-            ps1.setBoolean(6, voucher.isHot());
+            ps1.setDouble(5, voucher.getDiscount());
             int rowCount = ps1.executeUpdate();
             if (rowCount == 1) logger.trace("Voucher was successfully inserted into VOUCHER table.");
 
@@ -59,9 +57,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps2.setLong(1, id);
             ps2.setLong(2, voucher.getLocaleId());
             ps2.setString(3, voucher.getType());
-            int cost = voucher.getCost();
-            cost = (int) (cost - cost * discount);
-            ps2.setInt(4, cost);
+            ps2.setInt(4, voucher.getCost());
             ps2.setString(5, voucher.getCountry());
             ps2.setString(6, voucher.getDayNightAmount());
             ps2.setString(7, voucher.getTransport());
@@ -97,10 +93,7 @@ public class RdbVoucherDAO implements VoucherDAO {
             ps.close();
 
             PreparedStatement ps2 = connection.prepareStatement(sql2);
-            double discount = voucher.getDiscount();
-            int cost = voucher.getCost();
-            cost = (int) (cost - cost * discount);
-            ps2.setInt(1, cost);
+            ps2.setInt(1, voucher.getCost());
             ps2.setLong(2, voucher.getId());
             int rowCountPs2 = ps2.executeUpdate();
             if (rowCountPs2 == 1) logger.trace("Voucher cost was successfully updated into VOUCHER_I18N table.");
@@ -226,9 +219,4 @@ public class RdbVoucherDAO implements VoucherDAO {
         }
         return isDelete;
     }
-
-    //TODO проверить нужен ли этот метод
-
-
-
 }

@@ -3,7 +3,7 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="messages" var="msg"/>
-<div class="my-forms">
+<div class="my-authorization-forms">
     <h3><label for="login"><fmt:message key="sign.in" bundle="${msg}"/></label></h3>
     <c:if test="${not empty roleError}">
         <font color="#d2691e">${roleError}</font><br>

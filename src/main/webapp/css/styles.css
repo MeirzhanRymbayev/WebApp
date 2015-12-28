@@ -1,7 +1,12 @@
 .my-forms {
-    position: absolute;
+    position: relative;
     left: 20px;
-    width: 350px;
+}
+
+.my-authorization-forms{
+    position: relative;
+    left: 20px;
+    width: 290px;
 }
 
 #wrapper{

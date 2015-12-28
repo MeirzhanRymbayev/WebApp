@@ -15,6 +15,12 @@ import org.apache.log4j.Logger;
 public class Util {
 
 
+    /**
+     * Method converts locale values from String to int
+     * For example, 1 => kk, 2 => ru etc.
+     * @param locale String value of locale
+     * @return Returns int value of locale for the application
+     */
     public static int localeConverter(String locale) {
         int intLocale = 0;
         switch (locale) {
@@ -31,6 +37,11 @@ public class Util {
         return intLocale;
     }
 
+    /**
+     * Method scans folder and returns list of files names
+     * @param voucherFolder Folder name which will be scanned
+     * @return List of files names
+     */
     public static List<String> getFileNames(String voucherFolder){
         PropertyManager pm = PropertyManager.getInstance();
         List<String> fileNames = new ArrayList<>();

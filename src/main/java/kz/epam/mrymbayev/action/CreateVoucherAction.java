@@ -94,7 +94,7 @@ public class CreateVoucherAction implements Action {
     }
 
     /**
-     * Simple method, copies from InputStream to OutputStream
+     * Simple method, it copies from InputStream to OutputStream
      * @param input InputStream object
      * @param output OutputStream object
      * @throws IOException
