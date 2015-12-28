@@ -17,6 +17,7 @@ public class RegisterAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        DAOFactory daoFactory = DAOFactory.newInstance();
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         String firstname = request.getParameter("firstname");
@@ -42,12 +43,12 @@ public class RegisterAction implements Action {
         user.setPassword(password);
         user.setFirstName(firstname);
         user.setLastName(lastname);
-        UserDAO userDAO = DAOFactory.newInstance().getDao(UserDAO.class);
+        UserDAO userDAO = daoFactory.getDao(UserDAO.class);
 
         userDAO.save(user);
         registLog.info("User: " + user.getLogin() + " was added to DB.");
         //TODO проверить правильно ли он вернет коннекшн
-        DAOFactory.newInstance().close();
+        daoFactory.close();
         return "redirect:register-success";
     }
 }

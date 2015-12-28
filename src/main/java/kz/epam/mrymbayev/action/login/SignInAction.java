@@ -1,8 +1,8 @@
 package kz.epam.mrymbayev.action.login;
 
 import kz.epam.mrymbayev.action.Action;
-import kz.epam.mrymbayev.dao.UserDAO;
 import kz.epam.mrymbayev.dao.DAOFactory;
+import kz.epam.mrymbayev.dao.UserDAO;
 import kz.epam.mrymbayev.model.User;
 import kz.epam.mrymbayev.validator.Validator;
 
@@ -15,11 +15,9 @@ import java.util.Map;
 public class SignInAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        DAOFactory daoFactory = DAOFactory.newInstance();
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-        //TODO make sure validate form to type application/x-www-form-urlencoded
-        //String contentType = request.getContentType();
-        //System.out.println("contentType = " + contentType);
 
         Map<String, String> formData = new HashMap<>();
         formData.put("login", login);
@@ -33,26 +31,26 @@ public class SignInAction implements Action {
             }
             return "sign-in-page";
         }
-        UserDAO UserDAO = DAOFactory.newInstance().getDao(UserDAO.class);
+        UserDAO UserDAO = daoFactory.getDao(UserDAO.class);
         User user = UserDAO.getByParameter("LOGIN", login);
 
 
         HttpSession guestSession = request.getSession(false);
         User guestUser = (User) guestSession.getAttribute("user");
-        if(guestUser.getRole().getName().equals("guest")){
+        if (guestUser.getRole().getName().equals("guest")) {
             guestSession.removeAttribute("user");
         }
         HttpSession session = request.getSession(false);
         session.setAttribute("user", user);
-        if(session.getAttribute("roleError") != null){
+        if (session.getAttribute("roleError") != null) {
             session.removeAttribute("roleError");
         }
 
         /* If role of user equals MANAGER then we redirect user to manage-index-page */
-        if(user.getRole().getName().equals("manager")){
+        if (user.getRole().getName().equals("manager")) {
             return "redirect:manage-index-page";
         }
-
+        daoFactory.close();
         return "redirect:main-menu-page";
     }
 }

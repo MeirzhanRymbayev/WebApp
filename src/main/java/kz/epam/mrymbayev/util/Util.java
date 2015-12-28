@@ -43,13 +43,14 @@ public class Util {
      * @return List of files names
      */
     public static List<String> getFileNames(String voucherFolder){
-        PropertyManager pm = PropertyManager.getInstance();
         List<String> fileNames = new ArrayList<>();
+        PropertyManager pm = PropertyManager.getInstance();
         pm.loadProperties("app.properties");
         String rootFolder = pm.getProperty("voucher.images.root.folder");
         File dir = new File(rootFolder + voucherFolder + "/");
         File[] dirContent = dir.listFiles();
         //TODO if doesn't exist folder if(dirContent == null)
+
         for (File file :
                 dirContent) {
             String fileName = "/" + file.getName();

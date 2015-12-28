@@ -213,12 +213,15 @@ public class RdbVoucherDAO implements VoucherDAO {
                 voucher.setQuantity(rs.getInt("QUANTITY"));
                 voucher.setStartDate(rs.getDate("START_DATE"));
                 voucher.setEndDate(rs.getDate("END_DATE"));
+                String folder_name = rs.getString("FOLDER_NAME");
                 voucher.setFileNames(Util.getFileNames(rs.getString("FOLDER_NAME")));
                 voucher.setHot(rs.getBoolean("IS_HOT"));
                 list.add(voucher);
             }
             ps.close();
         } catch (SQLException e) {
+            int errorCode = e.getErrorCode();
+            System.out.println("errorCode = " + errorCode);
             e.printStackTrace();
             logger.error("Error with RdbVoucherDAO getAllById() method");
             throw new RdbVoucherDAOException("Error with RdbVoucherDAO getAllById() method");
