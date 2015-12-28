@@ -23,7 +23,7 @@ public class Voucher extends BaseEntity{
     public Voucher() {
     }
 
-    public Voucher(Long id, String type, Integer cost) {
+    public Voucher(long id, String type, Integer cost) {
         super(id);
         this.type = type;
         this.cost = cost;

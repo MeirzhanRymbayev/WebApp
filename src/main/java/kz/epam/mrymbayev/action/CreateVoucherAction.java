@@ -4,6 +4,7 @@ import kz.epam.mrymbayev.dao.DAOFactory;
 import kz.epam.mrymbayev.dao.VoucherDAO;
 import kz.epam.mrymbayev.model.Voucher;
 import kz.epam.mrymbayev.pm.PropertyManager;
+import kz.epam.mrymbayev.service.VoucherService;
 import kz.epam.mrymbayev.validator.Validator;
 import org.apache.log4j.Logger;
 
@@ -17,22 +18,27 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CreateVoucherAction implements Action {
+
+    private int localeCount = 3;
+    private DAOFactory daoFactory;
     Logger log = Logger.getLogger(CreateVoucherAction.class);
     PropertyManager propertyManager = PropertyManager.getInstance();
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+        daoFactory = DAOFactory.newInstance();
         log.info("create voucher action started.");
         propertyManager.loadProperties("app.properties");
         Voucher voucher = new Voucher();
 
-        String type = request.getParameter("typeOfTour");
-        String cost = request.getParameter("cost");
+        String[] type = request.getParameterValues("typeOfTour");
+        String[] cost = request.getParameterValues("cost");
+        String[] country = request.getParameterValues("country");
+        String[] dayNightAmount = request.getParameterValues("dayNightAmount");
+        String[] transport = request.getParameterValues("transport");
+        String[] localeId = request.getParameterValues("localeId");
         String hotel = request.getParameter("hotel");
-        String country = request.getParameter("country");
-        String dayNightAmount = request.getParameter("dayNightAmount");
-        String transport = request.getParameter("transport");
-        String localeId = request.getParameter("localeId");
         String startDateString = request.getParameter("start-date");
         String endDateString = request.getParameter("end-date");
         String quantityString = request.getParameter("quantity");
@@ -51,12 +57,15 @@ public class CreateVoucherAction implements Action {
         Collection<Part> files = getFiles(allParts);
 
         Map<String, String> formData = new HashMap<>();
-        formData.put("type", type);
-        formData.put("cost", cost);
+        for(int i = 0; i < localeCount; i++) { // add all form data into map to validate
+            formData.put("type", type[i]);
+            formData.put("cost", cost[i]);
+            formData.put("country", country[i]);
+            formData.put("dayNightAmount", dayNightAmount[i]);
+            formData.put("transport", transport[i]);
+        }
+
         formData.put("hotel", hotel);
-        formData.put("country", country);
-        formData.put("dayNightAmount", dayNightAmount);
-        formData.put("transport", transport);
         formData.put("quantity", quantityString);
         if(files.size() == 0) request.setAttribute("uploadError", "Files were not found. Please, try again.");
         Map<String, String> violations = Validator.voucherCreateValidate(formData);
@@ -69,22 +78,28 @@ public class CreateVoucherAction implements Action {
         }
 
 
-
-        voucher.setType(type);
-        voucher.setCost(Integer.parseInt(cost));
         voucher.setHotel(hotel);
-        voucher.setCountry(country);
-        voucher.setDayNightAmount(dayNightAmount);
-        voucher.setTransport(transport);
-        voucher.setLocaleId(Integer.parseInt(localeId));
         voucher.setStartDate(new java.sql.Date(startDate.getTime()));
         voucher.setEndDate(new java.sql.Date(endDate.getTime()));
         voucher.setQuantity(quantity);
 
-        //Надо обдумать это.
-        DAOFactory daoFactory = DAOFactory.newInstance();
-        VoucherDAO voucherDAO = daoFactory.getDao(VoucherDAO.class);
-        Voucher savedVoucher = voucherDAO.save(voucher);
+
+        VoucherService voucherService = new VoucherService(daoFactory);
+        Voucher savedVoucher = voucherService.save(voucher);
+        long savedVoucherId = savedVoucher.getId();
+        Voucher voucherI18nData = new Voucher();
+        for(int i = 0; i < localeCount; i++) {
+            voucherI18nData.setId(savedVoucherId);
+            voucherI18nData.setType(type[i]);
+            voucherI18nData.setCost(Integer.parseInt(cost[i]));
+            voucherI18nData.setCountry(country[i]);
+            voucherI18nData.setDayNightAmount(dayNightAmount[i]);
+            voucherI18nData.setTransport(transport[i]);
+            voucherI18nData.setLocaleId(Integer.parseInt(localeId[i]));
+            voucherService.saveI18nData(voucherI18nData);
+        }
+
+
         log.info("Voucher saved on database successfully.");
         String folderName = savedVoucher.getFolderName();
         String pathToCreatedFolder = saveFiles(files, folderName);

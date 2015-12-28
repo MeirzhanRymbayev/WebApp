@@ -1,11 +1,13 @@
 .my-forms {
     position: relative;
-    left: 20px;
 }
 
 .my-authorization-forms{
     position: relative;
-    left: 20px;
+    width: 290px;
+}
+#simple-inputs{
+    position: relative;
     width: 290px;
 }
 

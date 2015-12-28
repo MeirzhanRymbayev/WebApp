@@ -23,4 +23,5 @@ public interface VoucherDAO extends GenericDao<Voucher> {
     @Override
     List<Voucher> getAllByLocale(int locale);
 
+    public Voucher insertI18nData(Voucher voucherI18nData);
 }

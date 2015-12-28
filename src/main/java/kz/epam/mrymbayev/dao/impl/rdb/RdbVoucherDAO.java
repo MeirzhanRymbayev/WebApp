@@ -29,8 +29,7 @@ public class RdbVoucherDAO implements VoucherDAO {
 
     public Voucher insert(Voucher voucher) {
 
-        final String sql;
-        final String sql2;
+        String sql;
         try {
             sql = propertyManager.getProperty("voucher.insert");
 
@@ -47,26 +46,10 @@ public class RdbVoucherDAO implements VoucherDAO {
             rs.next();
             long id = rs.getLong(1);
             voucher.setId(id);
-            String folderName = "/voucher" + voucher.getId().toString();
+            String folderName = "/voucher" + voucher.getId();
             voucher.setFolderName(folderName);
             Util.saveFolderName(voucher, connection);
             ps1.close();
-
-            sql2 = propertyManager.getProperty("voucherI18n.insert");
-            PreparedStatement ps2 = connection.prepareStatement(sql2);
-            ps2.setLong(1, id);
-            ps2.setLong(2, voucher.getLocaleId());
-            ps2.setString(3, voucher.getType());
-            ps2.setInt(4, voucher.getCost());
-            ps2.setString(5, voucher.getCountry());
-            ps2.setString(6, voucher.getDayNightAmount());
-            ps2.setString(7, voucher.getTransport());
-            int rowCountPs2 = ps2.executeUpdate();
-            if (rowCountPs2 == 1) logger.trace("Voucher was successfully inserted into VOUCHER_I18N table.");
-
-            ResultSet rs2 = ps2.getGeneratedKeys();
-            rs2.next();
-            ps2.close();
         } catch (SQLException e) {
             e.printStackTrace();
             logger.error("RdbVoucherDAOException with insert() operation.");
@@ -76,10 +59,37 @@ public class RdbVoucherDAO implements VoucherDAO {
         return voucher;
     }
 
+
+    public Voucher insertI18nData(Voucher voucherI18nData){
+        try {
+        String sql2;
+        sql2 = propertyManager.getProperty("voucherI18n.insert");
+        PreparedStatement ps2 = connection.prepareStatement(sql2);
+        ps2.setLong(1, voucherI18nData.getId());
+        ps2.setLong(2, voucherI18nData.getLocaleId());
+        ps2.setString(3, voucherI18nData.getType());
+        ps2.setInt(4, voucherI18nData.getCost());
+        ps2.setString(5, voucherI18nData.getCountry());
+        ps2.setString(6, voucherI18nData.getDayNightAmount());
+        ps2.setString(7, voucherI18nData.getTransport());
+        int rowCountPs2 = ps2.executeUpdate();
+        if (rowCountPs2 == 1) logger.trace("Voucher was successfully inserted into VOUCHER_I18N table.");
+
+        ResultSet rs2 = ps2.getGeneratedKeys();
+        rs2.next();
+        ps2.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error("RdbVoucherDAOException with insertI18n() operation.");
+            throw new RdbVoucherDAOException("Issue with insertI18n() operation.");
+        }
+        logger.trace("Voucher object was successfully insertI18n: " + voucherI18nData.toString());
+        return voucherI18nData;
+    }
+
     public Voucher update(Voucher voucher) {
         try {
             String sql = propertyManager.getProperty("voucher.update");
-            String sql2 = propertyManager.getProperty("voucherI18n.update");
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, voucher.getHotel());
             ps.setDate(2, voucher.getStartDate());
@@ -92,12 +102,6 @@ public class RdbVoucherDAO implements VoucherDAO {
             if (rowCount == 1) logger.trace("Voucher cost was successfully updated into VOUCHER table.");
             ps.close();
 
-            PreparedStatement ps2 = connection.prepareStatement(sql2);
-            ps2.setInt(1, voucher.getCost());
-            ps2.setLong(2, voucher.getId());
-            int rowCountPs2 = ps2.executeUpdate();
-            if (rowCountPs2 == 1) logger.trace("Voucher cost was successfully updated into VOUCHER_I18N table.");
-            ps2.close();
         } catch (SQLException e) {
             e.printStackTrace();
             logger.error("RdbVoucherDAOException with update() operation.");
@@ -105,6 +109,24 @@ public class RdbVoucherDAO implements VoucherDAO {
         }
         logger.trace("Voucher object was successfully updated: " + voucher.toString());
         return voucher;
+    }
+
+    public Voucher updateI18nData(Voucher voucher){
+        String sql2 = propertyManager.getProperty("voucherI18n.update");
+        try{
+        PreparedStatement ps2 = connection.prepareStatement(sql2);
+        ps2.setInt(1, voucher.getCost());
+        ps2.setLong(2, voucher.getId());
+        int rowCountPs2 = ps2.executeUpdate();
+        if (rowCountPs2 == 1) logger.trace("Voucher cost was successfully updated into VOUCHER_I18N table.");
+        ps2.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
+        logger.error("RdbVoucherDAOException with update() operation.");
+        throw new RdbVoucherDAOException("Issue with update() operation.");
+    }
+    logger.trace("Voucher object was successfully updated: " + voucher.toString());
+    return voucher;
     }
 
     @Override

@@ -118,5 +118,19 @@ public class VoucherService {
         return true;
     }
 
+    public Voucher save(Voucher voucher){
+        VoucherDAO voucherDAO = daoFactory.getDao(VoucherDAO.class);
+        Voucher savedVoucher = voucherDAO.save(voucher);
+
+        return savedVoucher;
+    }
+
+    public Voucher saveI18nData(Voucher voucherI18nData){
+        VoucherDAO voucherDAO = daoFactory.getDao(VoucherDAO.class);
+        voucherDAO.insertI18nData(voucherI18nData);
+        return voucherI18nData;
+    }
+
+
 
 }
