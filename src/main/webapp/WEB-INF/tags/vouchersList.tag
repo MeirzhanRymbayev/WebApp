@@ -19,17 +19,12 @@
                 <fmt:bundle basename="messages" prefix="manager.voucher.">
                     <ul class="list-group">
 
-                        <li class="list-group-item">
-                            <span class="well well-sm">ID</span>
-                                ${voucher.id}</li>
-                        <li class="list-group-item">
-                            <span class="well well-sm"><fmt:message key="type"/></span>
+                        <li class="list-group-item"><span class="well well-sm">ID</span>${voucher.id}</li>
+                        <li class="list-group-item"><span class="well well-sm"><fmt:message key="type"/></span>
                                 ${voucher.type}</li>
-                        <li class="list-group-item">
-                            <span class="well well-sm"><fmt:message key="cost"/></span>
+                        <li class="list-group-item"><span class="well well-sm"><fmt:message key="cost"/></span>
                                 ${voucher.cost}$</li>
-                        <c:if test="${user.discount > 0}">
-                        <li class="list-group-item">
+                        <c:if test="${user.discount > 0}"><li class="list-group-item">
                             <span class="well well-sm"><fmt:message key="cost.with.user.discount"/></span>
                                 ${voucher.cost - voucher.cost * user.discount}$</li></c:if>
                         <li class="list-group-item">
@@ -39,10 +34,11 @@
                         <c:if test="${voucher.hot}">
                             <li class="list-group-item">
                                 <span class="well well-sm"><fmt:message key="cost.hot"/></span>
-                                    ${voucher.cost - voucher.cost * voucher.discount}$</li></c:if>
+                                <fmt:formatNumber value="${voucher.cost - voucher.cost * voucher.discount}"/>$</li>
+                        </c:if>
                         <c:if test="${voucher.discount > 0}"><li class="list-group-item">
                             <span class="well well-sm"><fmt:message key="discount.percentage"/></span>
-                                ${voucher.discount*100}%</li>
+                            <fmt:formatNumber value="${voucher.discount*100}"/>%</li>
                         </c:if>
                         <li class="list-group-item">
                             <span class="well well-sm"><fmt:message key="hotel"/></span>
@@ -55,7 +51,7 @@
                                 ${voucher.dayNightAmount}</li>
                         <li class="list-group-item">
                             <span class="well well-sm"><fmt:message key="start.date"/></span>
-                                ${voucher.startDate.toString()}</li>
+                                ${voucher.startDate}</li>
                         <li class="list-group-item">
                             <span class="well well-sm"><fmt:message key="end.date"/></span>
                                 ${voucher.endDate}</li>
